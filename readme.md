@@ -8,6 +8,7 @@ This section **assumes you are running a Linux distrubution**, specifically Ubun
 
 * [python 3.4](https://www.python.org/)
 * [git](http://git-scm.com/)
+* [pip](https://pip.pypa.io/en/latest/installing.html)
 * [virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/)
 
 If you don't have any of those requirements, you can install them via:
@@ -19,6 +20,9 @@ If you don't have any of those requirements, you can install them via:
 
     # git
     $ sudo apt-get install git
+
+    # pip
+    $ sudo apt-get install python-pip
 
     # virtualenv
     $ pip install virtualenv
