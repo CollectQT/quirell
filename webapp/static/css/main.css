@@ -1,0 +1,225 @@
+}
+@media all and (max-height: 500px), (max-width: 500px); 
+ .visible {
+ opacity: 1; }
+
+ .invisible {
+ opacity: 0; }
+
+ .none {
+ display: none; }
+
+ .positionAbsolute {
+ position: absolute; }
+
+ .positionStatic {
+ position: static; }
+
+ .center {
+ margin-left: auto;
+ margin-right: auto; }
+
+ a {
+ cursor: inherit;
+ color: purple;
+ text-decoration: inherit; }
+
+ nav a {
+  color: black; }
+
+  p a {
+  color: purple;
+  text-shadow: 0 0 0.05em purple; }
+
+  article a:hover {
+  text-decoration: underline; }
+
+  h3 a {
+  color: black; }
+
+  h3 a:hover {
+  text-decoration: none;
+  color: purple; }
+
+  h3 a {
+  transition: color 0.33s; }
+
+  i {
+  text-shadow: none; }
+
+  h1, h2, h3, h4, h5, p {
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  color: black; }
+
+  h3 {
+   -webkit-margin-before: 10px;
+   margin-bottom: 10px;
+   text-shadow: 0 0 0.05em purple; }
+
+   html, body, .texture {
+   padding: 0;
+   margin: 0;
+   width: 100%;
+   height: 100%; }
+
+   body {
+   background-color: white;
+   overflow-x: hidden;
+   font-family: "Press Start 2P", monospace; }
+
+   .texture {
+   position: fixed; }
+
+   .body_texture {
+   background-image: url(http://i.imgur.com/5NGuyjJ.png);
+   z-index: -1;
+   opacity: 0.8; }
+
+   nav button {
+   position: relative;
+   display: block;
+   width: 100%;
+   opacity: 0.7;
+   border: none;
+   text-align: right;
+   background-color: #fda720;
+   transition: color 0.5s, background-color 0.5s; }
+   nav button:hover {
+   color: #7AADA6;
+   background-color: black; }
+   nav button:active {
+   color: black;
+   background-color: #7AADA6; }
+
+ nav {
+ position: fixed;
+ padding-top: 0;
+ top: 0;
+ width: 100%;
+ background-color: #7AADA6; }
+
+ h3 {
+ text-align: center;
+ background-color: #7AADA6; }
+
+ h4 {
+ text-align: center;
+ background-color: rgba(122, 173, 166, 0.7); }
+
+ main {
+ display: table;
+ list-style-type: none;
+ padding-top: 0;
+ width: 100%; }
+
+ article {
+ background-color: rgba(253, 167, 32, 0.3); }
+
+ p, blockquote, ul {
+ font-family: "Ubuntu Mono", sans-serif;
+ background-color: rgba(255, 255, 255, 0.15); }
+
+ ul {
+ list-style-type: square; }
+
+ .heading {
+  font-family: "Press Start 2P", monospace; }
+
+  .content {
+  font-family: "Ubuntu Mono", sans-serif; }
+
+  @media all {
+  nav button {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 15px;
+  margin-bottom: 10px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.66); }
+  img {
+  height: 160px;
+  width: 160px; }
+}
+
+ h3 {
+ margin-top: 0;
+ margin-bottom: 15px;
+ font-size: 1.3em;
+ padding-top: 15px;
+ padding-bottom: 15px;
+ padding-left: 25px;
+ padding-right: 25px; }
+
+ h4 {
+ padding-left: 35px;
+ padding-right: 35px;
+ padding-top: 5px;
+ padding-bottom: 5px;
+ margin-top: 5px;
+ margin-bottom: 0; }
+
+ article {
+ border-style: solid;
+ border-color: #7AADA6;
+ border-width: 7px;
+ border-radius: 20px;
+ margin-top: 30px;
+ margin-bottom: 80px;
+ width: 65%;
+ box-shadow: 15px 15px 5px 5px rgba(0, 0, 0, 0.1); }
+
+ p {
+ margin-top: 15px;
+ margin-bottom: 10px;
+ margin-left: 25px;
+ margin-right: 25px;
+ font-size: 1em;
+ padding-right: 15px;
+ padding-left: 15px;
+ padding-top: 10px;
+ padding-bottom: 15px;
+ border-radius: 20px; }
+
+ blockquote {
+ margin-left: 60px;
+ margin-right: 60px;
+ font-style: italic;
+ padding-right: 15px;
+ padding-left: 15px;
+ padding-top: 10px;
+ padding-bottom: 15px; }
+
+ ul {
+ margin-left: 25px;
+ margin-right: 25px;
+ font-size: 1em;
+ padding-right: 15px;
+ padding-left: 15px;
+ padding-bottom: 15px; }
+
+ .fa-linkedin {
+ color: #4875B4; }
+
+ .fa-twitter {
+  color: #33CCFF; }
+
+  .fa-skype {
+  color: #12A5F4; }
+
+  .fa-envelope {
+  color: gray; }
+
+  .fa-github {
+  color: black; }
+
+  .fa-rss-square {
+  color: orange; }
+
+  .fa {
+  font-size: 1.5em; }
+
+  .twitter-tweet {
+  margin-left: auto !important;
+  margin-right: auto !important; }

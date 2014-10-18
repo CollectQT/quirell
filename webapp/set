@@ -1,0 +1,15 @@
+firestarter set
+    (run at top level of project folder)
+    [one of]
+        git clone firestarter
+        cp ~/firestarter
+    remove .git folder
+    remove venv
+    merge requirements.txt
+    merge .gitignore
+    rename main.py -> firestarter.py
+    prompt Procfile
+    merge config/
+    merge scripts/
+    prompt assets/
+    prompt paths/
