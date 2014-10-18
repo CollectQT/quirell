@@ -8,6 +8,11 @@ Use:
 [Developement] '$ python main.py' (runs in debug mode)
 '''
 
+# add folder to path
+import os
+import sys
+sys.path.insert(1, os.path.dirname(os.path.realpath(__file__)))
+
 # builtin
 import glob
 # external
