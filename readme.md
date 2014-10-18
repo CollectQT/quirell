@@ -39,14 +39,28 @@ Then we start setting up Quirell itself
 
 ## Contributing
 
-If you add packages, add it to the requirements via
+### Before You Make Changes
+
+Figure out what sort of changes you are going to make, and how comfortable you are making them.
+
+* If you are making a content (that is, not code) change you can do that via editing files on gitlab's online interface. For example [this link would allow you to edit the readme](https://gitlab.com/collectqt/quirell/edit/develop/readme.md)
+* If you are a project maintainer and are adding large sections of code that nobody will disagree with, feel free to add them to branch **'develop'**
+* If you are new to the project and want to make a suggested change (code or otherwise), create the feature on a new branch that describes the feature name (example: **'add-smiley-support'**) and submit a merge request versus **'develop'**
+
+If the change you are going to make has [an issue](https://gitlab.com/collectqt/quirell/issues), make yourself the assignee for that issue once you know that you are going to start working on it.
+
+### After You Make Changes
+
+If you aren't a core maintainer, don't be concerned about making sure the documentation for your changes is perfect, or put extra effort into making sure your writing style matches the rest of the code - before submitting your changes. Feel free to **submit your changes after you have gone through the instructions listed below this paragraph**. If you are a core maintianer... make sure to add comments below you merge people's code !
+
+If you added packages, add them to the requirements via
 
     $ pip freeze > requirements.txt
 
-If you make any code changes, make sure the code runs successfully via
+If you made any code changes, make sure the code runs successfully via
 
     # no way to do this yet
 
-If you add new top level file or folder, add it to the **'Project Architecture'** section of this readme
+If you added new top level file or folder, add it to the **Project Architecture** section of this readme
 
 ## Project Architecture
