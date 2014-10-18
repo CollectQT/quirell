@@ -1,9 +1,0 @@
-AVATAR: "http://website.com/a_picture_of_something.jpg"
-AVATAR_DESC: "my picture"
-SITENAME: "FireStarter"
-DESC: "Start a flask site really fast! Like, super fast!!!"
-URL: "http://lynncyrin.me"
-GOOGLE_ANALYTICS: False
-TWITTER_CARDS: False
-FACEBOOK_OPENGRAPH: False
-ALLOW_EXTERNAL: True
