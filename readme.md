@@ -37,6 +37,8 @@ Then we start setting up Quirell itself
     $ source venv/bin/activate
     $ pip install -r requirements.txt
 
+---
+
 ## Contributing
 
 ### Before You Make Changes
@@ -61,6 +63,12 @@ If you made any code changes, make sure the code runs successfully via
 
     # no way to do this yet
 
-If you added new top level file or folder, add it to the **Project Architecture** section of this readme
+If you added a new folder, add it to the **Project Architecture** section of this readme
+
+### Getting Developer Access
+
+If you want developer access to the collectqt/quirell repository, ask a [CollectQT team member](https://gitlab.com/groups/collectqt/members) to give you developer access. At the current time, the specific team member you would ask for this is [Lynn Cyrin](https://gitlab.com/u/cyrin). Before asking for developer access, create or assign yourself to an issue to that other people know what you are working on.
+
+---
 
 ## Project Architecture
