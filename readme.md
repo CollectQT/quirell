@@ -61,7 +61,7 @@ If you added packages, add them to the requirements via
 
 If you made any code changes, make sure the code runs successfully via
 
-    # no way to do this yet
+    $ python webapp/main.py
 
 If you added a new folder, add it to the **Project Architecture** section of this readme
 
@@ -72,3 +72,11 @@ If you want developer access to the collectqt/quirell repository, ask a [Collect
 ---
 
 ## Project Architecture
+
+    database/
+
+remote sql > json stuff (although possibly not exactly that)
+
+    webapp/
+
+the website front end
