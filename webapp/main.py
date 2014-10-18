@@ -23,7 +23,9 @@ build = cms.build_html
 # start app and set configuration
 app = flask.Flask(__name__, static_folder='static', static_url_path='')
 app.config.from_object(__name__)
-for key, value in yaml.load(file(app.root_path + '/config.yaml','r')).items():
+with open(app.root_path + '/config.yaml','r') as config_file:
+    configs = yaml.load(config_file.read())
+for key, value in configs.items():
     app.config[key] = value
 # start css builder
 cms.build_css_automatic(app)

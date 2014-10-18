@@ -16,7 +16,7 @@ If you don't have any of those requirements, you can install them via:
     # python 3.4
     $ sudo add-apt-repository ppa:fkrull/deadsnakes
     $ sudo apt-get update
-    $ sudo apt-get install python3.4
+    $ sudo apt-get install python3.4 python3.4-dev
 
     # git
     $ sudo apt-get install git

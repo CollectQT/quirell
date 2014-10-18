@@ -1,6 +1,4 @@
-}
-@media all and (max-height: 500px), (max-width: 500px); 
- .visible {
+.visible {
  opacity: 1; }
 
  .invisible {
@@ -25,9 +23,9 @@
  text-decoration: inherit; }
 
  nav a {
-  color: black; }
+ color: black; }
 
-  p a {
+ p a {
   color: purple;
   text-shadow: 0 0 0.05em purple; }
 
@@ -55,11 +53,11 @@
   color: black; }
 
   h3 {
-   -webkit-margin-before: 10px;
-   margin-bottom: 10px;
-   text-shadow: 0 0 0.05em purple; }
+  -webkit-margin-before: 10px;
+  margin-bottom: 10px;
+  text-shadow: 0 0 0.05em purple; }
 
-   html, body, .texture {
+  html, body, .texture {
    padding: 0;
    margin: 0;
    width: 100%;
@@ -94,7 +92,7 @@
    color: black;
    background-color: #7AADA6; }
 
- nav {
+nav {
  position: fixed;
  padding-top: 0;
  top: 0;
@@ -126,9 +124,9 @@
  list-style-type: square; }
 
  .heading {
-  font-family: "Press Start 2P", monospace; }
+ font-family: "Press Start 2P", monospace; }
 
-  .content {
+ .content {
   font-family: "Ubuntu Mono", sans-serif; }
 
   @media all {
@@ -141,85 +139,106 @@
   img {
   height: 160px;
   width: 160px; }
+  h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.3em;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 25px;
+  padding-right: 25px; }
+  h4 {
+  padding-left: 35px;
+  padding-right: 35px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-top: 5px;
+  margin-bottom: 0; }
+  article {
+  border-style: solid;
+  border-color: #7AADA6;
+  border-width: 7px;
+  border-radius: 20px;
+  margin-top: 30px;
+  margin-bottom: 80px;
+  width: 65%;
+  box-shadow: 15px 15px 5px 5px rgba(0, 0, 0, 0.1); }
+  p {
+  margin-top: 15px;
+  margin-bottom: 10px;
+  margin-left: 25px;
+  margin-right: 25px;
+  font-size: 1em;
+  padding-right: 15px;
+  padding-left: 15px;
+  padding-top: 10px;
+  padding-bottom: 15px;
+  border-radius: 20px; }
+  blockquote {
+   margin-left: 60px;
+   margin-right: 60px;
+   font-style: italic;
+   padding-right: 15px;
+   padding-left: 15px;
+   padding-top: 10px;
+   padding-bottom: 15px; }
+   ul {
+   margin-left: 25px;
+   margin-right: 25px;
+   font-size: 1em;
+   padding-right: 15px;
+   padding-left: 15px;
+   padding-bottom: 15px; }
 }
 
- h3 {
- margin-top: 0;
- margin-bottom: 15px;
- font-size: 1.3em;
- padding-top: 15px;
- padding-bottom: 15px;
- padding-left: 25px;
- padding-right: 25px; }
-
- h4 {
- padding-left: 35px;
- padding-right: 35px;
+@media all and (max-height: 500px), (max-width: 500px) {
+ html {
+ font-size: 0.7em; }
+ nav button {
  padding-top: 5px;
  padding-bottom: 5px;
- margin-top: 5px;
- margin-bottom: 0; }
-
+ padding-right: 15px;
+ margin-bottom: 5px;
+ box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.66); }
+ h3 {
+ padding-top: 5px;
+ padding-bottom: 5px;
+ margin-bottom: 5px; }
  article {
- border-style: solid;
- border-color: #7AADA6;
- border-width: 7px;
- border-radius: 20px;
- margin-top: 30px;
- margin-bottom: 80px;
- width: 65%;
- box-shadow: 15px 15px 5px 5px rgba(0, 0, 0, 0.1); }
-
+ border-style: none;
+ border-radius: 0;
+ padding-bottom: 5px;
+ margin-top: 20px;
+ margin-bottom: 30px;
+ margin-left: 0;
+ margin-right: 0;
+ width: 100%; }
  p {
- margin-top: 15px;
- margin-bottom: 10px;
- margin-left: 25px;
- margin-right: 25px;
- font-size: 1em;
- padding-right: 15px;
- padding-left: 15px;
- padding-top: 10px;
- padding-bottom: 15px;
- border-radius: 20px; }
+ margin-left: 0px;
+ margin-right: 0px; }
+}
 
- blockquote {
- margin-left: 60px;
- margin-right: 60px;
- font-style: italic;
- padding-right: 15px;
- padding-left: 15px;
- padding-top: 10px;
- padding-bottom: 15px; }
-
- ul {
- margin-left: 25px;
- margin-right: 25px;
- font-size: 1em;
- padding-right: 15px;
- padding-left: 15px;
- padding-bottom: 15px; }
-
- .fa-linkedin {
+.fa-linkedin {
  color: #4875B4; }
 
  .fa-twitter {
-  color: #33CCFF; }
+ color: #33CCFF; }
 
-  .fa-skype {
-  color: #12A5F4; }
+ .fa-skype {
+ color: #12A5F4; }
 
-  .fa-envelope {
-  color: gray; }
+ .fa-envelope {
+ color: gray; }
 
-  .fa-github {
-  color: black; }
+ .fa-github {
+ color: black; }
 
-  .fa-rss-square {
-  color: orange; }
+ .fa-rss-square {
+ color: orange; }
 
-  .fa {
-  font-size: 1.5em; }
+ .fa {
+ font-size: 1.5em; }
 
-  .twitter-tweet {
-  margin-left: auto !important;
-  margin-right: auto !important; }
+ .twitter-tweet {
+ margin-left: auto !important;
+ margin-right: auto !important; }
