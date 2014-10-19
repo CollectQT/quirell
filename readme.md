@@ -61,9 +61,17 @@ If you added packages, add them to the requirements via
 
 If you made any code changes, make sure the code runs successfully via
 
-    $ python webapp/main.py
+    $ foreman start
 
 If you added a new folder, add it to the **Project Architecture** section of this readme
+
+**If you are a core maintainer** you will be expected to pull changes from **'develop'** into **'production'**, then push them to heroku. The do that, run:
+
+    $ git checkout production
+    $ git merge develop
+    $ git push heroku production:master
+
+**But before you do this** make extra sure that the code is functional, because breaking production is not fun.
 
 ### Getting Developer Access
 
