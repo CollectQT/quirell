@@ -10,6 +10,8 @@ Everything in this folder resolves to a URL path. For example, the file `paths/u
 
 Static files go here. Like, CSS, JS, images, etc. One exception is that files that build into static files also go here, i.e. `static/scss/main.scss` which builds into `static/css/main.css`
 
+To be explicit: **if ever you want to edit CSS** you should edit `static/scss/main.scss`, run the server so it builds into `static/css/main.css`, then commit the both of them to git.
+
     scripts/
 
 Storage for python scripts.

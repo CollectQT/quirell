@@ -61,6 +61,9 @@ If you added packages, add them to the requirements via
 
 If you made any code changes, make sure the code runs successfully via
 
+    # first you run in debug mode, so assets get rebuilt
+    $ python webapp/main.py
+    # then you run in production mode
     $ foreman start
 
 If you added a new folder, add it to the **Project Architecture** section of this readme
