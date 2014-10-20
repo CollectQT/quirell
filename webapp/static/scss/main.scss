@@ -44,36 +44,37 @@ $texture: url(http://i.imgur.com/5NGuyjJ.png);
 
 $mobile_xy: 500px;
 
+.heading {font-family: $title_font;}
+.content {font-family: $body_font;}
+
 /*---------------
     GLOBAL
 -----------------*/
 
+h1, h2, h3, h4, h5, p {
+    color: black;
+    font-family: $title_font;
+    padding: 5px 15px;
+}
+
+h1, h2 {
+    background-color: rgba(gray, 0.3);
+    text-align: center;
+}
+
+p, blockquote, ul {
+    font-family: $body_font;
+}
+
 a {
     cursor: inherit;
     color: purple;
-    text-decoration: inherit; }
+    text-decoration: inherit;
+}
 
-nav a {color: black;}
-p a {color: purple; text-shadow: 0 0 0.05em purple;}
-article a:hover {text-decoration: underline;}
-h3 a {color: black;}
-h3 a:hover {text-decoration: none; color: purple;}
-h3 a {transition: color 0.33s;}
-i {text-shadow: none;}
+//
 
-h1, h2, h3, h4, h5, p {
-    -webkit-margin-before: 0;
-    -webkit-margin-after: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    color: black }
-
-h3 {
-    -webkit-margin-before: 10px;
-    margin-bottom: 10px;
-    text-shadow: 0 0 0.05em purple;}
-
-html, body, .texture {
+html, body {
     padding: 0;
     margin: 0;
     width: 100%;
@@ -85,14 +86,6 @@ body {
     overflow-x: hidden;
     font-family: $title_font;
  }
-
-.texture {position: fixed;}
-
-.body_texture {
-    background-image: $texture;
-    z-index: -1;
-    opacity: 0.8;
-}
 
 nav button {
     position: relative;
@@ -115,160 +108,69 @@ nav button {
 
 nav {
     position: fixed;
-    padding-top: 0;
-    top: 0;
     width: 100%;
     background-color: $primary_color;
-}
-
-h3 {
-    text-align: center;
-    background-color: $primary_color;
-}
-h4 {
-    text-align: center;
-    background-color: rgba($primary_color,0.7);
-}
-
-main {
-    display: table;
-    list-style-type: none;
-    padding-top: 0;
-    width: 100%;
 }
 
 article {background-color: $body_color;}
 
-p, blockquote, ul {
-    font-family: $body_font;
-    background-color: rgba(255, 255, 255, 0.15);
+pre {
+    color: white;
+    background-color: black;
 }
 
 ul {list-style-type: square;}
 
-.heading {font-family: $title_font}
-.content {font-family: $body_font}
-
-/*-------------------
-    BASE LAYOUT
----------------------*/
+/*---------------------
+ BASE (MOBILE) LAYOUT
+-----------------------*/
 
 //this media query is just for consistency
 @media all {
 
+    nav {
+        height: 80px;
+    }
+
+    main {
+        padding-top: 80px;
+    }
+
     nav button {
-        padding-top: 5px;
-        padding-bottom: 5px;
-        padding-right: 15px;
-        margin-bottom: 10px;
-        box-shadow: 5px 5px 5px rgba(0,0,0,0.66);
     }
 
     img {
-            height: 160px;
-          width: 160px;
-    }
-
-    h3 {
-        margin-top: 0;
-        margin-bottom: 15px;
-        font-size: 1.3em;
-        padding-top: 15px;
-        padding-bottom: 15px;
-        padding-left: 25px;
-        padding-right: 25px;
-    }
-
-    h4 {
-        padding-left: 35px;
-        padding-right: 35px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        margin-top: 5px;
-        margin-bottom: 0;
+        height: 160px;
+        width: 160px;
     }
 
     article {
         border-style: solid;
         border-color: $primary_color;
         border-width: 7px;
-        border-radius: 20px;
-        margin-top: 30px;
-        margin-bottom: 80px;
-        width: 65%;
-        box-shadow: 15px 15px 5px 5px rgba(0, 0, 0, 0.1);
     }
 
     p {
-        margin-top: 15px;
-        margin-bottom: 10px;
-        margin-left: 25px;
-        margin-right: 25px;
-        font-size: 1em;
-        padding-right: 15px;
-        padding-left: 15px;
-        padding-top: 10px;
-        padding-bottom: 15px;
-        border-radius: 20px;
+        padding: 0 10px;
+    }
+
+    pre {
+        padding: 5px;
     }
 
     blockquote {
-        margin-left: 60px;
-        margin-right: 60px;
         font-style: italic;
-        padding-right: 15px;
-        padding-left: 15px;
-        padding-top: 10px;
-        padding-bottom: 15px;
     }
 
     ul {
-        margin-left: 25px;
-        margin-right: 25px;
-        font-size: 1em;
-        padding-right: 15px;
-        padding-left: 15px;
-        padding-bottom: 15px;
     }
 }
 
 /*---------------
-    MOBILE
+    DESKTOP
 -----------------*/
 
-@media all and (max-height: $mobile_xy), (max-width: $mobile_xy){
-
-    html {font-size: 0.7em;}
-
-    nav button {
-        padding-top: 5px;
-        padding-bottom: 5px;
-        padding-right: 15px;
-        margin-bottom: 5px;
-        box-shadow: 3px 3px 3px rgba(0,0,0,0.66);
-    }
-
-    h3 {
-        padding-top: 5px;
-        padding-bottom: 5px;
-        margin-bottom: 5px;
-    }
-
-    article {
-        border-style: none;
-        border-radius: 0;
-        padding-bottom: 5px;
-        margin-top: 20px;
-        margin-bottom: 30px;
-        margin-left: 0;
-        margin-right: 0;
-        width: 100%;
-    }
-
-    p {
-        margin-left: 0px;
-        margin-right: 0px;
-    }
+@media all and (min-height: $mobile_xy), (min-width: $mobile_xy){
 }
 
 /*---------------

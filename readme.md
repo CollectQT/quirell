@@ -1,7 +1,5 @@
 # "Quirell" Social Network Project
 
----
-
 ## Running Locally
 
 This section **assumes you are running a Linux distrubution**, specifically Ubuntu. The code will probably run on something other than that, but no promises! Beyond that requirement, you also need to have basic familiarity with:
@@ -28,8 +26,6 @@ Finally, **everytime you start working on the project** you need to run these co
 
     $ source venv/bin/activate
     $ python config/setup.py
-
----
 
 ## Contributing
 
@@ -69,8 +65,6 @@ If you added a new folder, add it to the **Project Architecture** section of thi
 ### Getting Developer Access
 
 If you want developer access to the collectqt/quirell repository, ask a [CollectQT team member](https://gitlab.com/groups/collectqt/members) to give you developer access. At the current time, the specific team member you would ask for this is [Lynn Cyrin](https://gitlab.com/u/cyrin). Before asking for developer access, create or assign yourself to an issue to that other people know what you are working on.
-
----
 
 ## Project Architecture
 
