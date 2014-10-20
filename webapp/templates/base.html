@@ -5,9 +5,7 @@
 		{% block head %}{% include 'head.html' %}{% endblock %}
 	</head>
 	<body>
-		<div class="texture body_texture"></div>
         {% block navigation %}{% include 'nav.html' %}{% endblock %}
 		{% block content %}
             {% autoescape false %}{{ html_content }}{% endautoescape %}
         {% endblock %}
-		{% include 'analytics.html' %}

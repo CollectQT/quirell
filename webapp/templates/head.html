@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{% block title %}{{ config.TITLE }}{% endblock %}</title>
     <meta name="description" content="{% block desc %}{{ config.DESC }}{% endblock %}">
-{% if config.FACEBOOK_OPENGRAPH %}
+<!-- facebook OG -->
     <meta property="og:title" content="{{ self.title() }}"/>
     <meta property="og:description" content="{{ self.desc() }}"/>
     <meta property="og:image" content="{{ config.AVATAR }}"/>
@@ -15,8 +15,7 @@
     <meta property="og:image:type" content="image/png"/>
     <meta property="og:image:width" content="160"/>
     <meta property="og:image:height" content="160"/>
-{% endif %}
-{% if config.TWITTER_CARDS %}
+<!-- twitter cards -->
     <meta name="twitter:title" content="{{ self.title() }}">
     <meta name="twitter:description" content="{{ self.desc() }}">
     <meta name="twitter:card" content="summary">
@@ -24,16 +23,12 @@
     <meta name="twitter:creator" content="@lynnmagic">
     <meta name="twitter:image:src" content="{{ config.AVATAR }}">
     <meta name="twitter:domain" content="{{ config.URL }}">
-{% endif %}
 <!-- resources -->
-{% if config.ALLOW_EXTERNAL %}
     <script src="http://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
-    <!-- fonts -->
-        <link href="http://fonts.googleapis.com/css?family=Press+Start+2P" rel='stylesheet' type='text/css'>
-        <link href="http://fonts.googleapis.com/css?family=Ubuntu+Mono" rel='stylesheet' type='text/css'>
-        <link href="http://fonts.googleapis.com/css?family=Walter+Turncoat" rel='stylesheet' type='text/css'>
+    <link href="http://fonts.googleapis.com/css?family=Press+Start+2P" rel='stylesheet' type='text/css'>
+    <link href="http://fonts.googleapis.com/css?family=Ubuntu+Mono" rel='stylesheet' type='text/css'>
+    <link href="http://fonts.googleapis.com/css?family=Walter+Turncoat" rel='stylesheet' type='text/css'>
     <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <link href="http://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.0/normalize.min.css" rel="stylesheet">
-{% endif %}
     <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
