@@ -32,6 +32,9 @@
   background-color: rgba(128, 128, 128, 0.3);
   text-align: center; }
 
+  nav h1, nav h2 {
+  background-color: transparent; }
+
   p, blockquote, ul {
   font-family: "Ubuntu Mono", sans-serif; }
 
@@ -61,9 +64,9 @@
   background-color: #fda720;
   transition: color 0.5s, background-color 0.5s; }
   nav button:hover {
-  color: #7AADA6;
-  background-color: black; }
-  nav button:active {
+   color: #7AADA6;
+   background-color: black; }
+   nav button:active {
    color: black;
    background-color: #7AADA6; }
 
@@ -100,6 +103,12 @@ nav {
   padding: 5px; }
   blockquote {
   font-style: italic; }
+}
+
+@media all and (min-height: 500px) and (min-width: 500px) {
+ main {
+ margin: 0 auto;
+ width: 60%; }
 }
 
 .fa-linkedin {

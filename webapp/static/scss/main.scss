@@ -62,6 +62,10 @@ h1, h2 {
     text-align: center;
 }
 
+nav h1, nav h2 {
+    background-color: transparent;
+}
+
 p, blockquote, ul {
     font-family: $body_font;
 }
@@ -170,7 +174,13 @@ ul {list-style-type: square;}
     DESKTOP
 -----------------*/
 
-@media all and (min-height: $mobile_xy), (min-width: $mobile_xy){
+@media all and (min-height: $mobile_xy) and (min-width: $mobile_xy){
+
+    main {
+        margin: 0 auto;
+        width: 60%;
+    }
+
 }
 
 /*---------------

@@ -1,6 +1,6 @@
-# "Quirell" Social Network Project
+# Project Readme
 
-## Running Locally
+## Running The Code Locally
 
 This section **assumes you are running a Linux distrubution**, specifically Ubuntu. The code will probably run on something other than that, but no promises! Beyond that requirement, you also need to have basic familiarity with:
 
