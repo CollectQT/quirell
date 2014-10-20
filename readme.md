@@ -37,6 +37,10 @@ Then we start setting up Quirell itself
     $ source venv/bin/activate
     $ pip install -r requirements.txt
 
+Then you set up the environment
+
+    $ python config/ENV.py
+
 ---
 
 ## Contributing
@@ -91,3 +95,7 @@ remote sql > json stuff (although possibly not exactly that)
     webapp/
 
 the website front end
+
+    config/
+
+Projectwide configuration and setup scripts
