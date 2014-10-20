@@ -11,35 +11,23 @@ This section **assumes you are running a Linux distrubution**, specifically Ubun
 * [pip](https://pip.pypa.io/en/latest/installing.html)
 * [virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/)
 
-If you don't have any of those requirements, you can install them via:
+**If you don't have any of those requirements**, you can install them via the commands below. If you are unsure if you have them, then go through the commands anyway!
 
-    # python 3.4
     $ sudo add-apt-repository ppa:fkrull/deadsnakes
     $ sudo apt-get update
     $ sudo apt-get install python3.4 python3.4-dev
+    $ sudo apt-get install git python-pip python-virtualenv
 
-    # git
-    $ sudo apt-get install git
+**If this is your first time setting up Quirell**, you need to use these commands to set up the environment
 
-    # pip
-    $ sudo apt-get install python-pip
-
-    # virtualenv
-    $ pip install virtualenv
-
-Then we start setting up Quirell itself
-
-    # Quirell source code
     $ git clone git@gitlab.com:collectqt/quirell.git
-
-    # set up developement environment
+    $ cd quirell
     $ virtualenv -p python3.4 venv
+
+Finally, **everytime you start working on the project** you need to run these commands to activate the environment
+
     $ source venv/bin/activate
-    $ pip install -r requirements.txt
-
-Then you set up the environment
-
-    $ python config/ENV.py
+    $ python config/setup.py
 
 ---
 
