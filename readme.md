@@ -24,7 +24,7 @@ This section **assumes you are running a Linux distrubution**, specifically Ubun
     $ cd quirell
     $ virtualenv -p python3.4 venv
 
-Finally, **everytime you start working on the project** you need to run these commands to activate the environment
+Finally, **everytime you start working on the project** you need to run these commands within the `quirell/` folder to activate the environment
 
     $ source venv/bin/activate
     $ python config/setup.py
@@ -51,11 +51,9 @@ If you added packages, add them to the requirements via
 
     $ pip freeze > requirements.txt
 
-If you made any code changes, make sure the code runs successfully via
+If you made any code changes, make sure the code runs successfully via running and stopping a debug server (so assets are rebuilt), then running and stopping a production sever (to see if anything breaks)
 
-    # first you run in debug mode, so assets get rebuilt
     $ python webapp/main.py
-    # then you run in production mode
     $ foreman start
 
 If you added a new folder, add it to the **Project Architecture** section of this readme
@@ -78,7 +76,7 @@ If you want developer access to the collectqt/quirell repository, ask a [Collect
 
     database/
 
-remote sql > json stuff (although possibly not exactly that)
+remote database > local key value datastore functions
 
     webapp/
 
