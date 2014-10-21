@@ -16,7 +16,7 @@ def ENV ():
             os.environ[str(k)]
         except KeyError:
             os.environ[str(k)] = v
-            print(' * adding '+str(k)+' to environment')
+            #print(' * adding '+str(k)+' to environment')
 
 class database (object):
     def __init__ (self):
