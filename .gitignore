@@ -1,2 +1,6 @@
 venv/
 *.pyc
+*.pyo
+
+# PyCharm project folder
+.idea/
