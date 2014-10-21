@@ -25,7 +25,6 @@ This section **assumes you are running a Linux distrubution**, specifically Ubun
 Finally, **everytime you start working on the project** you need to run these commands within the `quirell/` folder to activate the environment
 
     $ source venv/bin/activate
-    $ python config/setup.py
 
 ## Contributing
 
