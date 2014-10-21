@@ -8,13 +8,14 @@ This section **assumes you are running a Linux distrubution**, specifically Ubun
 * [git](http://git-scm.com/)
 * [pip](https://pip.pypa.io/en/latest/installing.html)
 * [virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/)
+* [heroku toolbelt](https://toolbelt.heroku.com/)
 
 **If you don't have any of those requirements**, you can install them via the commands below. If you are unsure if you have them, then go through the commands anyway!
 
     $ sudo add-apt-repository ppa:fkrull/deadsnakes
     $ sudo apt-get update
     $ sudo apt-get install python3.4 python3.4-dev
-    $ sudo apt-get install git python-pip python-virtualenv
+    $ sudo apt-get install git python-pip python-virtualenv heroku-toolbelt
 
 **If this is your first time setting up Quirell**, you need to use these commands to set up the environment
 
