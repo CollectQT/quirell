@@ -53,8 +53,9 @@ def index ():
 @app.route('/<path>')
 def dynamic_path(path):
     # frist check that path is empty, if so then 404
-    if len(glob.glob('paths/'+path+'*')) == 0: return page_not_found(404)
-    return render('post.html', html_content=build("paths/"+path))
+    print("PATH REQUEST: "+str(path))
+    if len(glob.glob(app.root_path+'/paths/'+path+'*')) == 0: return page_not_found(404)
+    return render('post.html', html_content=build(app.root_path+'/paths/'+path))
 
 # except for /static/* in which case we render the file itself
 @app.route('/static/<path:filename>')
