@@ -33,27 +33,36 @@ Organization:
 .positionStatic {position: static;}
 .center {margin-left: auto; margin-right: auto;}
 
-$primary_color: #7AADA6;
-$secondary_color: #fda720;
-$body_color: rgba(#fda720, 0.3);
+$primary_color: #554488;
+$accent_color: rgba(#397D02, 0.4);
+$filler_dark: #D0D0D0;
+$filler_light: #EFEFEF;
 
-$title_font: "Press Start 2P", monospace;
-$body_font: "Ubuntu Mono", sans-serif;
-$cursive_font: "Walter Turncoat", cursive;
-$texture: url(http://i.imgur.com/5NGuyjJ.png);
+$body_font: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo, Helvetica, Arial, sans-serif;
+$monospaced_font: "Lucida Console", "Lucida Sans Typewriter", Monaco, "Bitstream Vera Sans Mono", monospace;
 
 $mobile_xy: 500px;
-
-.heading {font-family: $title_font;}
-.content {font-family: $body_font;}
 
 /*---------------
     GLOBAL
 -----------------*/
 
+html, body {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    background-color: $primary_color;
+    overflow-x: hidden;
+    font-family: $body_font;
+}
+
 h1, h2, h3, h4, h5, p {
     color: black;
-    font-family: $title_font;
+    font-family: $body_font;
     padding: 5px 15px;
 }
 
@@ -66,30 +75,14 @@ nav h1, nav h2 {
     background-color: transparent;
 }
 
-p, blockquote, ul {
-    font-family: $body_font;
-}
-
 a {
     cursor: inherit;
     color: purple;
     text-decoration: inherit;
+    &:hover {
+        text-decoration: underline;
+    }
 }
-
-//
-
-html, body {
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    height: 100%;
-}
-
-body {
-    background-color: white;
-    overflow-x: hidden;
-    font-family: $title_font;
- }
 
 nav button {
     position: relative;
@@ -98,32 +91,75 @@ nav button {
     opacity: 0.7;
     border: none;
     text-align: right;
-    background-color: $secondary_color;
+    background-color: $filler_dark;
     transition: color 0.5s, background-color 0.5s;
     &:hover {
-        color: $primary_color;
+        color: $filler_light;
         background-color: black;
     }
     &:active {
         color: black;
-        background-color: $primary_color;
+        background-color: $accent_color;
     }
 }
 
 nav {
     position: fixed;
     width: 100%;
-    background-color: $primary_color;
+    background-color: $filler_dark;
 }
 
-article {background-color: $body_color;}
+article {background-color: $filler_light;}
 
 pre {
     color: white;
     background-color: black;
+    font-family: $monospaced_font;
 }
 
 ul {list-style-type: square;}
+
+.img-mid {
+    height: 60px;
+    width: 60px;
+}
+
+
+blockquote {
+    font-style: italic;
+}
+
+.avatar, .post-meta {
+    display: inline-block;
+}
+
+.avatar {
+    border-radius: 20%;
+}
+
+.display-name {
+    font-weight: bold;
+}
+
+.subtext {
+    color: gray;
+    font-size: 0.9em;
+}
+
+.middle > * {
+    vertical-align: middle;
+}
+
+.action-bar {
+    font-weight: bold;
+    margin-left: auto;
+    min-width: 50%;
+    display: table;
+    list-style: none;
+    & li {
+        display: table-cell;
+    }
+}
 
 /*---------------------
  BASE (MOBILE) LAYOUT
@@ -131,6 +167,10 @@ ul {list-style-type: square;}
 
 //this media query is just for consistency
 @media all {
+
+    html {
+        font-size: 16px;
+    }
 
     nav {
         height: 80px;
@@ -149,9 +189,34 @@ ul {list-style-type: square;}
     }
 
     article {
-        border-style: solid;
-        border-color: $primary_color;
-        border-width: 7px;
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 5px 5px 5px $accent_color;
+    }
+
+    .post-author {
+    }
+
+    .post-meta {
+        max-width: 80%;
+        margin-left: 5px;
+        line-height: 1.4em;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .content {
+        padding: 10px 5px;
+    }
+
+    .action-bar {
+        margin-top: 2px;
+        margin-bottom: 2px;
+    }
+
+    .action-bar li {
+        padding: 0 10px;
     }
 
     p {
@@ -160,10 +225,6 @@ ul {list-style-type: square;}
 
     pre {
         padding: 5px;
-    }
-
-    blockquote {
-        font-style: italic;
     }
 
     ul {
@@ -193,7 +254,7 @@ ul {list-style-type: square;}
 .fa-envelope {color: gray;}
 .fa-github {color: black;}
 .fa-rss-square {color: orange;}
-.fa {font-size: 1.5em;}
+.fa {font-size: 1em;}
 
 //TWITTER MADE ME DO IT >_<
 .twitter-tweet {margin-left: auto !important; margin-right: auto !important;}
