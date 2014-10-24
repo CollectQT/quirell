@@ -88,7 +88,8 @@ a {
 nav {
     position: fixed;
     width: 100%;
-    background-color: $filler_medium;
+    background-color: $primary_color;
+    box-shadow: 0 0 10px black
 }
 
 article {background-color: $filler_light;}
@@ -100,12 +101,6 @@ pre {
 }
 
 ul {list-style-type: square;}
-
-.img-mid {
-    height: 60px;
-    width: 60px;
-}
-
 
 blockquote {
     font-style: italic;
@@ -161,8 +156,24 @@ blockquote {
         font-size: 16px;
     }
 
+    .img-mid {
+        height: 60px;
+        width: 60px;
+    }
+
+    .img-small {
+        height: 40px;
+        width: 40px;
+    }
+
     nav {
-        height: 80px;
+        height: 50px;
+    }
+
+    nav i {
+        font-size: 40px;
+        color: $filler_light;
+        padding: 0 15px;
     }
 
     main {
@@ -262,7 +273,6 @@ blockquote {
 .fa-envelope {color: gray;}
 .fa-github {color: black;}
 .fa-rss-square {color: orange;}
-.fa {font-size: 1em;}
 
 //TWITTER MADE ME DO IT >_<
 .twitter-tweet {margin-left: auto !important; margin-right: auto !important;}
