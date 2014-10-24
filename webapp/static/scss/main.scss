@@ -35,7 +35,8 @@ Organization:
 
 $primary_color: #554488;
 $accent_color: rgba(#397D02, 0.4);
-$filler_dark: #D0D0D0;
+$filler_dark: #808080;
+$filler_medium: #D0D0D0;
 $filler_light: #EFEFEF;
 
 $body_font: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo, Helvetica, Arial, sans-serif;
@@ -84,29 +85,10 @@ a {
     }
 }
 
-nav button {
-    position: relative;
-    display: block;
-    width: 100%;
-    opacity: 0.7;
-    border: none;
-    text-align: right;
-    background-color: $filler_dark;
-    transition: color 0.5s, background-color 0.5s;
-    &:hover {
-        color: $filler_light;
-        background-color: black;
-    }
-    &:active {
-        color: black;
-        background-color: $accent_color;
-    }
-}
-
 nav {
     position: fixed;
     width: 100%;
-    background-color: $filler_dark;
+    background-color: $filler_medium;
 }
 
 article {background-color: $filler_light;}
@@ -142,7 +124,7 @@ blockquote {
 }
 
 .subtext {
-    color: gray;
+    color: $filler_dark;
     font-size: 0.9em;
 }
 
@@ -151,12 +133,19 @@ blockquote {
 }
 
 .action-bar {
-    font-weight: bold;
+    padding: 0;
+    font-size: 1.0em;
     margin-left: auto;
-    min-width: 50%;
+    margin-right: auto;
+    width: 80%;
+    color: $filler_dark;
     display: table;
     list-style: none;
     & li {
+        white-space: nowrap;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
         display: table-cell;
     }
 }
@@ -177,6 +166,8 @@ blockquote {
     }
 
     main {
+        width: 95%;
+        margin: 0 auto;
         padding-top: 80px;
     }
 
@@ -192,14 +183,13 @@ blockquote {
         margin: 10px 0;
         padding: 10px;
         border-radius: 10px;
-        box-shadow: 5px 5px 5px $accent_color;
     }
 
     .post-author {
     }
 
     .post-meta {
-        max-width: 80%;
+        max-width: calc(95% - 60px);
         margin-left: 5px;
         line-height: 1.4em;
         white-space: nowrap;
@@ -215,10 +205,6 @@ blockquote {
         margin-bottom: 2px;
     }
 
-    .action-bar li {
-        padding: 0 10px;
-    }
-
     p {
         padding: 0 10px;
     }
@@ -227,8 +213,26 @@ blockquote {
         padding: 5px;
     }
 
-    ul {
+    li.action-icon-4 {
+        text-align: right;
+        width: 7%;
     }
+
+    li.action-value-4 {
+        text-align: left;
+        width: 18%;
+    }
+
+    li.action-icon-5 {
+        text-align: right;
+        width: 5%;
+    }
+
+    li.action-value-5 {
+        text-align: left;
+        width: 15%;
+    }
+
 }
 
 /*---------------
@@ -239,6 +243,10 @@ blockquote {
 
     main {
         margin: 0 auto;
+        width: 60%;
+    }
+
+    .action-bar {
         width: 60%;
     }
 

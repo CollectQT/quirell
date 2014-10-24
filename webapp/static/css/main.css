@@ -51,22 +51,6 @@
   a:hover {
   text-decoration: underline; }
 
-nav button {
- position: relative;
- display: block;
- width: 100%;
- opacity: 0.7;
- border: none;
- text-align: right;
- background-color: #D0D0D0;
- transition: color 0.5s, background-color 0.5s; }
- nav button:hover {
- color: #EFEFEF;
- background-color: black; }
- nav button:active {
- color: black;
- background-color: rgba(57, 125, 2, 0.4); }
-
 nav {
  position: fixed;
  width: 100%;
@@ -101,19 +85,26 @@ nav {
   font-weight: bold; }
 
   .subtext {
-  color: gray;
+  color: #808080;
   font-size: 0.9em; }
 
   .middle > * {
   vertical-align: middle; }
 
   .action-bar {
-  font-weight: bold;
+  padding: 0;
+  font-size: 1em;
   margin-left: auto;
-  min-width: 50%;
+  margin-right: auto;
+  width: 80%;
+  color: #808080;
   display: table;
   list-style: none; }
   .action-bar li {
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
   display: table-cell; }
 
 @media all {
@@ -122,6 +113,8 @@ nav {
  nav {
  height: 80px; }
  main {
+ width: 95%;
+ margin: 0 auto;
  padding-top: 80px; }
  img {
  height: 160px;
@@ -129,10 +122,9 @@ nav {
  article {
  margin: 10px 0;
  padding: 10px;
- border-radius: 10px;
- box-shadow: 5px 5px 5px rgba(57, 125, 2, 0.4); }
+ border-radius: 10px; }
  .post-meta {
- max-width: 80%;
+ max-width: calc(95% - 60px);
  margin-left: 5px;
  line-height: 1.4em;
  white-space: nowrap;
@@ -142,17 +134,29 @@ nav {
  .action-bar {
   margin-top: 2px;
   margin-bottom: 2px; }
-  .action-bar li {
-  padding: 0 10px; }
   p {
   padding: 0 10px; }
   pre {
   padding: 5px; }
+  li.action-icon-4 {
+  text-align: right;
+  width: 7%; }
+  li.action-value-4 {
+  text-align: left;
+  width: 18%; }
+  li.action-icon-5 {
+  text-align: right;
+  width: 5%; }
+  li.action-value-5 {
+  text-align: left;
+  width: 15%; }
 }
 
 @media all and (min-height: 500px) and (min-width: 500px) {
  main {
  margin: 0 auto;
+ width: 60%; }
+ .action-bar {
  width: 60%; }
 }
 
