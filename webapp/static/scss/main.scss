@@ -34,21 +34,22 @@ Organization:
 .center {margin-left: auto; margin-right: auto;}
 
 $primary_color: #554488;
-$accent_color: rgba(#397D02, 0.4);
+$accent_color: #397D02;
+$filler_darkest: black;
 $filler_dark: #808080;
 $filler_medium: #D0D0D0;
 $filler_light: #EFEFEF;
+$filler_lightest: white;
 
 $body_font: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo, Helvetica, Arial, sans-serif;
 $monospaced_font: "Lucida Console", "Lucida Sans Typewriter", Monaco, "Bitstream Vera Sans Mono", monospace;
-
-$mobile_xy: 500px;
 
 /*---------------
     GLOBAL
 -----------------*/
 
 html, body {
+    color: $filler_darkest;
     padding: 0;
     margin: 0;
     width: 100%;
@@ -62,23 +63,14 @@ body {
 }
 
 h1, h2, h3, h4, h5, p {
-    color: black;
+    color: $filler_darkest;
     font-family: $body_font;
     padding: 5px 15px;
 }
 
-h1, h2 {
-    background-color: rgba(gray, 0.3);
-    text-align: center;
-}
-
-nav h1, nav h2 {
-    background-color: transparent;
-}
-
 a {
     cursor: inherit;
-    color: purple;
+    color: $accent_color;
     text-decoration: inherit;
     &:hover {
         text-decoration: underline;
@@ -89,14 +81,45 @@ nav {
     position: fixed;
     width: 100%;
     background-color: $primary_color;
-    box-shadow: 0 0 10px black
+    box-shadow: 0 0 10px $filler_darkest;
+}
+
+nav button {
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+
+nav button i {
+    color: $filler_lightest;
+}
+
+.nav-block {
+    display: inline-block;
+}
+
+.nav-left {
+
+}
+
+.nav-mid {
+
+}
+
+.nav-right {
+
+}
+
+.nav-text {
+    vertical-align: bottom;
 }
 
 article {background-color: $filler_light;}
 
 pre {
-    color: white;
-    background-color: black;
+    color: $filler_lightest;
+    background-color: $filler_darkest;
     font-family: $monospaced_font;
 }
 
@@ -115,6 +138,7 @@ blockquote {
 }
 
 .display-name {
+    color: $filler_darkest;
     font-weight: bold;
 }
 
@@ -168,12 +192,19 @@ blockquote {
 
     nav {
         height: 50px;
+        height: 12vw;
     }
 
-    nav i {
-        font-size: 40px;
+    nav button i {
+        font-size: 35px;
+        font-size: 10vw;
         color: $filler_light;
         padding: 0 15px;
+        text-shadow: 0.05em 0.05em 0.05em $accent_color;
+    }
+
+    .nav-text {
+        display: none;
     }
 
     main {
@@ -247,13 +278,20 @@ blockquote {
 }
 
 /*---------------
-    DESKTOP
+      TABLET
 -----------------*/
 
-@media all and (min-height: $mobile_xy) and (min-width: $mobile_xy){
+@media all and (min-width: 500px){
+
+    nav {
+        height: 50px;
+    }
+
+    nav button i {
+        font-size: 40px;
+    }
 
     main {
-        margin: 0 auto;
         width: 60%;
     }
 
@@ -261,6 +299,27 @@ blockquote {
         width: 60%;
     }
 
+}
+
+/*---------------
+     DESKTOP
+-----------------*/
+
+@media all and (min-width: 1000px){
+
+    .nav-text {
+        display: inline;
+        color: $filler_lightest;
+        font-family: $body_font;
+        font-weight: 600;
+        font-size: 1.3em;
+        height: 40px;
+    }
+
+
+    main {
+        width: 40%;
+    }
 }
 
 /*---------------

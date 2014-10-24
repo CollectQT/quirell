@@ -18,6 +18,7 @@
  margin-right: auto; }
 
  html, body {
+ color: black;
  padding: 0;
  margin: 0;
  width: 100%;
@@ -37,16 +38,9 @@
    sans-serif;
   padding: 5px 15px; }
 
-  h1, h2 {
-  background-color: rgba(128, 128, 128, 0.3);
-  text-align: center; }
-
-  nav h1, nav h2 {
-  background-color: transparent; }
-
   a {
   cursor: inherit;
-  color: purple;
+  color: #397D02;
   text-decoration: inherit; }
   a:hover {
   text-decoration: underline; }
@@ -57,6 +51,21 @@ nav {
  background-color: #554488;
  box-shadow: 0 0 10px black; }
 
+ nav button {
+ background-color: transparent;
+ padding: 0;
+ margin: 0;
+ border: none; }
+
+ nav button i {
+ color: white; }
+
+ .nav-block {
+ display: inline-block; }
+
+ .nav-text {
+ vertical-align: bottom; }
+
  article {
  background-color: #EFEFEF; }
 
@@ -64,24 +73,25 @@ nav {
  color: white;
  background-color: black;
  font-family: "Lucida Console", "Lucida Sans Typewriter", Monaco, "Bitstream Vera Sans Mono",
- monospace; }
+  monospace; }
 
  ul {
  list-style-type: square; }
 
  blockquote {
- font-style: italic; }
+  font-style: italic; }
 
- .avatar, .post-meta {
- display: inline-block; }
+  .avatar, .post-meta {
+  display: inline-block; }
 
- .avatar {
- border-radius: 20%; }
+  .avatar {
+  border-radius: 20%; }
 
- .display-name {
- font-weight: bold; }
+  .display-name {
+  color: black;
+  font-weight: bold; }
 
- .subtext {
+  .subtext {
   color: #808080;
   font-size: 0.9em; }
 
@@ -114,19 +124,24 @@ nav {
  height: 40px;
  width: 40px; }
  nav {
- height: 50px; }
- nav i {
- font-size: 40px;
+ height: 50px;
+ height: 12vw; }
+ nav button i {
+ font-size: 35px;
+ font-size: 10vw;
  color: #EFEFEF;
- padding: 0 15px; }
+ padding: 0 15px;
+ text-shadow: 0.05em 0.05em 0.05em #397D02; }
+ .nav-text {
+ display: none; }
  main {
  width: 95%;
  margin: 0 auto;
  padding-top: 80px; }
  img {
- height: 160px;
- width: 160px; }
- article {
+  height: 160px;
+  width: 160px; }
+  article {
   margin: 10px 0;
   padding: 10px;
   border-radius: 10px; }
@@ -149,9 +164,9 @@ nav {
   text-align: right;
   width: 7%; }
   li.action-value-4 {
-  text-align: left;
-  width: 18%; }
-  li.action-icon-5 {
+   text-align: left;
+   width: 18%; }
+   li.action-icon-5 {
    text-align: right;
    width: 5%; }
    li.action-value-5 {
@@ -159,12 +174,29 @@ nav {
    width: 15%; }
 }
 
-@media all and (min-height: 500px) and (min-width: 500px) {
+@media all and (min-width: 500px) {
+ nav {
+ height: 50px; }
+ nav button i {
+ font-size: 40px; }
  main {
- margin: 0 auto;
  width: 60%; }
  .action-bar {
  width: 60%; }
+}
+
+@media all and (min-width: 1000px) {
+ .nav-text {
+ display: inline;
+ color: white;
+ font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica,
+ FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo, Helvetica, Arial,
+ sans-serif;
+ font-weight: 600;
+ font-size: 1.3em;
+ height: 40px; }
+ main {
+ width: 40%; }
 }
 
 .fa-linkedin {
