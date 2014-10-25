@@ -48,7 +48,7 @@
 nav {
  position: fixed;
  width: 100%;
- background-color: #554488;
+ background-color: #EFEFEF;
  box-shadow: 0 0 10px black; }
 
  nav button {
@@ -57,14 +57,17 @@ nav {
  margin: 0;
  border: none; }
 
- nav button i {
- color: white; }
+ nav button i, .nav-text, .quirell-icon {
+ color: #554488; }
+
+ .icon {
+ display: inline-block; }
+
+ .quirell-icon {
+ font-family: "Quirell", Arial; }
 
  .nav-block {
  display: inline-block; }
-
- .nav-text {
- vertical-align: bottom; }
 
  article {
  background-color: #EFEFEF; }
@@ -76,9 +79,9 @@ nav {
   monospace; }
 
  ul {
- list-style-type: square; }
+  list-style-type: square; }
 
- blockquote {
+  blockquote {
   font-style: italic; }
 
   .avatar, .post-meta {
@@ -108,11 +111,11 @@ nav {
   display: table;
   list-style: none; }
   .action-bar li {
-  white-space: nowrap;
-  overflow: hidden;
-  padding: 0;
-  margin: 0;
-  display: table-cell; }
+   white-space: nowrap;
+   overflow: hidden;
+   padding: 0;
+   margin: 0;
+   display: table-cell; }
 
 @media all {
  html {
@@ -124,14 +127,13 @@ nav {
  height: 40px;
  width: 40px; }
  nav {
- height: 50px;
- height: 12vw; }
- nav button i {
+ height: 55px;
+ height: 13vw; }
+ nav i {
  font-size: 35px;
  font-size: 10vw;
  color: #EFEFEF;
- padding: 0 15px;
- text-shadow: 0.05em 0.05em 0.05em #397D02; }
+ padding: 0 15px; }
  .nav-text {
  display: none; }
  main {
@@ -177,7 +179,7 @@ nav {
 @media all and (min-width: 500px) {
  nav {
  height: 50px; }
- nav button i {
+ nav i {
  font-size: 40px; }
  main {
  width: 60%; }
@@ -187,8 +189,8 @@ nav {
 
 @media all and (min-width: 1000px) {
  .nav-text {
- display: inline;
- color: white;
+ vertical-align: middle;
+ display: inline-block;
  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica,
  FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo, Helvetica, Arial,
  sans-serif;
@@ -220,3 +222,7 @@ nav {
  .twitter-tweet {
  margin-left: auto !important;
  margin-right: auto !important; }
+
+ @font-face {
+ font-family: "Quirell";
+ src: url(../fonts/Quirell.ttf) format("truetype"); }

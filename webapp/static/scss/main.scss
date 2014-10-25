@@ -80,7 +80,7 @@ a {
 nav {
     position: fixed;
     width: 100%;
-    background-color: $primary_color;
+    background-color: $filler_light;
     box-shadow: 0 0 10px $filler_darkest;
 }
 
@@ -91,8 +91,16 @@ nav button {
     border: none;
 }
 
-nav button i {
-    color: $filler_lightest;
+nav button i, .nav-text, .quirell-icon {
+    color: $primary_color;
+}
+
+.icon {
+    display: inline-block;
+}
+
+.quirell-icon {
+    font-family: "Quirell", Arial;
 }
 
 .nav-block {
@@ -109,10 +117,6 @@ nav button i {
 
 .nav-right {
 
-}
-
-.nav-text {
-    vertical-align: bottom;
 }
 
 article {background-color: $filler_light;}
@@ -191,16 +195,16 @@ blockquote {
     }
 
     nav {
-        height: 50px;
-        height: 12vw;
+        height: 55px;
+        height: 13vw;
     }
 
-    nav button i {
+    nav i {
         font-size: 35px;
         font-size: 10vw;
         color: $filler_light;
         padding: 0 15px;
-        text-shadow: 0.05em 0.05em 0.05em $accent_color;
+//        text-shadow: 0.05em 0.05em 0.05em $filler_darkest;
     }
 
     .nav-text {
@@ -287,7 +291,7 @@ blockquote {
         height: 50px;
     }
 
-    nav button i {
+    nav i {
         font-size: 40px;
     }
 
@@ -308,8 +312,8 @@ blockquote {
 @media all and (min-width: 1000px){
 
     .nav-text {
-        display: inline;
-        color: $filler_lightest;
+        vertical-align: middle;
+        display: inline-block;
         font-family: $body_font;
         font-weight: 600;
         font-size: 1.3em;
@@ -335,3 +339,8 @@ blockquote {
 
 //TWITTER MADE ME DO IT >_<
 .twitter-tweet {margin-left: auto !important; margin-right: auto !important;}
+
+@font-face {
+    font-family: "Quirell";
+    src: url(../fonts/Quirell.ttf) format("truetype");
+}
