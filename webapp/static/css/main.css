@@ -51,6 +51,18 @@ nav {
  background-color: #EFEFEF;
  box-shadow: 0 0 10px black; }
 
+ .nav-left {
+ float: left;
+ position: fixed; }
+
+ .nav-mid {
+ text-align: center;
+ position: fixed;
+ width: 100%; }
+
+ .nav-right {
+ float: right; }
+
  nav button {
  background-color: transparent;
  padding: 0;
@@ -66,19 +78,16 @@ nav {
  .quirell-icon {
  font-family: "Quirell", Arial; }
 
- .nav-block {
- display: inline-block; }
-
  article {
- background-color: #EFEFEF; }
+  background-color: #EFEFEF; }
 
- pre {
- color: white;
- background-color: black;
- font-family: "Lucida Console", "Lucida Sans Typewriter", Monaco, "Bitstream Vera Sans Mono",
-  monospace; }
+  pre {
+  color: white;
+  background-color: black;
+  font-family: "Lucida Console", "Lucida Sans Typewriter", Monaco, "Bitstream Vera Sans Mono",
+   monospace; }
 
- ul {
+  ul {
   list-style-type: square; }
 
   blockquote {
@@ -99,18 +108,18 @@ nav {
   font-size: 0.9em; }
 
   .middle > * {
-  vertical-align: middle; }
+   vertical-align: middle; }
 
-  .action-bar {
-  padding: 0;
-  font-size: 1em;
-  margin-left: auto;
-  margin-right: auto;
-  width: 80%;
-  color: #808080;
-  display: table;
-  list-style: none; }
-  .action-bar li {
+   .action-bar {
+   padding: 0;
+   font-size: 1em;
+   margin-left: auto;
+   margin-right: auto;
+   width: 80%;
+   color: #808080;
+   display: table;
+   list-style: none; }
+   .action-bar li {
    white-space: nowrap;
    overflow: hidden;
    padding: 0;
@@ -127,20 +136,25 @@ nav {
  height: 40px;
  width: 40px; }
  nav {
- height: 55px;
+ padding-top: 5px;
+ height: 50px;
  height: 13vw; }
  nav i {
- font-size: 35px;
+ font-size: 30px;
  font-size: 10vw;
  color: #EFEFEF;
- padding: 0 15px; }
+ margin-left: 15px;
+ margin-right: 5px; }
+ .quirell-icon {
+ font-size: 50px;
+ font-size: 10vw; }
  .nav-text {
  display: none; }
  main {
- width: 95%;
- margin: 0 auto;
- padding-top: 80px; }
- img {
+  width: 95%;
+  margin: 0 auto;
+  padding-top: 80px; }
+  img {
   height: 160px;
   width: 160px; }
   article {
@@ -148,6 +162,7 @@ nav {
   padding: 10px;
   border-radius: 10px; }
   .post-meta {
+  max-width: 230px;
   max-width: calc(95% - 60px);
   margin-left: 5px;
   line-height: 1.4em;
@@ -163,9 +178,9 @@ nav {
   pre {
   padding: 5px; }
   li.action-icon-4 {
-  text-align: right;
-  width: 7%; }
-  li.action-value-4 {
+   text-align: right;
+   width: 7%; }
+   li.action-value-4 {
    text-align: left;
    width: 18%; }
    li.action-icon-5 {
@@ -181,13 +196,24 @@ nav {
  height: 50px; }
  nav i {
  font-size: 40px; }
+ .quirell-icon {
+ font-size: 50px; }
  main {
- width: 60%; }
+ width: 70%; }
+ .post-meta {
+ max-width: 400px;
+ max-width: calc(95% - 60px); }
  .action-bar {
  width: 60%; }
 }
 
 @media all and (min-width: 1000px) {
+ nav {
+ width: 90%;
+ padding-left: 5%;
+ padding-right: 5%; }
+ .nav-mid {
+ width: 90%; }
  .nav-text {
  vertical-align: middle;
  display: inline-block;

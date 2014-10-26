@@ -84,6 +84,21 @@ nav {
     box-shadow: 0 0 10px $filler_darkest;
 }
 
+.nav-left {
+    float: left;
+    position: fixed;
+}
+
+.nav-mid {
+    text-align: center;
+    position: fixed;
+    width: 100%;
+}
+
+.nav-right {
+    float: right;
+}
+
 nav button {
     background-color: transparent;
     padding: 0;
@@ -101,22 +116,6 @@ nav button i, .nav-text, .quirell-icon {
 
 .quirell-icon {
     font-family: "Quirell", Arial;
-}
-
-.nav-block {
-    display: inline-block;
-}
-
-.nav-left {
-
-}
-
-.nav-mid {
-
-}
-
-.nav-right {
-
 }
 
 article {background-color: $filler_light;}
@@ -195,16 +194,22 @@ blockquote {
     }
 
     nav {
-        height: 55px;
+        padding-top: 5px;
+        height: 50px;
         height: 13vw;
     }
 
     nav i {
-        font-size: 35px;
+        font-size: 30px;
         font-size: 10vw;
         color: $filler_light;
-        padding: 0 15px;
-//        text-shadow: 0.05em 0.05em 0.05em $filler_darkest;
+        margin-left: 15px;
+        margin-right: 5px;
+    }
+
+    .quirell-icon {
+        font-size: 50px;
+        font-size: 10vw;
     }
 
     .nav-text {
@@ -235,6 +240,7 @@ blockquote {
     }
 
     .post-meta {
+        max-width: 230px;
         max-width: calc(95% - 60px);
         margin-left: 5px;
         line-height: 1.4em;
@@ -295,8 +301,17 @@ blockquote {
         font-size: 40px;
     }
 
+    .quirell-icon {
+        font-size: 50px;
+    }
+
     main {
-        width: 60%;
+        width: 70%;
+    }
+
+    .post-meta {
+        max-width: 400px;
+        max-width: calc(95% - 60px);
     }
 
     .action-bar {
@@ -311,6 +326,16 @@ blockquote {
 
 @media all and (min-width: 1000px){
 
+    nav {
+        width: 90%;
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    .nav-mid {
+        width: 90%;
+    }
+
     .nav-text {
         vertical-align: middle;
         display: inline-block;
@@ -319,7 +344,6 @@ blockquote {
         font-size: 1.3em;
         height: 40px;
     }
-
 
     main {
         width: 40%;
