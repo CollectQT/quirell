@@ -147,7 +147,8 @@ nav {
  margin-right: 5px; }
  .quirell-icon {
  font-size: 50px;
- font-size: 10vw; }
+ font-size: 10vw;
+ display: none; }
  .nav-text {
  display: none; }
  main {
@@ -197,7 +198,8 @@ nav {
  nav i {
  font-size: 40px; }
  .quirell-icon {
- font-size: 50px; }
+ font-size: 50px;
+ display: inline-block; }
  main {
  width: 70%; }
  .post-meta {
