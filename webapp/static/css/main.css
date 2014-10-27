@@ -63,6 +63,9 @@ nav {
  .nav-right {
  float: right; }
 
+ nav i {
+ color: #EFEFEF; }
+
  nav button {
  background-color: transparent;
  padding: 0;
@@ -76,9 +79,9 @@ nav {
  display: inline-block; }
 
  .quirell-icon {
- font-family: "Quirell", Arial; }
+  font-family: "Quirell", Arial; }
 
- article {
+  article {
   background-color: #EFEFEF; }
 
   pre {
@@ -93,10 +96,13 @@ nav {
   blockquote {
   font-style: italic; }
 
-  .avatar, .post-meta {
-  display: inline-block; }
+  .post-meta-top {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden; }
 
   .avatar {
+  display: inline-block;
   border-radius: 20%; }
 
   .display-name {
@@ -104,92 +110,83 @@ nav {
   font-weight: bold; }
 
   .subtext {
-  color: #808080;
-  font-size: 0.9em; }
+   color: #808080;
+   font-size: 0.9em; }
 
-  .middle > * {
+   .middle > * {
    vertical-align: middle; }
 
-   .action-bar {
+   .post-meta-bottom {
    padding: 0;
    font-size: 1em;
    margin-left: auto;
    margin-right: auto;
-   width: 80%;
-   color: #808080;
-   display: table;
-   list-style: none; }
-   .action-bar li {
-   white-space: nowrap;
-   overflow: hidden;
-   padding: 0;
-   margin: 0;
-   display: table-cell; }
+   color: #808080; }
 
-@media all {
- html {
- font-size: 16px; }
- .img-mid {
- height: 60px;
- width: 60px; }
- .img-small {
- height: 40px;
- width: 40px; }
- nav {
- padding-top: 5px;
- height: 50px;
- height: 13vw; }
- nav i {
- font-size: 30px;
- font-size: 10vw;
- color: #EFEFEF;
- margin-left: 15px;
- margin-right: 5px; }
- .quirell-icon {
- font-size: 50px;
- font-size: 10vw;
- display: none; }
- .nav-text {
- display: none; }
- main {
-  width: 95%;
-  margin: 0 auto;
-  padding-top: 80px; }
-  img {
-  height: 160px;
-  width: 160px; }
-  article {
-  margin: 10px 0;
-  padding: 10px;
-  border-radius: 10px; }
-  .post-meta {
-  max-width: 230px;
-  max-width: calc(95% - 60px);
-  margin-left: 5px;
-  line-height: 1.4em;
-  white-space: nowrap;
-  overflow: hidden; }
-  .content {
-  padding: 10px 5px; }
-  .action-bar {
-  margin-top: 2px;
-  margin-bottom: 2px; }
-  p {
-  padding: 0 10px; }
-  pre {
-  padding: 5px; }
-  li.action-icon-4 {
-   text-align: right;
-   width: 7%; }
-   li.action-value-4 {
-   text-align: left;
-   width: 18%; }
-   li.action-icon-5 {
-   text-align: right;
-   width: 5%; }
-   li.action-value-5 {
-   text-align: left;
-   width: 15%; }
+   .post-notes {
+   display: inline-block; }
+
+   .post-action-bar {
+   display: inline-block; }
+
+   @media all {
+   html {
+   font-size: 16px; }
+   .img-mid {
+   height: 60px;
+   width: 60px; }
+   .img-small {
+    height: 40px;
+    width: 40px; }
+    nav {
+    padding-top: 5px;
+    height: 50px;
+    height: 13vw; }
+    nav i {
+    font-size: 30px;
+    font-size: 10vw;
+    margin-left: 15px;
+    margin-right: 5px; }
+    .quirell-icon {
+    font-size: 50px;
+    font-size: 10vw;
+    display: none; }
+    .nav-text {
+    display: none; }
+    main {
+    width: 95%;
+    margin: 0 auto;
+    padding-top: 60px; }
+    img {
+    height: 160px;
+    width: 160px; }
+    article {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 10px; }
+    .post-meta-top {
+     max-width: 230px;
+     max-width: calc(95% - 60px);
+     margin-left: 5px;
+     line-height: 1.4em; }
+     .post-meta-bottom {
+     width: 100%; }
+     .post-notes {
+     width: 40%; }
+     .post-tags {
+     margin-bottom: 10px; }
+     .post-action-bar {
+     padding-right: 20px;
+     float: right;
+     text-align: right; }
+     .post-action-bar > * {
+     padding: 0 10px; }
+     .content {
+     padding: 10px 15px; }
+     p {
+     padding: 0 10px; }
+     pre {
+      padding: 5px; }
 }
 
 @media all and (min-width: 500px) {
@@ -202,11 +199,9 @@ nav {
  display: inline-block; }
  main {
  width: 70%; }
- .post-meta {
+ .post-meta-top {
  max-width: 400px;
  max-width: calc(95% - 60px); }
- .action-bar {
- width: 60%; }
 }
 
 @media all and (min-width: 1000px) {
