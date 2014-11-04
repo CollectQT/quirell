@@ -122,7 +122,7 @@ nav button i, .nav-text, .quirell-icon {
     font-family: "Quirell", Arial;
 }
 
-article {background-color: $filler_light;}
+article.post {background-color: $filler_light;}
 
 pre {
     color: $filler_lightest;
@@ -186,6 +186,7 @@ blockquote {
 
     html {
         font-size: 16px;
+        line-height: 1.3em;
     }
 
     .img-mid {
@@ -235,7 +236,7 @@ blockquote {
         width: 160px;
     }
 
-    article {
+    article.post {
         margin: 10px 0;
         padding: 10px;
         border-radius: 10px;
@@ -303,6 +304,7 @@ blockquote {
     }
 
     .quirell-icon {
+        padding-top: 15px;
         font-size: 50px;
         display: inline-block;
     }

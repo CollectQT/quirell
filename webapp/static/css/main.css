@@ -81,7 +81,7 @@ nav {
  .quirell-icon {
   font-family: "Quirell", Arial; }
 
-  article {
+  article.post {
   background-color: #EFEFEF; }
 
   pre {
@@ -131,7 +131,8 @@ nav {
 
    @media all {
    html {
-   font-size: 16px; }
+   font-size: 16px;
+   line-height: 1.3em; }
    .img-mid {
    height: 60px;
    width: 60px; }
@@ -160,7 +161,7 @@ nav {
     img {
     height: 160px;
     width: 160px; }
-    article {
+    article.post {
     margin: 10px 0;
     padding: 10px;
     border-radius: 10px; }
@@ -195,6 +196,7 @@ nav {
  nav i {
  font-size: 40px; }
  .quirell-icon {
+ padding-top: 15px;
  font-size: 50px;
  display: inline-block; }
  main {
