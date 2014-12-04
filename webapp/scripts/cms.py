@@ -1,7 +1,33 @@
+import os
+
+class cms (object):
+    def __init__ (self, app):
+        import yaml
+        self.app = app
+        #
+        with open(relpath('../../config/ENV.yaml'), 'r') as ENV_file:
+            ENV = yaml.load(ENV_file)
+        for k, v in ENV.items():
+            try: os.environ[str(k)]
+            except KeyError: os.environ[str(k)] = v
+        for key, value in ENV.items():
+            app.config[key] = value
+        #
+        build_css_automatic(self.app)
+
+    def login_manager (self):
+        from flask.ext.login import LoginManager
+        login_manager = LoginManager()
+        login_manager.init_app(self.app)
+        return login_manager
+
+from watchdog.events import FileSystemEventHandler
+class Change_monitor (FileSystemEventHandler):
+    ''' build_css() on scss file change'''
+    def on_modified (self, event): build_css(self.app)
+
 def build_css (app):
-    '''
-    builds css from sass
-    '''
+    '''builds css from sass'''
     import scss
     # configs
     scss.config.PROJECT_ROOT = app.root_path
@@ -18,9 +44,7 @@ def build_css (app):
     print(" * building css")
 
 def build_css_automatic (app):
-    '''
-    adds monitoring to autoreload css on changes
-    '''
+    '''adds monitoring to autoreload css on changes'''
     from watchdog import observers
     from watchdog.events import LoggingEventHandler
     # start up the monitor
@@ -32,14 +56,8 @@ def build_css_automatic (app):
     # do an initial build
     build_css(app)
 
-from watchdog.events import FileSystemEventHandler
-class Change_monitor (FileSystemEventHandler):
-    '''
-    defines what should happen on scss file change
-    that being, build_css()
-    '''
-    def on_modified (self, event):
-        build_css(self.app)
+# there's totally a better way to do this
+def relpath (path): return os.path.join(os.path.dirname(__file__), path)
 
 def build_html (path):
     '''

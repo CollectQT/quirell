@@ -18,44 +18,47 @@ import glob
 # external
 import yaml
 import flask
+import flask.ext.login as flask_login
 # custom
 from scripts import cms
 
 # shortcuts
-render = flask.render_template
+flask.render_template
 build = cms.build_html
 
-# start app and set configuration
+# start app and run startup things
 app = flask.Flask(__name__, static_folder='static', static_url_path='')
 app.config.from_object(__name__)
-with open(app.root_path + '/config.yaml','r') as config_file:
-    configs = yaml.load(config_file.read())
-for key, value in configs.items():
-    app.config[key] = value
-# start css builder
-cms.build_css_automatic(app)
+CMS = cms.cms(app)
+app, login_manager = CMS.app, CMS.login_manager()
 
 # Views! i.e. what the user gets when they type in our url
 
 # the homepage is special because its path is empty.
-#
-# if you are actually launching a website you probably want to change
-#     return render('post.html', html_content=build("readme"))
-# to
-#     return render('post.html', html_content=build("paths/index"))
-#
 @app.route('/')
 def index ():
-    return render('post.html', html_content=build("readme"))
+    return flask.render_template('post.html', html_content=build("readme"))
 
 # every other path reads from paths/<url_input>
-# ex: website.com/cats -> firestarter/paths/cats
 @app.route('/<path>')
 def dynamic_path(path):
-    # frist check that path is empty, if so then 404
+    # first check that path is empty, if so then 404
     print("PATH REQUEST: "+str(path))
     if len(glob.glob(app.root_path+'/paths/'+path+'*')) == 0: return page_not_found(404)
-    return render('post.html', html_content=build(app.root_path+'/paths/'+path))
+    return flask.render_template('post.html', html_content=build(app.root_path+'/paths/'+path))
+
+# from flask-login, idk what its for
+@login_manager.user_loader
+def load_user (userid):
+    return user.get(userid)
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    error = None
+    if flask.request.method == 'POST': print(flask.request.form['name'])
+    # the code below is executed if the request method
+    # was GET or the credentials were invalid
+    return flask.render_template("post.html", html_content=build(app.root_path+'/paths/test'))
 
 # except for /static/* in which case we render the file itself
 @app.route('/static/<path:filename>')
@@ -65,7 +68,7 @@ def base_static(filename):
 # 404 is special because it needs @app.errorhandler(404)
 @app.errorhandler(404)
 def page_not_found (e):
-    return render('post.html', html_content=build("paths/404"))
+    return flask.render_template('post.html', html_content=build("paths/404"))
 
 # debug mode start options
 
