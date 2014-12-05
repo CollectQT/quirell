@@ -16,7 +16,6 @@ sys.path.insert(1, os.path.dirname(os.path.realpath(__file__)))
 # builtin
 import glob
 # external
-import yaml
 import flask
 import flask.ext.login as flask_login
 # custom
@@ -44,7 +43,7 @@ def index ():
 def dynamic_path(path):
     # first check that path is empty, if so then 404
     print("PATH REQUEST: "+str(path))
-    if len(glob.glob(app.root_path+'/paths/'+path+'*')) == 0: return page_not_found(404)
+    if len(glob.glob(app.root_path+'/paths/'+path+'*')) == 0: return flask.abort(404)
     return flask.render_template('post.html', html_content=build(app.root_path+'/paths/'+path))
 
 # from flask-login, idk what its for
@@ -55,7 +54,9 @@ def load_user (userid):
 @app.route("/login", methods=["GET", "POST"])
 def login():
     error = None
-    if flask.request.method == 'POST': print(flask.request.form['name'])
+    if flask.request.method == 'POST':
+        try: name = flask.request.form['name']
+        except KeyError: flask.abort(400)
     # the code below is executed if the request method
     # was GET or the credentials were invalid
     return flask.render_template("post.html", html_content=build(app.root_path+'/paths/test'))

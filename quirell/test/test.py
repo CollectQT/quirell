@@ -2,13 +2,11 @@
 
 import json
 #
-from py2neo import neo4j, node, rel
-#
 from database import Database
 
 node_data = {
     'node_type': 'user',
-    'user_id': '@lynncyrin',
+    'userID': '@lynn',
     'user_info': json.dumps({
         'description': 'computer femme',
         'profile_fields': {},
@@ -17,3 +15,4 @@ node_data = {
 
 db = Database()
 db.create_user(node_data)
+print(db.get_user('@lynn'))

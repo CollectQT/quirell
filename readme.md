@@ -79,3 +79,11 @@ the website front end
     config/
 
 Projectwide configuration and setup scripts
+
+---
+
+for a single user, there exists:
+
+* a display name (comesmetic ex: 'super gay witch')
+* a user ID (unique, URL safe ex: '@lynncyrin')
+??? * a data ID (unique, permanent, a series of numbers, ex: '0001213')
