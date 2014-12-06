@@ -12,8 +12,8 @@ an attribute identifying their 'node_type', currently defined 'node_type's being
 'user' and 'post'. 'user' 'node_type's need a userID, and 'post's 'node_type'
 need 'content' and a 'creator'.
 
-node(node_type='user', userID='@cyrin')
-node(node_type='post', content='im a programmer omg!!!' creator='@cyrin')
+    node(node_type='user', userID='@cyrin')
+    node(node_type='post', content='im a programmer omg!!!' creator='@cyrin')
 
 In the above example second class objects are 'userID', 'content', 'creator'
 
@@ -22,13 +22,13 @@ python object of some sort and encoded as a json string. Data attached to nodes
 this way are third class objects. Create as many third class objects as you
 want, as they are easy to keep track of. Example:
 
-node(
-    post_info={
-        'display_name': 'lynn',
-        'pronouns': 'she/her',
-        'random': 'hi!!!!',
-    }
-)
+    node(
+        post_info={
+            'display_name': 'lynn',
+            'pronouns': 'she/her',
+            'random': 'hi!!!!',
+        }
+    )
 
 In the above example third class objects are 'display_name', 'pronouns', etc...
 Also please note again that the contents of post_info are a json string, I'm
@@ -38,24 +38,24 @@ The majority of the content for a node should be third class, for users that
 would be user_info, for posts that would be post_info. Here are some example
 nodes incorpating all of the above:
 
-node(
-    node_type='user'
-    userID='@cyrin'
-    user_info=
-    {
-        'display_name': 'lynn',
-        'pronouns': 'she/her',
-        'description': 'computer femme!!!!'
-    }
-)
+    node(
+        node_type='user'
+        userID='@cyrin'
+        user_info=
+        {
+            'display_name': 'lynn',
+            'pronouns': 'she/her',
+            'description': 'computer femme!!!!'
+        }
+    )
 
-node(
-    node_type='post'
-    content='im a programmer :)'
-    creator='@cyrin'
-    post_info=
-    {
-        'tags'=['tech', 'me'],
-        'visibility'='friends',
-    }
-)
+    node(
+        node_type='post'
+        content='im a programmer :)'
+        creator='@cyrin'
+        post_info=
+        {
+            'tags'=['tech', 'me'],
+            'visibility'='friends',
+        }
+    )
