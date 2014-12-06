@@ -1,19 +1,13 @@
 import os
 
-class cms (object):
+class Cms (object):
     def __init__ (self, app):
         import yaml
         self.app = app
-        #
-        with open(relpath('../../config/ENV.yaml'), 'r') as ENV_file:
-            ENV = yaml.load(ENV_file)
-        for k, v in ENV.items():
-            try: os.environ[str(k)]
-            except KeyError: os.environ[str(k)] = v
-        for key, value in ENV.items():
-            app.config[key] = value
-        #
         build_css_automatic(self.app)
+        self.app.login_manager = self.login_manager()
+
+    def start (self): return self.app
 
     def login_manager (self):
         from flask.ext.login import LoginManager
@@ -55,9 +49,6 @@ def build_css_automatic (app):
     observer.start()
     # do an initial build
     build_css(app)
-
-# there's totally a better way to do this
-def relpath (path): return os.path.join(os.path.dirname(__file__), path)
 
 def build_html (path):
     '''

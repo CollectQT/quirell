@@ -11,7 +11,6 @@ Use:
 # add folder to path
 import os
 import sys
-sys.path.insert(1, os.path.dirname(os.path.realpath(__file__)))
 
 # builtin
 import glob
@@ -19,7 +18,8 @@ import glob
 import flask
 import flask.ext.login as flask_login
 # custom
-from scripts import cms
+from quirell.webapp import cms
+from quirell.config import *
 
 # shortcuts
 flask.render_template
@@ -29,7 +29,7 @@ build = cms.build_html
 app = flask.Flask(__name__, static_folder='static', static_url_path='')
 app.config.from_object(__name__)
 CMS = cms.cms(app)
-app, login_manager = CMS.app, CMS.login_manager()
+app = cms.Cms.start()
 
 # Views! i.e. what the user gets when they type in our url
 
@@ -38,18 +38,11 @@ app, login_manager = CMS.app, CMS.login_manager()
 def index ():
     return flask.render_template('post.html', html_content=build("readme"))
 
-# every other path reads from paths/<url_input>
-@app.route('/<path>')
-def dynamic_path(path):
-    # first check that path is empty, if so then 404
-    print("PATH REQUEST: "+str(path))
-    if len(glob.glob(app.root_path+'/paths/'+path+'*')) == 0: return flask.abort(404)
-    return flask.render_template('post.html', html_content=build(app.root_path+'/paths/'+path))
-
-# from flask-login, idk what its for
-@login_manager.user_loader
+'''
+@app.login_manager.user_loader
 def load_user (userid):
     return user.get(userid)
+'''
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -65,6 +58,14 @@ def login():
 @app.route('/static/<path:filename>')
 def base_static(filename):
     return flask.send_from_directory(app.root_path + '/static/', filename)
+
+# every other path reads from paths/<url_input>
+@app.route('/<path>')
+def dynamic_path(path):
+    # first check that path is empty, if so then 404
+    print("PATH REQUEST: "+str(path))
+    if len(glob.glob(app.root_path+'/paths/'+path+'*')) == 0: return flask.abort(404)
+    return flask.render_template('post.html', html_content=build(app.root_path+'/paths/'+path))
 
 # 404 is special because it needs @app.errorhandler(404)
 @app.errorhandler(404)

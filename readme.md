@@ -47,12 +47,11 @@ If you added packages, add them to the requirements via
 
     $ pip freeze > requirements.txt
 
-If you made any code changes, make sure the code runs successfully via running and stopping a debug server (so assets are rebuilt), then running and stopping a production sever (to see if anything breaks)
+If you made any code changes, make sure the code runs successfully via...
 
-    $ python webapp/main.py
-    $ foreman start
+((WIP))
 
-If you added a new folder, add it to the **Project Architecture** section of this readme
+    python -m quirell.test
 
 **If you are a core maintainer** you will be expected to pull changes from **'develop'** into **'production'**, then push them to heroku. The do that, run:
 
@@ -68,22 +67,4 @@ If you want developer access to the collectqt/quirell repository, ask a [Collect
 
 ## Project Architecture
 
-    database/
-
-remote database > local key value datastore functions
-
-    webapp/
-
-the website front end
-
-    config/
-
-Projectwide configuration and setup scripts
-
----
-
-for a single user, there exists:
-
-* a display name (comesmetic ex: 'super gay witch')
-* a user ID (unique, URL safe ex: '@lynncyrin')
-??? * a data ID (unique, permanent, a series of numbers, ex: '0001213')
+WIP
