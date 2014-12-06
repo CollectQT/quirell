@@ -1,5 +1,7 @@
 # Database
 
+!!! This is out of date as of updating to py2neo 2.X
+
 ## Architecture
 
 nodes themselves are 'first class objects', users and posts are represented in
