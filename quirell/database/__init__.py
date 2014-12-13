@@ -1,1 +1,1 @@
-# package marker
+from quirell.database.database import Database

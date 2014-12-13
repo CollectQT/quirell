@@ -1,1 +1,1 @@
-web: gunicorn quirell.webapp.main:app
+web: gunicorn quirell.webapp:app

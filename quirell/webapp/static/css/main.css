@@ -1,1 +1,253 @@
-/home/lynn/quirell/quirell/webapp/static/scss/main.scss; 
+.visible {
+ opacity: 1; }
+
+ .invisible {
+ opacity: 0; }
+
+ .none {
+ display: none; }
+
+ .positionAbsolute {
+ position: absolute; }
+
+ .positionStatic {
+ position: static; }
+
+ .center {
+ margin-left: auto;
+ margin-right: auto; }
+
+ html, body {
+ color: black;
+ padding: 0;
+ margin: 0;
+ width: 100%;
+ height: 100%; }
+
+ body {
+ background-color: #554488;
+ overflow-x: hidden;
+ font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica,
+  FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo, Helvetica, Arial,
+  sans-serif; }
+
+ h1, h2, h3, h4, h5, p {
+  color: black;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica,
+   FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo, Helvetica, Arial,
+   sans-serif;
+  padding: 5px 15px; }
+
+  a {
+  cursor: inherit;
+  color: #397D02;
+  text-decoration: inherit; }
+  a:hover {
+  text-decoration: underline; }
+
+nav {
+ position: fixed;
+ width: 100%;
+ background-color: #EFEFEF;
+ box-shadow: 0 0 10px black; }
+
+ .nav-left {
+ float: left;
+ position: fixed; }
+
+ .nav-mid {
+ text-align: center;
+ position: fixed;
+ width: 100%; }
+
+ .nav-right {
+ float: right; }
+
+ nav i {
+ color: #EFEFEF; }
+
+ nav button {
+ background-color: transparent;
+ padding: 0;
+ margin: 0;
+ border: none; }
+
+ nav button i, .nav-text, .quirell-icon {
+ color: #554488; }
+
+ .icon {
+ display: inline-block; }
+
+ .quirell-icon {
+  font-family: "Quirell", Arial; }
+
+  article.post {
+  background-color: #EFEFEF; }
+
+  pre {
+  color: white;
+  background-color: black;
+  font-family: "Lucida Console", "Lucida Sans Typewriter", Monaco, "Bitstream Vera Sans Mono",
+   monospace; }
+
+  ul {
+  list-style-type: square; }
+
+  blockquote {
+  font-style: italic; }
+
+  .post-meta-top {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden; }
+
+  .avatar {
+  display: inline-block;
+  border-radius: 20%; }
+
+  .display-name {
+  color: black;
+  font-weight: bold; }
+
+  .subtext {
+   color: #808080;
+   font-size: 0.9em; }
+
+   .middle > * {
+   vertical-align: middle; }
+
+   .post-meta-bottom {
+   padding: 0;
+   font-size: 1em;
+   margin-left: auto;
+   margin-right: auto;
+   color: #808080; }
+
+   .post-notes {
+   display: inline-block; }
+
+   .post-action-bar {
+   display: inline-block; }
+
+   @media all {
+   html {
+   font-size: 16px;
+   line-height: 1.3em; }
+   .img-mid {
+   height: 60px;
+   width: 60px; }
+   .img-small {
+    height: 40px;
+    width: 40px; }
+    nav {
+    padding-top: 5px;
+    height: 50px;
+    height: 13vw; }
+    nav i {
+    font-size: 30px;
+    font-size: 10vw;
+    margin-left: 15px;
+    margin-right: 5px; }
+    .quirell-icon {
+    font-size: 50px;
+    font-size: 10vw;
+    display: none; }
+    .nav-text {
+    display: none; }
+    main {
+    width: 95%;
+    margin: 0 auto;
+    padding-top: 60px; }
+    img {
+    height: 160px;
+    width: 160px; }
+    article.post {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 10px; }
+    .post-meta-top {
+     max-width: 230px;
+     max-width: calc(95% - 60px);
+     margin-left: 5px;
+     line-height: 1.4em; }
+     .post-meta-bottom {
+     width: 100%; }
+     .post-notes {
+     width: 40%; }
+     .post-tags {
+     margin-bottom: 10px; }
+     .post-action-bar {
+     padding-right: 20px;
+     float: right;
+     text-align: right; }
+     .post-action-bar > * {
+     padding: 0 10px; }
+     .content {
+     padding: 10px 15px; }
+     p {
+     padding: 0 10px; }
+     pre {
+      padding: 5px; }
+}
+
+@media all and (min-width: 500px) {
+ nav {
+ height: 50px; }
+ nav i {
+ font-size: 40px; }
+ .quirell-icon {
+ padding-top: 15px;
+ font-size: 50px;
+ display: inline-block; }
+ main {
+ width: 70%; }
+ .post-meta-top {
+ max-width: 400px;
+ max-width: calc(95% - 60px); }
+}
+
+@media all and (min-width: 1000px) {
+ nav {
+ width: 90%;
+ padding-left: 5%;
+ padding-right: 5%; }
+ .nav-mid {
+ width: 90%; }
+ .nav-text {
+ vertical-align: middle;
+ display: inline-block;
+ font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica,
+ FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo, Helvetica, Arial,
+ sans-serif;
+ font-weight: 600;
+ font-size: 1.3em;
+ height: 40px; }
+ main {
+ width: 40%; }
+}
+
+.fa-linkedin {
+ color: #4875B4; }
+
+ .fa-twitter {
+ color: #33CCFF; }
+
+ .fa-skype {
+ color: #12A5F4; }
+
+ .fa-envelope {
+ color: gray; }
+
+ .fa-github {
+ color: black; }
+
+ .fa-rss-square {
+ color: orange; }
+
+ .twitter-tweet {
+ margin-left: auto !important;
+ margin-right: auto !important; }
+
+ @font-face {
+ font-family: "Quirell";
+ src: url(../fonts/Quirell.ttf) format("truetype"); }

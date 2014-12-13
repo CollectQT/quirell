@@ -5,19 +5,22 @@ Views! i.e. what the user gets when they type in our url
 '''
 
 # builtin
+import os
 import glob
 # external
 import flask
 import flask.ext.login as flask_login
 # custom
-from quirell.webapp import cms, app
 from quirell.config import *
+from quirell.webapp import cms
 
-# shortcuts
+# initialize flask app and attach the cms to it
+app = flask.Flask(__name__, static_folder='static', static_url_path='')
+app = cms.Cms(app).start()
 
 # the homepage is special because its path is empty.
 @app.route('/')
-def index (): return app.cms.render('post.html', "readme")
+def index (): return app.cms.render('post.html', "index")
 
 '''
 @app.login_manager.user_loader
@@ -33,7 +36,7 @@ def login():
         except KeyError: flask.abort(400)
     # the code below is executed if the request method
     # was GET or the credentials were invalid
-    return app.cms.render("post.html", html_content=build(app.root_path+'/paths/test'))
+    return app.cms.render("post.html", 'login')
 
 # except for /static/* in which case we render the file itself
 @app.route('/static/<path:filename>')
@@ -43,11 +46,9 @@ def base_static(filename):
 # every other path reads from paths/<url_input>
 @app.route('/<path>')
 def dynamic_path(path):
-    # first check that path is empty, if so then 404
-    print("PATH REQUEST: "+str(path))
-    if len(glob.glob(app.root_path+'/paths/'+path+'*')) == 0: return flask.abort(404)
-    return flask.render_template('post.html', '/paths/'+path, app.root_path)
+    return app.cms.render("post.html", path)
 
 # 404 is special because it needs @app.errorhandler(404)
 @app.errorhandler(404)
-def page_not_found (e): return flask.render_template('post.html', html_content=build("paths/404"))
+def page_not_found(e):
+    return app.cms.render('post.html', "404")

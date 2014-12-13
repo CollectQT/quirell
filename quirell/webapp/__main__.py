@@ -1,3 +1,2 @@
-from quirell.webapp import app
-app.run(debug=True)
-
+from quirell.webapp import runserver
+runserver.run()
