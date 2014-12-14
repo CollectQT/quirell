@@ -4,11 +4,29 @@ from quirell.config import *
 
 class Test (object):
     def __init__ (self):
-        #self.db_test()
-        self.webapp_test()
-        print('Tests Complete')
+        import time
+        import threading
+        from quirell.webapp import app, runserver
+        #
+        web_server_thread = threading.Thread(target=runserver.run)
+        testing_thread = threading.Thread(target=Test.webapp_test, daemon=True,
+            kwargs={
+                'app': app,}
+            )
+        #
+        web_server_thread.start()
+        testing_thread.start()
 
-    def db_test (self):
+    def webapp_test (app):
+        import time
+        import requests
+        time.sleep(1)
+        requests.get('http://0.0.0.0:5000')
+        print('app is up! tearing down now...')
+        time.sleep(1)
+        requests.post('http://0.0.0.0:5000/shutdown')
+
+    def db_test ():
         from quirell.database.database import Database
         import json
         #
@@ -24,25 +42,6 @@ class Test (object):
         db = Database()
         db.create_user(node_data)
         print(db.get_user('@lynn'))
-
-    def webapp_test (self):
-        import requests
-        #url = 'http://localhost:5000'
-        #r = requests.get('http://localhost:5000')
-    '''
-        import requests
-        from quirell.webapp import app
-        app.run(debug=True, use_reloader=False)
-    '''
-    '''
-    from flask_failsafe import failsafe
-    @failsafe
-    def create_app (self):
-        # note that the import is *inside* this function so that we can catch
-        # errors that happen at import time
-        from quirell.webapp import app
-        return app
-    '''
 
 if __name__ == "__main__":
     Test()

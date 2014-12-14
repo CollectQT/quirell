@@ -33,12 +33,12 @@ class Cms (object):
         from watchdog.events import LoggingEventHandler
         change_monitor = Change_monitor(self)
         observer = observers.Observer()
-        observer.schedule(change_monitor, self.app.root_path+'/static/scss/')
+        observer.schedule(change_monitor, BASE_PATH+'/quirell/webapp/static/scss/')
         observer.start()
         # start css writer
         import scss
-        scss.config.PROJECT_ROOT = self.app.root_path
-        self.scss_file = self.app.root_path+'/static/scss/main.scss'
+        scss.config.PROJECT_ROOT = BASE_PATH
+        self.scss_file = BASE_PATH+'/quirell/webapp/static/scss/main.scss'
         self.css_writer = scss.Scss()
         # do an intial build
         self.build_css()
@@ -51,7 +51,7 @@ class Cms (object):
         # readability sillyness
         for i in range(4): compiled_css = compiled_css.replace("  ", " ")
         # write to file
-        with open(self.app.root_path+'/static/css/main.css', 'w') as outfile:
+        with open(BASE_PATH+'/quirell/webapp/static/css/main.css', 'w') as outfile:
             outfile.write(compiled_css)
         # log
         print(" * building css")
@@ -75,7 +75,6 @@ class Cms (object):
         import markdown
         # get full path
         full_path = os.path.join(BASE_PATH, 'quirell', 'webapp', 'paths', file_name)
-        print(full_path)
         # see what files start with that path
         files_with_path = glob.glob(full_path+'*')
         # if theres not just one, throw an error
@@ -100,5 +99,12 @@ class Cms (object):
 from watchdog.events import FileSystemEventHandler
 class Change_monitor (FileSystemEventHandler):
     ''' build_css() on scss file change'''
-    def __init__ (self, cms_inst): self.cms_inst = cms_inst
-    def on_modified (self, event): self.cms_inst()
+    def __init__ (self, cms_inst): self.css_builder = cms_inst.build_css
+    def on_modified (self, event): self.css_builder()
+
+def shutdown_server():
+    from flask import request
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
