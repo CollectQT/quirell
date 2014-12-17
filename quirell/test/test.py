@@ -21,8 +21,13 @@ class Test (object):
         import time
         import requests
         time.sleep(1)
+        print('request index')
         requests.get('http://0.0.0.0:5000')
-        print('app is up! tearing down now...')
+        print('test login')
+        creds = {'name': 'lynn'}
+        requests.get('http://0.0.0.0:5000/login')
+        requests.post('http://0.0.0.0:5000/login', data=creds)
+        print('tearing down server now')
         time.sleep(1)
         requests.post('http://0.0.0.0:5000/shutdown')
 
