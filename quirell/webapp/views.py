@@ -11,9 +11,9 @@ import glob
 import flask
 import flask.ext.login as flask_login
 # custom
-import quirell.webapp.forms as forms
 from quirell.config import *
-from quirell.webapp.cms import Cms, User
+from quirell.webapp.cms import Cms
+from quirell.webapp import forms
 
 # initialize flask app and attach the cms to it
 app = flask.Flask(__name__, static_folder='static', static_url_path='')
@@ -26,10 +26,10 @@ def index (): return cms.render('post.html', 'index')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    from quirell.webapp.forms import login_form
+    from quirell.webapp.user import User
     form = forms.login_form()
     if flask.request.method == 'POST':
-        if not form.validate_on_submit(): abort(400) # bad form input
+        if not form.validate_on_submit(): flask.abort(400) # bad form input
         user = User(form.userID, form.password)
         flask_login.login_user(user)
         #
@@ -41,6 +41,7 @@ def login():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    from quirell.webapp.user import User
     form = forms.registration_form()
     if flask.request.method == 'POST':
         pass
@@ -86,7 +87,7 @@ def load_user (userID):
 
 @app.route('/shutdown', methods=['POST'])
 def shutdown():
-    from quirell.webapp.cms import shutdown_server
+    from quirell.webapp.shutdown import shutdown_server
     if app.config['DEBUG'] == False: return 'Invalid shutdown request'
     shutdown_server()
     return 'Server shutting down...'

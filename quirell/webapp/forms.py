@@ -14,7 +14,7 @@ class registration_form (flask_wtf.Form):
     userID = StringField('userID', [validators.Required()])
     email = StringField('email address', [validators.Required()])
     password = PasswordField('password', [
-        validators.Required()
-        validators.EqualTo('confirm', message='passwords must match')])
+        validators.Required(),
+        validators.EqualTo('confirm', message='passwords must match'),])
     confirm = PasswordField('repeat password')
     accept_tos = BooleanField('I accept the TOS', [validators.Required()])

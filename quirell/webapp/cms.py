@@ -5,8 +5,7 @@ import logging
 # external
 import flask
 import flask.ext.login as flask_login
-from flask.ext.login import LoginManager
-from flask.ext.bcrypt import Bcrypt
+import flask.ext.bcrypt as bcrypt
 # custom
 from quirell.config import *
 from quirell.database import Database
@@ -19,9 +18,9 @@ class Cms (object):
         for k,v in CONFIG.items(): self.app.config[k] = v # configs
         self.db = Database() # database
         self.build_css_automatic() # css builder
-        self.bcrypt = Bcrypt(self.app)
+        self.bcrypt = bcrypt.Bcrypt(self.app)
         # login manager
-        self.login_manager = LoginManager().init_app(self.app)
+        self.login_manager =flask_login.LoginManager().init_app(self.app)
 
     def start (self): return self.app, self
 
@@ -38,14 +37,23 @@ class Cms (object):
     #     # not done ! needs more things !
     #     return self.db.get_user(userID)
 
-    # css building
+    ################
+    # CSS BUILDING #
+    ################
+
+    from watchdog.events import FileSystemEventHandler
+    class Change_monitor (FileSystemEventHandler):
+        ''' build_css() on scss file change'''
+        def __init__ (self, cms_inst): self.css_builder = cms_inst.build_css
+        def on_modified (self, event): self.css_builder()
+
 
     def build_css_automatic (self):
         '''adds monitoring to autoreload css on changes'''
         # start up the monitor
         from watchdog import observers
         from watchdog.events import LoggingEventHandler
-        change_monitor = Change_monitor(self)
+        change_monitor = Cms.Change_monitor(self)
         observer = observers.Observer()
         observer.schedule(change_monitor, BASE_PATH+'/quirell/webapp/static/scss/')
         observer.start()
@@ -70,7 +78,9 @@ class Cms (object):
         # log
         print("[NOTE] Building CSS")
 
-    # html building
+    #################
+    # HTML BUILDING #
+    #################
 
     def quick_render (self, template, content, *args, **kwargs):
         '''render a webpage from text input and a template'''
@@ -119,39 +129,3 @@ class Cms (object):
             file_text = self.convert_markdown(file_text)
         # return the html
         return file_text
-
-class User (flask_login.UserMixin):
-    from quirell.views import cms
-
-    def __init__ (self, userID, password, email):
-        self.userID = userID
-        self.password = cms.bcrypt.generate_password_hash(password)
-        self.email = email
-
-    def create (self):
-        node_data = {
-            'node_type': 'user',
-            'userID': '@'+self.userID,
-            'password': self.password,
-            'email': self.email,
-        }
-        cms.db.create_user(node_data)
-
-    def get (self, userID):
-        return self.userID
-
-    def is_authenticated (self):
-        return cms.bcrypt.check_password_hash(cms.db.user.password, self.password)
-
-from watchdog.events import FileSystemEventHandler
-class Change_monitor (FileSystemEventHandler):
-    ''' build_css() on scss file change'''
-    def __init__ (self, cms_inst): self.css_builder = cms_inst.build_css
-    def on_modified (self, event): self.css_builder()
-
-def shutdown_server():
-    from flask import request
-    func = request.environ.get('werkzeug.server.shutdown')
-    if func is None:
-        raise RuntimeError('Not running with the Werkzeug Server')
-    func()

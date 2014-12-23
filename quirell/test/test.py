@@ -17,16 +17,17 @@ class Test (object):
         testing_thread.start()
 
     def webapp_test (app):
+        from quirell.webapp.shutdown import shutdown
         import requests
         requests.get('http://0.0.0.0:5000')
         requests.get('http://0.0.0.0:5000/login')
         creds = {
-            'userID': '@lynn',
+            'userID': 'lynn',
             'password': 'rawr',
             'remember_me': False,
         }
         requests.post('http://0.0.0.0:5000/login', data=creds)
-        requests.post('http://0.0.0.0:5000/shutdown')
+        shutdown()
 
 if __name__ == "__main__":
     Test()
