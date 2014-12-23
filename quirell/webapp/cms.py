@@ -1,49 +1,42 @@
 '''cms.py'''
 
+# builtin
+import logging
 # external
+import flask
 import flask.ext.login as flask_login
+from flask.ext.login import LoginManager
+from flask.ext.bcrypt import Bcrypt
 # custom
 from quirell.config import *
+from quirell.database import Database
 
 class Cms (object):
     def __init__ (self, app):
-        from quirell.database import Database
-        self.app = app
+        self.app = app # attach app to cms
+        self.app.cms = self # attach cms to app, allows for dirty tricks
         # start things
-        self.db = Database()
-        self.attach_config()
-        self.build_css_automatic()
-        # attach stuff
-        self.app.cms = self
-        self.app.login_manager = self.login_manager()
+        for k,v in CONFIG.items(): self.app.config[k] = v # configs
+        self.db = Database() # database
+        self.build_css_automatic() # css builder
+        self.bcrypt = Bcrypt(self.app)
+        # login manager
+        self.login_manager = LoginManager().init_app(self.app)
 
-    def start (self): return self.app
-
-    def attach_config (self):
-        from quirell.config import ENV
-        self.app.config['SECRET_KEY'] = ENV['SECRET_KEY']
+    def start (self): return self.app, self
 
     # logins
 
-    def login_manager (self):
-        from flask.ext.login import LoginManager
-        login_manager = LoginManager()
-        login_manager.init_app(self.app)
-        # configs, move them somewher else later
-        login_manager.login_view = 'login'
-        login_manager.login_message = 'You have to be logged in to view this page!'
-        #
-        return login_manager
-
-    def user_loader (self, userID):
-        '''
-        returns user object when given a user_id
-        should return None (not raise an exception) if the ID is not valid
-        assums user is already logged in
-        '''
-        self.app.login_manager.user_loader = self.user_loader
-        # not done ! needs more things !
-        return self.db.get_user(userID)
+    # def user_loader (self, userID):
+    #     '''
+    #     returns user object when given a user_id
+    #     should return None (not raise an exception) if the ID is not valid
+    #     assumes user is already logged in
+    #     '''
+    #     # bind to app.login_manager
+    #     self.login_manager.user_loader = self.user_loader
+    #     # not done ! needs more things !
+    #     return self.db.get_user(userID)
 
     # css building
 
@@ -75,7 +68,7 @@ class Cms (object):
         with open(BASE_PATH+'/quirell/webapp/static/css/main.css', 'w') as outfile:
             outfile.write(compiled_css)
         # log
-        print(" * building css")
+        print("[NOTE] Building CSS")
 
     # html building
 
@@ -112,8 +105,9 @@ class Cms (object):
         # if theres 0, its actually 404
         # if theres >1, someone shoud go rename some files ;p
         if not len(files_with_path) == 1:
-            print('files with this path: '+str(len(files_with_path)))
-            print('the above value should be 1')
+            print('[ERROR] Files with path '+str(full_path)+': '+str(len(files_with_path)))
+            print('[ERROR] The above value should be 1')
+            print('[ERROR] Path should extend from base directory')
             return flask.abort(404)
         # we've verified that theres only one file
         file_path = files_with_path[0]
@@ -127,7 +121,27 @@ class Cms (object):
         return file_text
 
 class User (flask_login.UserMixin):
-    pass
+    from quirell.views import cms
+
+    def __init__ (self, userID, password, email):
+        self.userID = userID
+        self.password = cms.bcrypt.generate_password_hash(password)
+        self.email = email
+
+    def create (self):
+        node_data = {
+            'node_type': 'user',
+            'userID': '@'+self.userID,
+            'password': self.password,
+            'email': self.email,
+        }
+        cms.db.create_user(node_data)
+
+    def get (self, userID):
+        return self.userID
+
+    def is_authenticated (self):
+        return cms.bcrypt.check_password_hash(cms.db.user.password, self.password)
 
 from watchdog.events import FileSystemEventHandler
 class Change_monitor (FileSystemEventHandler):

@@ -12,19 +12,25 @@ create variable names IN_ALL_CAPS
 
 import os
 
+# remember to make secret stuff secret >_>
+
 # evironment variables
 ENV ={
-    # remember to make these secret >_>
     # points to our database
     'GRAPHENEDB_URL': 'http://app30806446:FQ6jx4p9dWF6e3UzfcbL@app30806446.sb02.stations.graphenedb.com:24789',
-    # some sort of encryption thing
-    'SECRET_KEY': '000000000000000',
 }
+
 for k, v in ENV.items():
     # see if environment variables have already been added
     try: os.environ[str(k)]
     # if not, add them
     except KeyError: os.environ[str(k)] = v
+
+CONFIG ={
+    'WTF_CSRF_ENABLED': True,
+    # some sort of encryption thing
+    'SECRET_KEY': os.urandom(24),
+}
 
 # global variables
 # BASE_PATH = location of the highest level of the project

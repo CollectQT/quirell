@@ -10,43 +10,23 @@ class Test (object):
         #
         web_server_thread = threading.Thread(target=runserver.run)
         testing_thread = threading.Thread(target=Test.webapp_test, daemon=True,
-            kwargs={
-                'app': app,}
-            )
+            kwargs={'app': app,})
         #
+        #Test.db_test()
         web_server_thread.start()
         testing_thread.start()
 
     def webapp_test (app):
-        import time
         import requests
-        time.sleep(1)
-        print('request index')
         requests.get('http://0.0.0.0:5000')
-        print('test login')
-        creds = {'name': 'lynn'}
         requests.get('http://0.0.0.0:5000/login')
-        requests.post('http://0.0.0.0:5000/login', data=creds)
-        print('tearing down server now')
-        time.sleep(1)
-        requests.post('http://0.0.0.0:5000/shutdown')
-
-    def db_test ():
-        from quirell.database.database import Database
-        import json
-        #
-        node_data = {
-            'node_type': 'user',
+        creds = {
             'userID': '@lynn',
-            'user_info': json.dumps({
-                'description': 'computer femme',
-                'profile_fields': {},
-            }),
+            'password': 'rawr',
+            'remember_me': False,
         }
-        #
-        db = Database()
-        db.create_user(node_data)
-        print(db.get_user('@lynn'))
+        requests.post('http://0.0.0.0:5000/login', data=creds)
+        requests.post('http://0.0.0.0:5000/shutdown')
 
 if __name__ == "__main__":
     Test()

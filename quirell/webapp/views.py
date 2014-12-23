@@ -11,44 +11,48 @@ import glob
 import flask
 import flask.ext.login as flask_login
 # custom
+import quirell.webapp.forms as forms
 from quirell.config import *
 from quirell.webapp.cms import Cms, User
 
 # initialize flask app and attach the cms to it
 app = flask.Flask(__name__, static_folder='static', static_url_path='')
-app = Cms(app).start()
+app, cms = Cms(app).start()
 app.is_running = False
 
 # the homepage is special because its path is empty.
 @app.route('/')
-def index (): return app.cms.render('post.html', "index")
+def index (): return cms.render('post.html', 'index')
 
-@app.route("/login", methods=["GET", "POST"])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    error = None
+    from quirell.webapp.forms import login_form
+    form = forms.login_form()
     if flask.request.method == 'POST':
-        try: name = flask.request.form['name']
-        except KeyError: flask.abort(400)
+        if not form.validate_on_submit(): abort(400) # bad form input
+        user = User(form.userID, form.password)
+        flask_login.login_user(user)
+        #
         # a successful login should return the user to where they were
         # before via the 'next' variable in a query string
-        return app.cms.quick_render("message.html", "from input was "+str(name))
+        return cms.quick_render('message.html', 'logged in user '+str(form.userID))
     if flask.request.method == 'GET':
-        form = '''
-<form action='/login' method='POST'>
-    <div>
-        <label for="name">Name:</label>
-        <input type="text" name="name" placeholder="lynn kitty"/>
-    </div>
-</form>
-            '''
-        return app.cms.quick_render("message.html", form)
+        return cms.render('message.html', form.location, form=form)
 
-@app.route("/settings")
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    form = forms.registration_form()
+    if flask.request.method == 'POST':
+        pass
+    if flask.request.method == 'GET':
+        return cms.render('message.html', form.location, form=form)
+
+@app.route('/settings')
 @flask_login.login_required
 def settings():
     pass
 
-@app.route("/logout")
+@app.route('/logout')
 @flask_login.login_required
 def logout():
     #logout_user()
@@ -63,13 +67,13 @@ def base_static(filename):
 # needs to be below every other named path, so right above tech and errors
 @app.route('/<path>')
 def dynamic_path(path):
-    return app.cms.render("post.html", path)
+    return cms.render('post.html', path)
 
 # errors
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return app.cms.render('post.html', "404")
+    return cms.render('message.html', '404')
 
 # tech stuff past this point, not necesarily views
 
