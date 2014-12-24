@@ -3,39 +3,40 @@
 # builtin
 import logging
 # external
+import markdown
 import flask
-import flask.ext.login as flask_login
 import flask.ext.bcrypt as bcrypt
+import flask.ext.login as flask_login
 # custom
 from quirell.config import *
 from quirell.database import Database
 
 class Cms (object):
+
     def __init__ (self, app):
-        self.app = app # attach app to cms
-        self.app.cms = self # attach cms to app, allows for dirty tricks
-        # start things
-        for k,v in CONFIG.items(): self.app.config[k] = v # configs
-        self.db = Database() # database
-        self.build_css_automatic() # css builder
-        self.bcrypt = bcrypt.Bcrypt(self.app)
-        # login manager
-        self.login_manager =flask_login.LoginManager().init_app(self.app)
+        app.cms = self
+        # configs
+        for k,v in CONFIG.items(): app.config[k] = v
+        # content building
+        self.md = markdown.Markdown()
+        self.build_css_automatic()
+        # user management
+        self.db = Database()
+        self.bcrypt = bcrypt.Bcrypt(app)
+        self.login_manager =flask_login.LoginManager().init_app(app)
+        self.user_container = dict()
 
-    def start (self): return self.app, self
+    #########
+    # USERS #
+    #########
 
-    # logins
+    def add_user (self, userID, user):
+        self.user_container[userID] = user
+        print('[NOTE] Logging in user '+userID)
 
-    # def user_loader (self, userID):
-    #     '''
-    #     returns user object when given a user_id
-    #     should return None (not raise an exception) if the ID is not valid
-    #     assumes user is already logged in
-    #     '''
-    #     # bind to app.login_manager
-    #     self.login_manager.user_loader = self.user_loader
-    #     # not done ! needs more things !
-    #     return self.db.get_user(userID)
+    def get_user (self, userID):
+        return self.user_container[userID]
+
 
     ################
     # CSS BUILDING #
@@ -82,40 +83,36 @@ class Cms (object):
     # HTML BUILDING #
     #################
 
-    def quick_render (self, template, content, *args, **kwargs):
-        '''render a webpage from text input and a template'''
-        import flask
-        return flask.render_template(template,
-            html_content=self.convert_markdown(content), *args, **kwargs)
+    def form_render (self, template, form, *args, **kwargs):
+        '''render a page from a template and a form's html attribute'''
+        html_content = flask.templating.render_template_string(form.html, form=form)
+        return flask.render_template(template, form=form, html_content=html_content,
+            *args, **kwargs)
 
-    def render (self, template, content, *args, **kwargs):
-        '''render a webpage from a path file and a template'''
-        import flask
-        return flask.render_template(template,
-            html_content=self.build_html(content), *args, **kwargs)
+    def text_render (self, template, content, *args, **kwargs):
+        '''render a page from text input and a template file'''
+        html_content=self.md.convert(content)
+        return flask.render_template(template, html_content=html_content, *args, **kwargs)
 
-    def convert_markdown (self, text):
-        import markdown
-        md = markdown.Markdown()
-        return md.convert(text)
+    def file_render (self, template, file_path='', *args, **kwargs):
+        '''render a page from a path file and a template file'''
+        html_content=self.html_from_file(file_path)
+        return flask.render_template(template, html_content=html_content, *args, **kwargs)
 
-    def build_html (self, file_name):
-        '''
-        input: path_name[.md|.html]
-        html: <some html></some html>
-        '''
+    def html_from_file (self, file_path):
+        '''input: path_name[.md|.html]; output: <some html></some html>'''
         import os
         import glob
         import flask
         # get full path
-        full_path = os.path.join(BASE_PATH, 'quirell', 'webapp', 'paths', file_name)
+        file_path = os.path.join(BASE_PATH, 'quirell', 'webapp', 'paths', file_path)
         # see what files start with that path
-        files_with_path = glob.glob(full_path+'*')
+        files_with_path = glob.glob(file_path+'*')
         # if theres not just one, throw an error
         # if theres 0, its actually 404
         # if theres >1, someone shoud go rename some files ;p
         if not len(files_with_path) == 1:
-            print('[ERROR] Files with path '+str(full_path)+': '+str(len(files_with_path)))
+            print('[ERROR] Files with path '+str(file_path)+': '+str(len(files_with_path)))
             print('[ERROR] The above value should be 1')
             print('[ERROR] Path should extend from base directory')
             return flask.abort(404)
@@ -126,6 +123,6 @@ class Cms (object):
             file_text = file_data.read()
         # if its markdown, make it html
         if file_path.endswith('.md'):
-            file_text = self.convert_markdown(file_text)
+            file_text = self.md.convert(file_text)
         # return the html
         return file_text
