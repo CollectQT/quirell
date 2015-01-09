@@ -61,3 +61,22 @@ nodes incorpating all of the above:
             'visibility'='friends',
         }
     )
+
+---
+
+posts
+
+top level:
+    content
+    visibility
+    owner
+    secondary:
+        tags
+
+    node(
+        node_type='post'
+        content='rawr'
+        visibility=''
+        creator='<node>'
+        post_info
+    )

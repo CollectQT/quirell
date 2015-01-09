@@ -42,10 +42,20 @@ class registration_form (flask_wtf.Form):
             <p><input type="submit" value="Sign In"></p>
         </form>
         '''
-    userID = StringField('userID', [validators.Required()])
-    email = StringField('email address', [validators.Required()])
-    password = PasswordField('password', [
-        validators.Required(),
-        validators.EqualTo('confirm', message='passwords must match'),])
+    userID = StringField('userID')
+    email = StringField('email address')
+    password = PasswordField('password',
+        [validators.EqualTo('confirm', message='passwords must match')])
     confirm = PasswordField('repeat password')
-    accept_tos = BooleanField('I accept the TOS', [validators.Required()])
+
+class new_post (flask_wtf.Form):
+    html = '''
+        <h1>Signup</h1>
+        <form action="/new_post" method="POST" name="new_post">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.content(size=40) }}<br>
+            </p>
+        </form>
+        '''
+    content = TextField('content')

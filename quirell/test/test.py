@@ -22,20 +22,25 @@ class Test (object):
         requests.get('http://0.0.0.0:5000')
         requests.get('http://0.0.0.0:5000/login')
         requests.get('http://0.0.0.0:5000/signup')
-        new_user = {
-            'userID': 'kitty',
-            'email': 'firemagelynn@gmail.com',
-            'password': 'catte',
-            'confirm': 'catte',
-            'accept_tos': True,
-        }
-        requests.post('http://0.0.0.0:5000/signup', data=new_user)
-        # login = {
-        #     'userID': 'lynn',
-        #     'password': 'rawr',
-        #     'remember_me': False,
+        # new_user = {
+        #     'userID': 'kitty',
+        #     'email': 'firemagelynn@gmail.com',
+        #     'password': 'catte',
+        #     'confirm': 'catte',
+        #     'accept_tos': True,
         # }
-        # r = requests.post('http://0.0.0.0:5000/login', data=login)
+        # requests.post('http://0.0.0.0:5000/signup', data=new_user)
+        login = {
+            'userID': 'rawr',
+            'password': 'rawr',
+            'remember_me': False,
+        }
+        requests.post('http://0.0.0.0:5000/login', data=login)
+        requests.get('http://0.0.0.0:5000/new_post')
+        post_content = {
+            'content': 'new post to get more pets!',
+        }
+        requests.post('http://0.0.0.0:5000/new_post')
         shutdown()
 
 if __name__ == "__main__":

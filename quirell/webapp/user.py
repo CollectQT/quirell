@@ -1,37 +1,40 @@
-# this is imported the cms instance
-from quirell.webapp.views import cms
 import flask.ext.login as flask_login
+from quirell.webapp.views import cms # this is the cms instance, not the class
 
 class User (flask_login.UserMixin):
+    '''the user class represents an individual user in the database'''
 
     def login (self, userID, password):
         '''logs in a user'''
-        db_entry = cms.db.get_user('@'+userID)
-        if db_entry == None:
+        node = cms.db.get_user('@'+userID)
+        # check that inputs are correct
+        # like, if this user exists
+        if node == None:
             return None, 'no user with this username'
-        if not self.check_pass(password):
+        # and if their password matches the db password
+        if not cms.bcrypt.check_password_hash(node['password'], password):
             return None, 'incorrect password'
-        cms.add_user(userID, self)
-        flask_login.login_user(self)
+        # user considered successfully logged in at this point
+        self.userID = userID
+        cms.add_user(userID, self) # add user instance to cms
+        flask_login.login_user(self) # add to login manageer
         return self, ''
 
     def create (self, userID, password, email):
         '''create a new user'''
         node_data = {
-            'node_type': 'user',
             'userID': '@'+userID,
-            'password': self.set_pass(password),
+            'password': cms.bcrypt.generate_password_hash(password),
             'email': email,
         }
         cms.db.create_user(node_data)
 
-    def set_pass (self, password):
-        '''set password for a new user'''
-        return cms.bcrypt.generate_password_hash(password)
-
-    def check_pass (pass1, pass2):
-        '''check password input against user set password'''
-        return cms.bcrypt.check_password_hash(pass1, pass2)
+    def create_post (self, content):
+        node_data = {
+            'content': content
+        }
 
     def is_authenticated (self):
         return True
+
+    def get_id (self): return self.userID

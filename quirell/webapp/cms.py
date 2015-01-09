@@ -1,7 +1,7 @@
 '''cms.py'''
 
 # builtin
-import logging
+import sys
 # external
 import markdown
 import flask
@@ -21,7 +21,11 @@ class Cms (object):
         self.md = markdown.Markdown()
         self.build_css_automatic()
         # user management
-        self.db = Database()
+        # connect to user database
+        try: self.db = Database()
+        except:
+            print('[ERROR] Cannot connect to database')
+            #print('[WARNING] Running without database, if you need a database connection you should run "python -m quirell.webapp.shutdown"')
         self.bcrypt = bcrypt.Bcrypt(app)
         self.login_manager =flask_login.LoginManager().init_app(app)
         self.user_container = dict()
@@ -32,10 +36,12 @@ class Cms (object):
 
     def add_user (self, userID, user):
         self.user_container[userID] = user
-        print('[NOTE] Logging in user '+userID)
+        print('[NOTE] Logging in user \''+userID+'\'')
 
     def get_user (self, userID):
-        return self.user_container[userID]
+        try: user = self.user_container[userID]
+        except KeyError: user = None
+        return user
 
 
     ################

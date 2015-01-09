@@ -56,6 +56,14 @@ def signup():
     if flask.request.method == 'GET':
         return cms.form_render('form.html', form=form)
 
+@app.route('/new_post', methods=['GET', 'POST'])
+@flask_login.login_required
+def new_post():
+    from quirell.webapp.user import User
+    if flask.request.method == 'POST':
+        user = flask_login.current_user
+        user.create_post()
+
 @app.route('/settings')
 @flask_login.login_required
 def settings():
@@ -66,6 +74,11 @@ def settings():
 def logout():
     #logout_user()
     return flask.redirect('/index')
+
+@app.route('/favicon.ico')
+def favicon():
+    return flask.send_from_directory(os.path.join(BASE_PATH, 'quirell',
+        'webapp', 'static', 'favicon.png'))
 
 # except for /static/* in which case we render the file itself
 @app.route('/static/<path:filename>')
