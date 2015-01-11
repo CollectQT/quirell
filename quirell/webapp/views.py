@@ -51,7 +51,8 @@ def signup():
     form = forms.registration_form()
     if flask.request.method == 'POST':
         user = User()
-        user.create(userID=form.userID.data, password=form.password.data, email=form.email.data)
+        user.create(userID=form.userID.data, password=form.password.data,
+            email=form.email.data)
         return cms.text_render('message.html', 'signup successful')
     if flask.request.method == 'GET':
         return cms.form_render('form.html', form=form)
@@ -78,7 +79,7 @@ def logout():
 @app.route('/favicon.ico')
 def favicon():
     return flask.send_from_directory(os.path.join(BASE_PATH, 'quirell',
-        'webapp', 'static', 'favicon.png'))
+        'webapp', 'static'), 'favicon.png')
 
 # except for /static/* in which case we render the file itself
 @app.route('/static/<path:filename>')
