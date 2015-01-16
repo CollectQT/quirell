@@ -35,7 +35,7 @@ def login():
     if flask.request.method == 'POST':
         user = User()
         success, message = user.login(userID=form.userID.data,
-            password=form.password.data)
+            password=form.password.data, remember=form.remember_me.data)
         if not success: # user credentials invalid
             print(message)
             flask.redirect('/')
@@ -60,10 +60,12 @@ def signup():
 @app.route('/new_post', methods=['GET', 'POST'])
 @flask_login.login_required
 def new_post():
-    from quirell.webapp.user import User
+    form = forms.new_post()
     if flask.request.method == 'POST':
-        user = flask_login.current_user
-        user.create_post()
+        flask_login.current_user.create_post(content=form.content.data)
+        return cms.text_render('message.html', 'post created')
+    if flask.request.method == 'GET':
+        return cms.form_render('form.html', form=form)
 
 @app.route('/settings')
 @flask_login.login_required
@@ -73,7 +75,7 @@ def settings():
 @app.route('/logout')
 @flask_login.login_required
 def logout():
-    #logout_user()
+    flask_login.logout_user()
     return flask.redirect('/index')
 
 @app.route('/favicon.ico')

@@ -36,7 +36,7 @@ class Cms (object):
 
     def add_user (self, userID, user):
         self.user_container[userID] = user
-        print('[NOTE] Logging in user \''+userID+'\'')
+        print('[NOTE] Logging in user @'+userID)
 
     def get_user (self, userID):
         try: user = self.user_container[userID]

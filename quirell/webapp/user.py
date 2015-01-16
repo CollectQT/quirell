@@ -4,7 +4,7 @@ from quirell.webapp.views import cms # this is the cms instance, not the class
 class User (flask_login.UserMixin):
     '''the user class represents an individual user in the database'''
 
-    def login (self, userID, password):
+    def login (self, userID, password, remember):
         '''logs in a user'''
         node = cms.db.get_user('@'+userID)
         # check that inputs are correct
@@ -15,9 +15,10 @@ class User (flask_login.UserMixin):
         if not cms.bcrypt.check_password_hash(node['password'], password):
             return None, 'incorrect password'
         # user considered successfully logged in at this point
+        self.node = node
         self.userID = userID
         cms.add_user(userID, self) # add user instance to cms
-        flask_login.login_user(self) # add to login manageer
+        flask_login.login_user(self, remember=remember) # add to login manager
         return self, ''
 
     def create (self, userID, password, email):
@@ -33,6 +34,7 @@ class User (flask_login.UserMixin):
         node_data = {
             'content': content
         }
+        cms.db.create_post(node_data, self.node)
 
     def is_authenticated (self):
         return True

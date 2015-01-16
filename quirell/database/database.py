@@ -24,16 +24,15 @@ class Database (object):
     '''
 
     def __init__ (self):
-        from py2neo import ServiceRoot
         graphenedb_url = os.environ.get("GRAPHENEDB_URL", "http://localhost:7474/")
-        self.db = ServiceRoot(graphenedb_url).graph
+        self.db = py2neo.ServiceRoot(graphenedb_url).graph
         # no duplicate userID or email
         self.create_uniqueness_constraint('user', 'userID')
         self.create_uniqueness_constraint('user', 'email')
 
     def create_user (self, node_data):
         '''Create a new user in the database'''
-        new_user = py2neo.node(**node_data)
+        new_user = py2neo.Node(**node_data)
         self.add_label(new_user, 'user')
         self.db.create(new_user)
         print('[NOTE] Creating new user')
@@ -44,11 +43,11 @@ class Database (object):
         return result
 
     def create_post (self, node_data, user):
-        post = py2neo.node(**node_data)
+        post = py2neo.Node(**node_data)
         self.add_label(post, 'post')
-        user_created_post = py2neo.relationship(user, 'CREATED', post)
+        user_created_post = py2neo.Relationship(user, 'CREATED', post)
         self.db.create(post, user_created_post)
-        print('[NOTE] Creating new post')
+        print('[NOTE] Creating new post for user '+user['userID'])
 
     def create_uniqueness_constraint (self, label, constraint):
         # so with these try excepts... what I -think- is happening is that

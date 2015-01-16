@@ -50,7 +50,7 @@ class registration_form (flask_wtf.Form):
 
 class new_post (flask_wtf.Form):
     html = '''
-        <h1>Signup</h1>
+        <h1>Create New Post</h1>
         <form action="/new_post" method="POST" name="new_post">
             {{ form.hidden_tag() }}
             <p>
