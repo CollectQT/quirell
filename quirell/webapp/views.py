@@ -109,3 +109,8 @@ def shutdown():
     if app.config['DEBUG'] == False: return 'Invalid shutdown request'
     shutdown_server()
     return 'Server shutting down...'
+
+@app.context_processor
+def set_globals():
+    user = flask_login.current_user
+    return dict(user=user)

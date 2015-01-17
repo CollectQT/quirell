@@ -51,14 +51,16 @@ nav {
  background-color: #EFEFEF;
  box-shadow: 0 0 10px black; }
 
+ .nav-block {
+ float: left; }
+
  .nav-left {
- float: left;
- position: fixed; }
+ width: 40%; }
 
  .nav-mid {
  text-align: center;
- position: fixed;
- width: 100%; }
+ width: 15%;
+ margin: 0 auto; }
 
  .nav-right {
  float: right; }
@@ -66,19 +68,20 @@ nav {
  nav i {
  color: #EFEFEF; }
 
- nav button {
+ nav .button {
+ display: inline-block;
  background-color: transparent;
  padding: 0;
  margin: 0;
  border: none; }
 
- nav button i, .nav-text, .quirell-icon {
+ nav .button i, .nav-text, .quirell-icon {
  color: #554488; }
 
  .icon {
- display: inline-block; }
+  display: inline-block; }
 
- .quirell-icon {
+  .quirell-icon {
   font-family: "Quirell", Arial; }
 
   article.post {
@@ -106,10 +109,10 @@ nav {
   border-radius: 20%; }
 
   .display-name {
-  color: black;
-  font-weight: bold; }
+   color: black;
+   font-weight: bold; }
 
-  .subtext {
+   .subtext {
    color: #808080;
    font-size: 0.9em; }
 
@@ -134,9 +137,9 @@ nav {
    font-size: 16px;
    line-height: 1.3em; }
    .img-mid {
-   height: 60px;
-   width: 60px; }
-   .img-small {
+    height: 60px;
+    width: 60px; }
+    .img-small {
     height: 40px;
     width: 40px; }
     nav {
@@ -162,10 +165,10 @@ nav {
     height: 160px;
     width: 160px; }
     article.post {
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 10px; }
-    .post-meta-top {
+     margin: 10px 0;
+     padding: 10px;
+     border-radius: 10px; }
+     .post-meta-top {
      max-width: 230px;
      max-width: calc(95% - 60px);
      margin-left: 5px;
@@ -185,8 +188,8 @@ nav {
      .content {
      padding: 10px 15px; }
      p {
-     padding: 0 10px; }
-     pre {
+      padding: 0 10px; }
+      pre {
       padding: 5px; }
 }
 
@@ -211,8 +214,6 @@ nav {
  width: 90%;
  padding-left: 5%;
  padding-right: 5%; }
- .nav-mid {
- width: 90%; }
  .nav-text {
  vertical-align: middle;
  display: inline-block;

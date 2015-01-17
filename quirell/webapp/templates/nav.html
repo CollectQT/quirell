@@ -1,32 +1,42 @@
 <nav>
     <div class='nav-block nav-left'>
-    <!-- quirell info -->
-        <button>
+        <a href='/' class='button'>
             <i class='fa fa-home'></i>
             <div class='nav-text'>Home</div>
-        </button>
-        <button>
+        </a>
+        <a href='/notes' class='button'>
             <i class='fa fa-exclamation'></i>
             <div class='nav-text'>Notes</div>
-        </button>
-        <button>
+        </a>
+        <!--
+        <button class='button'>
             <i class='fa fa-comment'></i>
             <div class='nav-text'>Chat</div>
         </button>
+        -->
     </div>
     <div class='nav-block nav-mid'>
-        <!-- user activities -->
-            <i class='icon quirell-icon'>Q</i>
-        <!-- login | signup // user | options -->
+        <a href='/'><i class='icon quirell-icon'>Q</i></a>
     </div>
     <div class='nav-block nav-right'>
-        <button>
-            <i class='fa fa-user'></i>
-            <div class='nav-text'>@lynncyrin</div>
-        </button>
-        <button>
-            <i class='fa fa-cog'></i>
-            <div class='nav-text'></div>
-        </button>
+        <!-- user account functions -->
+        {% if user.is_authenticated() %}
+            <!-- user actions -->
+            <a href='/{{ user['userID'] }}' class='button'>
+                <i class='fa fa-user'></i>
+                <div class='nav-text'>{{ user['userID'] }}</div>
+            </a>
+            <!-- settings -->
+            <a herf='/settings' class='button'>
+                <i class='fa fa-cog'></i>
+                <div class='nav-text'></div>
+            </a>
+        {% else %}
+            <!-- login -->
+            <a href='/login' class='button'>
+                    <i class='fa fa-user'></i>
+                    <div class='nav-text'>Login</div>
+            </a>
+        {% endif %}
     </div>
 </nav>
