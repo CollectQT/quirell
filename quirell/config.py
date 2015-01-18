@@ -11,20 +11,19 @@ create variable names IN_ALL_CAPS
 '''
 
 import os
+import yaml
 
-# remember to make secret stuff secret >_>
+# global variables
+# BASE_PATH = location of the highest level of the project
+BASE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..',))
 
-# evironment variables
-ENV ={
-    # points to our database
-    'GRAPHENEDB_URL': 'http://app30806446:FQ6jx4p9dWF6e3UzfcbL@app30806446.sb02.stations.graphenedb.com:24789',
-}
-
-for k, v in ENV.items():
-    # see if environment variables have already been added
-    try: os.environ[str(k)]
-    # if not, add them
-    except KeyError: os.environ[str(k)] = v
+def set_env():
+    with open(BASE_PATH+'/quirell/ENV.yaml', 'r') as yaml_file:
+        for k, v in yaml.load(yaml_file).items():
+            # see if environment variables have already been added
+            try: os.environ[str(k)]
+            # if not, add them
+            except KeyError: os.environ[str(k)] = v
 
 CONFIG ={
     'WTF_CSRF_ENABLED': True,
@@ -32,6 +31,5 @@ CONFIG ={
     'SECRET_KEY': os.urandom(24),
 }
 
-# global variables
-# BASE_PATH = location of the highest level of the project
-BASE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..',))
+if __name__ == '__main__':
+    set_env()

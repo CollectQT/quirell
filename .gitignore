@@ -1,3 +1,5 @@
+ENV.yaml
+
 venv/
 *.pyc
 *.pyo
