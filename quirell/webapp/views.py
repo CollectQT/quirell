@@ -7,6 +7,12 @@ Views! i.e. what the user gets when they type in our url
 # builtin
 import os
 import glob
+import json
+import time
+import base64
+import hmac
+import urllib.parse
+from hashlib import sha1
 # external
 import flask
 import flask.ext.login as flask_login
@@ -66,6 +72,35 @@ def new_post():
         return cms.text_render('message.html', 'post created')
     if flask.request.method == 'GET':
         return cms.form_render('form.html', form=form)
+
+@app.route("/submit_form/", methods=["POST"])
+def submit_form():
+    username = request.form["username"]
+    full_name = request.form["full_name"]
+    avatar_url = request.form["avatar_url"]
+    #update_account(username, full_name, avatar_url)
+    return flask.redirect('/')
+
+@app.route('/sign_s3/')
+def sign_s3():
+    AWS_ACCESS_KEY = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    S3_BUCKET = os.environ.get('S3_BUCKET')
+    #
+    object_name = flask.request.args.get('s3_object_name')
+    mime_type = flask.request.args.get('s3_object_type')
+    #
+    expires = int(time.time()+10)
+    amz_headers = "x-amz-acl:public-read"
+    put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, S3_BUCKET, object_name)
+    signature = base64.encodestring(hmac.new(AWS_SECRET_KEY.encode(encoding='utf-8'), put_request.encode(encoding='utf-8'), sha1).digest())
+    signature = urllib.parse.quote_plus(signature.strip())
+    url = 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, object_name)
+    #
+    return json.dumps({
+        'signed_request': '%s?AWSAccessKeyId=%s&Expires=%d&Signature=%s' % (url, AWS_ACCESS_KEY, expires, signature),
+         'url': url
+      })
 
 @app.route('/settings')
 @flask_login.login_required
