@@ -26,7 +26,7 @@ def set_globals():
     # forms = forms from quirell.webapp.forms
     return dict(user=user, forms=forms)
 
-@app.route('/files/')
+@app.route('/')
 def index ():
     # if user is logged in redirect to /timeline
     return cms.file_render('message.html', 'paths/index')
