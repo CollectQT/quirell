@@ -1,0 +1,13 @@
+<h1>Login</h1>
+<form action="/login" method="POST" name="login">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ config.URL }}
+        Please enter your userID:<br>
+        {{ form.userID(size=40) }}<br>
+        Please enter your Password:<br>
+        {{ form.password(size=40) }}<br>
+    </p>
+    <p>{{ form.remember_me }} Remember Me</p>
+    <p><input type="submit" value="Sign In"></p>
+</form>
