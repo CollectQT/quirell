@@ -134,6 +134,10 @@ pre {
     font-family: $monospaced_font;
 }
 
+p code {
+    background-color: $filler_medium;
+}
+
 ul {list-style-type: square;}
 
 blockquote {

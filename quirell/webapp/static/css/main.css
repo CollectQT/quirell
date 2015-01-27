@@ -93,6 +93,9 @@ nav {
   font-family: "Lucida Console", "Lucida Sans Typewriter", Monaco, "Bitstream Vera Sans Mono",
    monospace; }
 
+  p code {
+  background-color: #D0D0D0; }
+
   ul {
   list-style-type: square; }
 
@@ -105,10 +108,10 @@ nav {
   overflow: hidden; }
 
   .avatar {
-  display: inline-block;
-  border-radius: 20%; }
+   display: inline-block;
+   border-radius: 20%; }
 
-  .display-name {
+   .display-name {
    color: black;
    font-weight: bold; }
 
@@ -134,9 +137,9 @@ nav {
 
    @media all {
    html {
-   font-size: 16px;
-   line-height: 1.3em; }
-   .img-mid {
+    font-size: 16px;
+    line-height: 1.3em; }
+    .img-mid {
     height: 60px;
     width: 60px; }
     .img-small {
@@ -162,9 +165,9 @@ nav {
     margin: 0 auto;
     padding-top: 60px; }
     img {
-    height: 160px;
-    width: 160px; }
-    article.post {
+     height: 160px;
+     width: 160px; }
+     article.post {
      margin: 10px 0;
      padding: 10px;
      border-radius: 10px; }
@@ -186,8 +189,8 @@ nav {
      .post-action-bar > * {
      padding: 0 10px; }
      .content {
-     padding: 10px 15px; }
-     p {
+      padding: 10px 15px; }
+      p {
       padding: 0 10px; }
       pre {
       padding: 5px; }

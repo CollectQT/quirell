@@ -1,10 +1,10 @@
-# Webapp Readme
+# Quirell Webapp Readme
 
 This readme descriptions the contents of the `quirell.webapp` folder
 
     __init__.py
 
-Normally just a package marker, in this project the __init__.py also instantiates the flask app and the cms (described in the next section). Import either of them with `from quirell.webapp import app, cms`.
+Normally just a package marker, in this project the `__init__.py` also instantiates the flask app and the cms (described in the next section). Import either of them with `from quirell.webapp import app, cms`.
 
     __main__.py
 
