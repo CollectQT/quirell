@@ -43,7 +43,6 @@ class Cms (object):
         except KeyError: user = None
         return user
 
-
     ################
     # CSS BUILDING #
     ################
@@ -111,7 +110,7 @@ class Cms (object):
         import glob
         import flask
         # get full path
-        file_path = os.path.join(BASE_PATH, 'quirell', 'webapp', 'paths', file_path)
+        file_path = os.path.join(BASE_PATH, 'quirell', 'webapp', 'templates', file_path)
         # see what files start with that path
         files_with_path = glob.glob(file_path+'*')
         # if theres not just one, throw an error

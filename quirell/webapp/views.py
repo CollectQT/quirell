@@ -18,16 +18,24 @@ from quirell.webapp import cms
 # note: to keep utility functions out of the user namespace, most URLS
 # should start with /i/, example, quirell.net/i/about.
 
-@app.route('/')
+# defines variables available to all templates
+@app.context_processor
+def set_globals():
+    user = flask_login.current_user
+    # user = current active user
+    # forms = forms from quirell.webapp.forms
+    return dict(user=user, forms=forms)
+
+@app.route('/files/')
 def index ():
     # if user is logged in redirect to /timeline
-    return cms.file_render('message.html', 'index')
+    return cms.file_render('message.html', 'paths/index')
 
 @app.route('/timeline')
 def timeline():
     pass
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/i/login', methods=['GET', 'POST'])
 def login():
     from quirell.webapp.user import User
     form = forms.login_form()
@@ -42,9 +50,9 @@ def login():
         # before via the 'next' variable in a query string
         return cms.text_render('message.html', 'login successful')
     if flask.request.method == 'GET':
-        return cms.form_render('form.html', form=form)
+        return cms.form_render('forms.html', '')
 
-@app.route('/signup', methods=['GET', 'POST'])
+@app.route('/i/signup', methods=['GET', 'POST'])
 def signup():
     from quirell.webapp.user import User
     form = forms.registration_form()
@@ -54,9 +62,9 @@ def signup():
             email=form.email.data)
         return cms.text_render('message.html', 'signup successful')
     if flask.request.method == 'GET':
-        return cms.form_render('form.html', form=form)
+        return cms.form_render('message.html')
 
-@app.route('/new_post', methods=['GET', 'POST'])
+@app.route('/i/new_post', methods=['GET', 'POST'])
 @flask_login.login_required
 def new_post():
     form = forms.new_post()
@@ -64,7 +72,7 @@ def new_post():
         flask_login.current_user.create_post(content=form.content.data)
         return cms.text_render('message.html', 'post created')
     if flask.request.method == 'GET':
-        return cms.form_render('form.html', form=form)
+        return cms.form_render('message.html', form=form)
 
 @app.route("/submit_form/", methods=["POST"])
 def submit_form():
@@ -74,6 +82,7 @@ def submit_form():
     #update_account(username, full_name, avatar_url)
     return flask.redirect('/')
 
+# sign an upload request before if goes up to the s3 server
 @app.route('/sign_s3/')
 def sign_s3():
     AWS_ACCESS_KEY = os.environ.get('AWS_ACCESS_KEY_ID')
@@ -111,26 +120,7 @@ def favicon():
     return flask.send_from_directory(os.path.join(BASE_PATH, 'quirell',
         'webapp', 'static'), 'favicon.png')
 
-# except for /static/* in which case we render the file itself
-@app.route('/static/<path:filename>')
-def base_static(filename):
-    return flask.send_from_directory(app.root_path + '/static/', filename)
-
-# every other path reads from paths/<url_input>
-# needs to be below every other named path, so right above tech and errors
-@app.route('/<path>')
-def dynamic_path(path):
-    return cms.file_render('post.html', path)
-
-# tech stuff past this point, not necesarily views
-
-@app.errorhandler(404)
-def page_not_found(e):
-    return cms.file_render('message.html', '404')
-
-@app.login_manager.user_loader
-def load_user (userID): return cms.get_user(userID)
-
+# shutdown the server
 @app.route('/shutdown', methods=['POST'])
 def shutdown():
     from quirell.webapp.shutdown import shutdown_server
@@ -138,7 +128,30 @@ def shutdown():
     shutdown_server()
     return 'Server shutting down...'
 
-@app.context_processor
-def set_globals():
-    user = flask_login.current_user
-    return dict(user=user)
+# render static files
+@app.route('/i/static/<path:filename>')
+def base_static(filename):
+    return flask.send_from_directory(app.root_path + '/static/', filename)
+
+# used to render files from the very top of the quirell project
+@app.route('/i/files/<path>')
+def render_file(path):
+    path = '../../../'+path
+    return cms.file_render('message.html', path)
+
+# render everything else in the quirell.webapp.templates.paths folder
+@app.route('/<path>')
+def dynamic_path(path):
+    print('dynamic_path')
+    return cms.file_render('post.html', 'paths/'+path)
+
+##############
+# tech stuff #
+##############
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return cms.file_render('message.html', 'paths/404'), 404
+
+@app.login_manager.user_loader
+def load_user (userID): return cms.get_user(userID)
