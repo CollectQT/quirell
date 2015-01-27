@@ -18,12 +18,14 @@ import yaml
 BASE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..',))
 
 def set_env():
-    with open(BASE_PATH+'/quirell/ENV.yaml', 'r') as yaml_file:
+    try:
+        with open(BASE_PATH+'/quirell/ENV.yaml', 'r') as yaml_file:
         for k, v in yaml.load(yaml_file).items():
             # see if environment variables have already been added
             try: os.environ[str(k)]
             # if not, add them
             except KeyError: os.environ[str(k)] = v
+    except FileNotFoundError: pass
 
 CONFIG ={
     'WTF_CSRF_ENABLED': True,
