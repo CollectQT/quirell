@@ -1,9 +1,3 @@
-'''
-views.py
-
-Views! i.e. what the user gets when they type in our url
-'''
-
 # builtin
 import os
 import glob
@@ -17,13 +11,12 @@ from hashlib import sha1
 import flask
 import flask.ext.login as flask_login
 # custom
-from quirell.config import *
-from quirell.webapp.cms import Cms
 from quirell.webapp import forms
+from quirell.webapp import app
+from quirell.webapp import cms
 
-# initialize flask app and attach the cms to it
-app = flask.Flask(__name__, static_folder='static', static_url_path='')
-cms = Cms(app)
+# note: to keep utility functions out of the user namespace, most URLS
+# should start with /i/, example, quirell.net/i/about.
 
 @app.route('/')
 def index ():

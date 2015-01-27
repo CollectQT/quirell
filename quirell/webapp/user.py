@@ -1,5 +1,5 @@
 import flask.ext.login as flask_login
-from quirell.webapp.views import cms # this is the cms instance, not the class
+from quirell.webapp import cms # this is the cms instance, not the class
 
 class User (flask_login.UserMixin):
     '''the user class represents an individual user in the database'''
