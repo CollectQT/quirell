@@ -122,12 +122,14 @@ class Cms (object):
             elif len(glob.glob(file_path+'.html')) == 1:
                 files_with_path = glob.glob(file_path+'.html')
             else:
-                print('[ERROR] There are files starting with path '+str(file_path))
-                print('[ERROR] But that path does not define a single markdown or HTML file')
+                print('[NOTE] There are files starting with path '+str(file_path))
+                print('[NOTE] But that path does not define a single markdown or HTML file')
+                print('[NOTE] 404ing request')
                 return flask.abort(404)
         # if theres 0, no file is found, tell flask we are 404ing
         elif len(files_with_path) == 0:
-            print('[ERROR] No files with path '+str(file_path)+': '+str(len(files_with_path)))
+            print('[NOTE] No files with path '+str(file_path)+': '+str(len(files_with_path)))
+            print('[NOTE] 404ing request')
             return flask.abort(404)
         # we've verified that theres only one file
         file_path = files_with_path[0]
