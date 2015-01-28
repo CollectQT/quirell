@@ -16,7 +16,6 @@ from quirell.webapp import app
 from quirell.webapp import cms
 
 # note: to keep utility functions out of the user namespace, most URLS
-# should start with /i/, example, quirell.net/i/about.
 
 # defines variables available to all templates
 @app.context_processor
@@ -35,7 +34,7 @@ def index ():
 def timeline():
     pass
 
-@app.route('/i/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     from quirell.webapp.user import User
     form = forms.login_form()
@@ -50,9 +49,9 @@ def login():
         # before via the 'next' variable in a query string
         return cms.text_render('message.html', 'login successful')
     if flask.request.method == 'GET':
-        return cms.form_render('forms.html', '')
+        return cms.form_render('forms.html', 'login_form.html')
 
-@app.route('/i/signup', methods=['GET', 'POST'])
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
     from quirell.webapp.user import User
     form = forms.registration_form()
@@ -64,7 +63,7 @@ def signup():
     if flask.request.method == 'GET':
         return cms.form_render('message.html')
 
-@app.route('/i/new_post', methods=['GET', 'POST'])
+@app.route('/new_post', methods=['GET', 'POST'])
 @flask_login.login_required
 def new_post():
     form = forms.new_post()
@@ -129,12 +128,12 @@ def shutdown():
     return 'Server shutting down...'
 
 # render static files
-@app.route('/i/static/<path:filename>')
+@app.route('/static/<path:filename>')
 def base_static(filename):
     return flask.send_from_directory(app.root_path + '/static/', filename)
 
 # used to render files from the very top of the quirell project
-@app.route('/i/files/<path>')
+@app.route('/files/<path>')
 def render_file(path):
     path = '../../../'+path
     return cms.file_render('message.html', path)
