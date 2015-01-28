@@ -10,16 +10,16 @@ class User (flask_login.UserMixin):
         # check that inputs are correct
         # like, if this user exists
         if node == None:
-            return None, 'no user with this username'
+            return False, 'bad_userID'
         # and if their password matches the db password
         if not cms.bcrypt.check_password_hash(node['password'], password):
-            return None, 'incorrect password'
+            return False, 'bad_password'
         # user considered successfully logged in at this point
         self.node = node
         self.userID = userID
         cms.add_user(userID, self) # add user instance to cms
         flask_login.login_user(self, remember=remember) # add to login manager
-        return self, ''
+        return True, self
 
     def create (self, userID, password, email):
         '''create a new user'''
