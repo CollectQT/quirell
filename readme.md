@@ -1,8 +1,8 @@
-# Project Readme
+# Quirell Project Readme
 
 ## Running The Code Locally
 
-This section **assumes you are running a Linux distrubution**, specifically Ubuntu. The code will probably run on something other than that, but no promises! Beyond that requirement, you also need to have basic familiarity with:
+This section assumes you are running a Linux distrubution, specifically Ubuntu. The code will probably run on something other than that, but no promises! Beyond that requirement, you also need to have basic familiarity with:
 
 * [python 3.4](https://www.python.org/)
 * [git](http://git-scm.com/)
@@ -10,22 +10,36 @@ This section **assumes you are running a Linux distrubution**, specifically Ubun
 * [virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/)
 * [heroku toolbelt](https://toolbelt.heroku.com/)
 
-**If you don't have any of those requirements**, you can install them via the commands below. If you are unsure if you have them, then go through the commands anyway!
+If you don't have any of those requirements, you can install them via the commands below. If you are unsure if you have them, then go through the commands anyway!
 
     $ sudo add-apt-repository ppa:fkrull/deadsnakes
     $ sudo apt-get update
     $ sudo apt-get install python3.4 python3.4-dev
     $ sudo apt-get install git python-pip python-virtualenv heroku-toolbelt
 
-**If this is your first time setting up Quirell**, you need to use these commands to set up the environment
+If this is your first time setting up Quirell, you need to use these commands to set up the virutal environment. You can opt not to set up a virtual environment but you will probably end up with all sorts of obscure errors.
 
     $ git clone git@gitlab.com:collectqt/quirell.git
     $ cd quirell
     $ virtualenv -p python3.4 venv
 
-Finally, **everytime you start working on the project** you need to run these commands within the `quirell/` folder to activate the environment
+Finally, everytime you start working on the project you need to run these commands within the `quirell/` folder to activate the environment. It's useful to alias this command to something shorter (I personally have it aliased as 'sv')
 
     $ source venv/bin/activate
+
+Then you install the project requirements (either to the virtual environment or your system installation of python) with
+
+    $ pip install -r requirements.txt
+
+After everything has installed you should try to start a test run with
+
+    $ python -m quirell.test
+
+A successful run will, amoung other things, not print any lines that start with `[ERROR]`, and will print a bunch of GET and POST requests. If everything is fine then try and run the application proper, with
+
+    $ python -m quirell.webapp
+
+This will start up a local flask debug server. After a few seconds the terminal should display `* Running on http://0.0.0.0:5000/`, and you'll be able to open quirell on your browser by visiting [http://0.0.0.0:5000/](http://0.0.0.0:5000/)
 
 ## Contributing
 
@@ -47,11 +61,9 @@ If you added packages, add them to the requirements via
 
     $ pip freeze > requirements.txt
 
-If you made any code changes, make sure the code runs successfully via...
+If you added new features, try to figure out a way to test them via adding to them `quirell/test/test.py` and running
 
-((WIP))
-
-    python -m quirell.test
+    $ python -m quirell.test
 
 **If you are a core maintainer** you will be expected to pull changes from **'develop'** into **'production'**, then push them to heroku. The do that, run:
 
@@ -64,7 +76,3 @@ If you made any code changes, make sure the code runs successfully via...
 ### Getting Developer Access
 
 If you want developer access to the collectqt/quirell repository, ask a [CollectQT team member](https://gitlab.com/groups/collectqt/members) to give you developer access. At the current time, the specific team member you would ask for this is [Lynn Cyrin](https://gitlab.com/u/cyrin). Before asking for developer access, create or assign yourself to an issue to that other people know what you are working on.
-
-## Project Architecture
-
-WIP
