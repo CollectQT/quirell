@@ -99,10 +99,10 @@ class Cms (object):
         return flask.render_template(template, form=form, html_content=html_content,
             *args, **kwargs)
 
-    def text_render (self, template, content, *args, **kwargs):
+    def text_render (self, content):
         '''render a page from text input and a template file'''
         html_content=self.md.convert(content)
-        return flask.render_template(template, html_content=html_content, *args, **kwargs)
+        return flask.render_template('message.html', html_content=html_content)
 
     def file_render (self, template, file_path='', *args, **kwargs):
         '''render a page from a path file and a template file'''
