@@ -112,14 +112,22 @@ class Cms (object):
         # get full path
         file_path = os.path.join(BASE_PATH, 'quirell', 'webapp', 'templates', file_path)
         # see what files start with that path
+        # if theres not just one, we have issues
         files_with_path = glob.glob(file_path+'*')
-        # if theres not just one, throw an error
-        # if theres 0, its actually 404
         # if theres >1, someone shoud go rename some files ;p
-        if not len(files_with_path) == 1:
-            print('[ERROR] Files with path '+str(file_path)+': '+str(len(files_with_path)))
-            print('[ERROR] The above value should be 1')
-            print('[ERROR] Path should extend from base directory')
+        # but thats not always reasonable, so we search a bit more for the file
+        if len(files_with_path) > 1:
+            if len(glob.glob(file_path+'.md')) == 1:
+                files_with_path = glob.glob(file_path+'.md')
+            elif len(glob.glob(file_path+'.html')) == 1:
+                files_with_path = glob.glob(file_path+'.html')
+            else:
+                print('[ERROR] There are files starting with path '+str(file_path))
+                print('[ERROR] But that path does not define a single markdown or HTML file')
+                return flask.abort(404)
+        # if theres 0, no file is found, tell flask we are 404ing
+        elif len(files_with_path) == 0:
+            print('[ERROR] No files with path '+str(file_path)+': '+str(len(files_with_path)))
             return flask.abort(404)
         # we've verified that theres only one file
         file_path = files_with_path[0]
