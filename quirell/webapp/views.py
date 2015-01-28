@@ -142,7 +142,6 @@ def render_file(path):
 # render everything else in the quirell.webapp.templates.paths folder
 @app.route('/<path>')
 def dynamic_path(path):
-    print('dynamic_path')
     return cms.file_render('post.html', 'paths/'+path)
 
 ##############
