@@ -17,32 +17,23 @@ class Test (object):
         testing_thread.start()
 
     def webapp_test (app):
-        from quirell.webapp.shutdown import shutdown
         import requests
         session = requests.Session()
-        session.get('http://0.0.0.0:5000')
-        session.get('http://0.0.0.0:5000/login')
-        session.get('http://0.0.0.0:5000/signup')
-        # new_user = {
-        #     'userID': 'kitty',
-        #     'email': 'firemagelynn@gmail.com',
-        #     'password': 'catte',
-        #     'confirm': 'catte',
-        #     'accept_tos': True,
-        # }
-        # requestsession.post('http://0.0.0.0:5000/signup', data=new_user)
-        login = {
-            'userID': 'rawr',
-            'password': 'rawr',
-            'remember_me': True,
-        }
-        session.post('http://0.0.0.0:5000/login', data=login)
-        session.get('http://0.0.0.0:5000/new_post')
-        content = {
-            'content': 'new post to get more pets!',
-        }
-        session.post('http://0.0.0.0:5000/new_post', data=content)
-        shutdown()
+        quirell = 'http://0.0.0.0:5000'
+        # make sure you didn't break the basic pages
+        assert session.get(quirell).status_code == 200
+        assert session.get(quirell+'/login').status_code == 200
+        assert session.get(quirell+'/signup').status_code == 200
+        # should 401, you aren't logged in yet
+        assert session.get(quirell+'/new_post').status_code == 401
+        # user 'rawr' is bad at security, clearly
+        login = {'userID': 'rawr', 'password': 'rawr',}
+        assert session.post('http://0.0.0.0:5000/login_POST', data=login).status_code == 200
+        # purposeful 404
+        assert session.get(quirell+'/cats?hi=hi&no=no').status_code == 404
+
+        # don't leave the server on forever
+        session.post('http://0.0.0.0:5000/shutdown')
 
 if __name__ == "__main__":
     Test()

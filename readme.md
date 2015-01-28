@@ -35,7 +35,7 @@ After everything has installed you should try to start a test run with
 
     $ python -m quirell.test
 
-A successful run will, amoung other things, not print any lines that start with `[ERROR]`, and will print a bunch of GET and POST requests. If everything is fine then try and run the application proper, with
+A successful run will, amoung other things, not print any lines that start with `[ERROR]`, and will print a bunch of GET and POST requests. If something is super wrong you'll get a traceback with an `AssertionError`. If everything is fine then try and run the application proper, with
 
     $ python -m quirell.webapp
 
