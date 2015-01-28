@@ -34,6 +34,11 @@ class Cms (object):
     # USERS #
     #########
 
+    def user_exists (self, userID):
+        result = self.db.get_user('@'+userID)
+        if result == None: return False
+        else: return True
+
     def add_user (self, userID, user):
         self.user_container[userID] = user
         print('[NOTE] Logging in user @'+userID)
