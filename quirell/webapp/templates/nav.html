@@ -22,18 +22,18 @@
         <!-- user account functions -->
         {% if user.is_authenticated() %}
             <!-- user actions -->
-            <a href='/{{ user['userID'] }}' class='button'>
+            <a href='/u/{{ user['userID'] }}' class='button'>
                 <i class='fa fa-user'></i>
                 <div class='nav-text'>{{ user['userID'] }}</div>
             </a>
             <!-- settings -->
-            <a herf='/i/settings' class='button'>
+            <a herf='/settings' class='button'>
                 <i class='fa fa-cog'></i>
                 <div class='nav-text'></div>
             </a>
         {% else %}
             <!-- login -->
-            <a href='/i/login' class='button'>
+            <a href='/login' class='button'>
                     <i class='fa fa-user'></i>
                     <div class='nav-text'>Login</div>
             </a>
