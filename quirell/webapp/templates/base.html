@@ -6,6 +6,4 @@
 	</head>
 	<body>
         {% block navigation %}{% include 'nav.html' %}{% endblock %}
-		{% block content %}
-            {% autoescape false %}{{ html_content }}{% endautoescape %}
-        {% endblock %}
+		{% block content %}{% endblock %}

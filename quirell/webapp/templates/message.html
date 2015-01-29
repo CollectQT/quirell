@@ -1,8 +1,29 @@
+{#
+
+Used for rendering short blocks of html, short i.e. will fit into a
+single article tag. You can use it by creating another HTML file with:
+
+    {% extends "message.html" %}
+        {% block article %}
+            text, text, text
+        {% endblock %}
+
+If the above content is inside of, say, paths/example.html - you can
+then render it with
+
+    flask.render_template('paths/example.html')
+
+Or alternatively you can input content from a python string, by assigning
+it to the html_content variable like so:
+
+    flask.render_template('message.html' html_content='text, text, text')
+
+#}
 {% extends "base.html" %}
 	{% block content %}
-		<main>
-            <article class='post'>
-                {% autoescape false %}{{ html_content }}{% endautoescape %}
-            </article>
-        </main>
+		<main><article class='post'>
+                {% filter markdown %}{% autoescape false %}{% block article -%}
+                    {{ html_content }}
+                {%- endblock %}{% endautoescape %}{% endfilter %}
+        </article></main>
 	{% endblock %}

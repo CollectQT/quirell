@@ -22,49 +22,54 @@ from quirell.webapp import cms
 
 @app.context_processor
 def set_globals():
-    user = flask_login.current_user
     # user = current active user
-    # forms = forms from quirell.webapp.forms
-    return dict(user=user, forms=forms)
+    user = flask_login.current_user
+    # forms from quirell.webapp.forms
+    login = forms.login()
+    new_post = forms.new_post()
+    signup = forms.signup()
+    return dict(user=user, login=login, new_post=new_post,)
 
 #@app.before_first_request
 #@app.before_request
 #@app.after_request
 
-#########
-# PATHS #
-#########
+###############
+# BASIC PATHS #
+###############
 
 # NOTE: Flask methods default to POST, so if there's no method listed
 # then its a POST request
 
 @app.route('/')
 def index ():
-    return cms.file_render('message.html', 'paths/index')
+    return flask.render_template('paths/index.html')
 
 @app.route('/login')
 def login():
-    return cms.file_render('form.html', 'forms/login_form.html')
+    return flask.render_template('forms/login.html')
 
 @app.route('/signup')
 def signup():
-    return cms.file_render('form.html', 'forms/registration_form.html')
+    return flask.render_template('forms/signup.html')
+
+@app.route('/user')
+@app.route('/profile')
+@flask_login.login_required
+def user_redirect():
+    return flask.redirect('/u/'+flask_login.current_user.userID)
 
 # render static files
 @app.route('/static/<path:filename>')
 def base_static(filename):
     return flask.send_from_directory(app.root_path + '/static/', filename)
 
-# used to render files from the very top of the quirell project
-@app.route('/files/<path>')
-def render_file(path):
-    path = '../../../'+path
-    return cms.file_render('message.html', path)
-
-# render things in the quirell.webapp.templates.paths folder
-@app.route('/<path>')
-def dynamic_path(path):
-    return cms.file_render('post.html', 'paths/'+path)
+# mostly used to render the readmes
+@app.route('/files/<path:filename>')
+def render_file(filename):
+    with open(BASE_PATH+'/'+filename, 'r') as f:
+        content = f.read()
+    return flask.render_template('message.html', html_content=content)
 
 #########
 # FORMS #
@@ -91,7 +96,7 @@ def login_POST():
         flask.redirect('/login?status='+message)
     # a successful login should return the user to where they were
     # before via the 'next' variable in a query string
-    return cms.text_render('login successful')
+    return flask.render_template('message.html', html_content='login successful')
 
 @app.route('/signup_POST', methods=['POST'])
 def signup_POST():
@@ -100,13 +105,13 @@ def signup_POST():
     user = User()
     user.create(userID=form.userID.data, password=form.password.data,
         email=form.email.data)
-    return cms.text_render('signup successful')
+    return flask.render_template('message.html', html_content='signup successful')
 
 @app.route('/new_post_POST', methods=['POST'])
 @flask_login.login_required
 def new_post_POST():
     flask_login.current_user.create_post(content=form.content.data)
-    return cms.text_render('post created')
+    return flask.render_template('message.html', html_content='post created')
 
 @app.route("/submit_form/", methods=["POST"])
 def submit_form():
@@ -122,12 +127,11 @@ def submit_form():
 
 @app.route('/u/<userID>')
 def user_request(userID):
-    return cms.text_render('page not yet created')
-    #if cms.user_exists(userID):
-        #return # that user's page
-    # user doesn't exist
-    #else:
-    #    return # a search page with that userID as a query
+    from quirell.webapp.user import User
+    if not cms.user_exists(userID):
+        return flask.abort(404)
+    else:
+        requested_user = ''
 
 @app.route('/user/<path>')
 def user_to_u(path):
@@ -158,7 +162,7 @@ def timeline():
 @app.route('/new_post')
 @flask_login.login_required
 def new_post():
-    return cms.file_render('form.html', 'forms/new_post.html')
+    return flask.render_template('forms/new_post.html')
 
 ########
 # TECH #
@@ -172,7 +176,7 @@ def robots():
 
 @app.errorhandler(401)
 def unathorized(e):
-    return cms.file_render('message.html', 'paths/401'), 401
+    return flask.render_template('paths/401.html'), 401
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -186,7 +190,7 @@ def page_not_found(e):
     if cms.user_exists(user):
         return flask.redirect('/u'+flask.request.path+
             '?'+flask.request.query_string.decode("utf-8"))
-    return cms.file_render('message.html', 'paths/404'), 404
+    return flask.render_template('paths/404.html'), 401
 
 @app.login_manager.user_loader
 def load_user (userID): return cms.get_user(userID)

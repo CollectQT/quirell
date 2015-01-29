@@ -1,12 +1,11 @@
 '''cms.py'''
 
 # builtin
+import os
 import sys
 # external
 import markdown
 import flask
-import flask.ext.bcrypt as bcrypt
-import flask.ext.login as flask_login
 # custom
 from quirell.config import *
 from quirell.database import Database
@@ -14,19 +13,18 @@ from quirell.database import Database
 class Cms (object):
 
     def __init__ (self, app):
-        app.cms = self
+        import flask.ext.bcrypt as bcrypt
+        import flask.ext.login as flask_login
+        import flask.ext.misaka as misaka
         # configs
         for k,v in CONFIG.items(): app.config[k] = v
         # content building
-        self.md = markdown.Markdown()
+        misaka.Misaka(app) # markdown
         self.build_css_automatic()
         # user management
-        # connect to user database
         try: self.db = Database()
-        except:
-            print('[ERROR] Cannot connect to database')
-            #print('[WARNING] Running without database, if you need a database connection you should run "python -m quirell.webapp.shutdown"')
-        self.bcrypt = bcrypt.Bcrypt(app)
+        except: print('[ERROR] Cannot connect to database')
+        self.bcrypt = bcrypt.Bcrypt(app) # encryption
         self.login_manager =flask_login.LoginManager().init_app(app)
         self.user_container = dict()
 
@@ -88,61 +86,3 @@ class Cms (object):
             outfile.write(compiled_css)
         # log
         print("[NOTE] Building CSS")
-
-    #################
-    # HTML BUILDING #
-    #################
-
-    def form_render (self, template, form, *args, **kwargs):
-        '''render a page from a template and a form's html attribute'''
-        html_content = flask.templating.render_template_string(form.html, form=form)
-        return flask.render_template(template, form=form, html_content=html_content,
-            *args, **kwargs)
-
-    def text_render (self, content):
-        '''render a page from text input and a template file'''
-        html_content=self.md.convert(content)
-        return flask.render_template('message.html', html_content=html_content)
-
-    def file_render (self, template, file_path='', *args, **kwargs):
-        '''render a page from a path file and a template file'''
-        html_content=self.html_from_file(file_path)
-        return flask.render_template(template, html_content=html_content, *args, **kwargs)
-
-    def html_from_file (self, file_path):
-        '''input: path_name[.md|.html]; output: <some html></some html>'''
-        import os
-        import glob
-        import flask
-        # get full path
-        file_path = os.path.join(BASE_PATH, 'quirell', 'webapp', 'templates', file_path)
-        # see what files start with that path
-        # if theres not just one, we have issues
-        files_with_path = glob.glob(file_path+'*')
-        # if theres >1, someone shoud go rename some files ;p
-        # but thats not always reasonable, so we search a bit more for the file
-        if len(files_with_path) > 1:
-            if len(glob.glob(file_path+'.md')) == 1:
-                files_with_path = glob.glob(file_path+'.md')
-            elif len(glob.glob(file_path+'.html')) == 1:
-                files_with_path = glob.glob(file_path+'.html')
-            else:
-                print('[NOTE] There are files starting with path '+str(file_path))
-                print('[NOTE] But that path does not define a single markdown or HTML file')
-                print('[NOTE] 404ing request')
-                return flask.abort(404)
-        # if theres 0, no file is found, tell flask we are 404ing
-        elif len(files_with_path) == 0:
-            print('[NOTE] No files with path '+str(file_path)+': '+str(len(files_with_path)))
-            print('[NOTE] 404ing request')
-            return flask.abort(404)
-        # we've verified that theres only one file
-        file_path = files_with_path[0]
-        # open it
-        with open(file_path, 'r') as file_data:
-            file_text = file_data.read()
-        # if its markdown, make it html
-        if file_path.endswith('.md'):
-            file_text = self.md.convert(file_text)
-        # return the html
-        return file_text

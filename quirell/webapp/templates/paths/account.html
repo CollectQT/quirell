@@ -1,0 +1,51 @@
+<h1>Edit your account</h1>
+
+<hr />
+
+<h2>Your avatar</h2>
+
+<input type="file" id="files"/>
+<p id="status">Please select a file</p>
+<div style="border:1px solid gray;width:300px;"  id="preview"><img src="/static/img/default.png" style="width:300px;" /></div>
+
+<h2>Your information</h2>
+
+<form method="POST" action="/submit_form/">
+    <input type="hidden" id="avatar_url" name="avatar_url" value="/static/img/default.png" />
+    <input type="text" name="username" placeholder="Username" /><br />
+    <input type="text" name="full_name" placeholder="Full name" /><br /><br />
+
+    <hr />
+    <h2>Save changes</h2>
+
+    <input type="submit" value="Update profile" />
+</form>
+
+<script type="text/javascript" src="/static/js/s3upload.js"></script>
+
+<script type="text/javascript">
+function s3_upload(){
+    var status_elem = document.getElementById("status");
+    var url_elem = document.getElementById("avatar_url");
+    var preview_elem = document.getElementById("preview");
+    var s3upload = new S3Upload({
+        file_dom_selector: 'files',
+        s3_sign_put_url: '/sign_s3/',
+        onProgress: function(percent, message) {
+            status_elem.innerHTML = 'Upload progress: ' + percent + '% ' + message;
+        },
+        onFinishS3Put: function(url) {
+            status_elem.innerHTML = 'Upload completed. Uploaded to: '+ url;
+            url_elem.value = url;
+            preview_elem.innerHTML = '<img src="'+url+'" style="width:300px;" />';
+        },
+        onError: function(status) {
+            status_elem.innerHTML = 'Upload error: ' + status;
+        }
+    });
+}
+(function() {
+    var input_element = document.getElementById("files");
+    input_element.onchange = s3_upload;
+})();
+</script>

@@ -1,12 +1,15 @@
-<h1>Login</h1>
-<form action="/login_POST" method="POST" name="login">
-    {{ login.hidden_tag() }}
-    <p>
-        Please enter your userID:<br>
-        {{ login.userID(size=40) }}<br>
-        Please enter your Password:<br>
-        {{ login.password(size=40) }}<br>
-    </p>
-    <p>{{ login.remember_me }} Remember Me</p>
-    <p><input type="submit" value="Sign In"></p>
-</form>
+{% extends "message.html" %}
+    {% block article %}
+        <h1>Login</h1>
+        <form action="/login_POST" method="POST" name="login">
+            {{ login.hidden_tag() }}
+            <p>
+                Please enter your userID:<br>
+                {{ login.userID(size=40) }}<br>
+                Please enter your Password:<br>
+                {{ login.password(size=40) }}<br>
+            </p>
+            <p>{{ login.remember_me }} Remember Me</p>
+            <p><input type="submit" value="Sign In"></p>
+        </form>
+    {% endblock %}
