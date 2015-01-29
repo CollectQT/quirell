@@ -1,19 +1,20 @@
-{% extends "message.html" %}
-    {% block article %}
-        <h1>Signup</h1>
-        <form action="/signup_POST" method="POST" name="signup">
-            {{ signup.hidden_tag() }}
-            <p>
-                enter your userID:<br>
-                {{ signup.userID(size=40) }}<br>
-                enter your email:<br>
-                {{ signup.email(size=40) }}<br>
-                enter your Password:<br>
-                {{ signup.password(size=40) }}<br>
-                confirm password:<br>
-                {{ signup.confirm(size=40) }}<br>
-            </p>
-            <p>{{ signup.accept_tos }} Accept TOS</p>
-            <p><input type="submit" value="Sign In"></p>
-        </form>
+{% extends "base.html" %}
+    {% block content %}
+        <main><article class='post form'>
+            <h1>Signup</h1>
+            <form action="/signup_POST" method="POST" name="signup">
+                {{ signup.hidden_tag() }}
+                <p>
+                    enter your userID:<br>
+                    {{ signup.userID(size=40) }}<br>
+                    enter your email:<br>
+                    {{ signup.email(size=40) }}<br>
+                    enter your Password:<br>
+                    {{ signup.password(size=40) }}<br>
+                    confirm password:<br>
+                    {{ signup.confirm(size=40) }}<br>
+                </p>
+                <p><input type="submit" value="Sign In"></p>
+            </form>
+        </article></main>
     {% endblock %}
