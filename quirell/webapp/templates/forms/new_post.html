@@ -1,7 +1,7 @@
 <h1>Create New Post</h1>
 <form action="/new_post_POST" method="POST" name="new_post">
-    {{ form.hidden_tag() }}
+    {{ forms.new_post.hidden_tag() }}
     <p>
-        {{ form.content(size=40) }}<br>
+        {{ forms.new_post.content(size=40) }}<br>
     </p>
 </form>

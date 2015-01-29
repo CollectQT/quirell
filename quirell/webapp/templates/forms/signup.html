@@ -1,16 +1,16 @@
 <h1>Signup</h1>
 <form action="/signup_POST" method="POST" name="signup">
-    {{ form.hidden_tag() }}
+    {{ signup.hidden_tag() }}
     <p>
         enter your userID:<br>
-        {{ form.userID(size=40) }}<br>
+        {{ signup.userID(size=40) }}<br>
         enter your email:<br>
-        {{ form.email(size=40) }}<br>
+        {{ signup.email(size=40) }}<br>
         enter your Password:<br>
-        {{ form.password(size=40) }}<br>
+        {{ signup.password(size=40) }}<br>
         confirm password:<br>
-        {{ form.confirm(size=40) }}<br>
+        {{ signup.confirm(size=40) }}<br>
     </p>
-    <p>{{ form.accept_tos }} Accept TOS</p>
+    <p>{{ signup.accept_tos }} Accept TOS</p>
     <p><input type="submit" value="Sign In"></p>
 </form>
