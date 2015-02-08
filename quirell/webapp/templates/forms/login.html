@@ -2,7 +2,10 @@
     {% block content %}
         <main><article class='post form'>
             <h1>Login</h1>
-            <form action="/login_POST" method="POST" name="login">
+            <script>
+            </script>
+            {% autoescape false %}{{ login_message }}{% endautoescape %}
+            <form action="/login" method="POST">
                 {{ login.hidden_tag() }}
                 <p>
                     Please enter your userID:<br>

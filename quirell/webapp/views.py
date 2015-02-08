@@ -3,10 +3,8 @@ import os
 import glob
 import json
 import time
-import base64
-import hmac
 import urllib
-from hashlib import sha1
+import hashlib
 # external
 import flask
 import flask.ext.login as flask_login
@@ -28,7 +26,7 @@ def set_globals():
     login = forms.login()
     new_post = forms.new_post()
     signup = forms.signup()
-    return dict(user=user, login=login, new_post=new_post,)
+    return dict(user=user, login=login, signup=signup, new_post=new_post,)
 
 #@app.before_first_request
 #@app.before_request
@@ -52,6 +50,10 @@ def login():
 @app.route('/signup')
 def signup():
     return flask.render_template('forms/signup.html')
+
+@app.route('/account')
+def account():
+    return flask.render_template('paths/account.html')
 
 @app.route('/user')
 @app.route('/profile')
@@ -85,29 +87,31 @@ def render_file(filename):
 # * the form that posts to it
 # * the testing request (you added one, right?)
 
-@app.route('/login_POST', methods=['POST'])
+@app.route('/login', methods=['POST'])
 def login_POST():
     from quirell.webapp.user import User
-    form = forms.login_form()
+    form = forms.login()
     user = User()
     success, message = user.login(userID=form.userID.data,
         password=form.password.data, remember=form.remember_me.data)
-    if not success: # user credentials invalid
-        flask.redirect('/login?status='+message)
+    if not success: # user credentials invalid in some way
+        return flask.render_template('forms/login.html',
+            login_message=message)
+        #return flask.jsonify(messsage=message)
     # a successful login should return the user to where they were
     # before via the 'next' variable in a query string
     return flask.render_template('message.html', html_content='login successful')
 
-@app.route('/signup_POST', methods=['POST'])
+@app.route('/signup', methods=['POST'])
 def signup_POST():
     from quirell.webapp.user import User
-    form = forms.registration_form()
+    form = forms.signup()
     user = User()
     user.create(userID=form.userID.data, password=form.password.data,
         email=form.email.data)
     return flask.render_template('message.html', html_content='signup successful')
 
-@app.route('/new_post_POST', methods=['POST'])
+@app.route('/new_post', methods=['POST'])
 @flask_login.login_required
 def new_post_POST():
     flask_login.current_user.create_post(content=form.content.data)
@@ -115,9 +119,7 @@ def new_post_POST():
 
 @app.route("/submit_form/", methods=["POST"])
 def submit_form():
-    username = request.form["username"]
-    full_name = request.form["full_name"]
-    avatar_url = request.form["avatar_url"]
+    image_url = request.form["avatar_url"]
     #update_account(username, full_name, avatar_url)
     return flask.redirect('/')
 
@@ -129,9 +131,19 @@ def submit_form():
 def user_request(userID):
     from quirell.webapp.user import User
     if not cms.user_exists(userID):
+        # will eventually return a more specfic 'user not found' page
         return flask.abort(404)
+    user = User().get_user(userID)
+    # Determine if current user is self
+    # If you aren't logged in, then user isn't self
+    if not flask_login.current_user.is_authenticated():
+        return flask.render_template('paths/user.html', user_is_self=False)
+    # If you are logged in and have the same userID, then it is
+    elif '@'+userID == flask_login.current_user.userID:
+        return flask.render_template('paths/user.html', user_is_self=True)
+    # Otherwise (you are logged in but different userID) it isnt
     else:
-        requested_user = ''
+        return flask.render_template('paths/user.html', user_is_self=False)
 
 @app.route('/user/<path>')
 def user_to_u(path):
@@ -209,19 +221,27 @@ def favicon():
         'webapp', 'static'), 'favicon.png')
 
 # sign an upload request before if goes up to the s3 server
-@app.route('/sign_s3/')
+@app.route('/sign_s3_kitten/')
+@flask_login.login_required
 def sign_s3():
+    import base64
+    import hmac
+    import mimetypes
     AWS_ACCESS_KEY = os.environ.get('AWS_ACCESS_KEY_ID')
     AWS_SECRET_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
     S3_BUCKET = os.environ.get('S3_BUCKET')
-    #
-    object_name = flask.request.args.get('s3_object_name')
+    # object naming
+    cms.hash.update(('').encode(encoding='utf-8'))
+    object_name = cms.hash.hexdigest()
     mime_type = flask.request.args.get('s3_object_type')
-    #
+    if not mime_type.split('/')[0] == 'image':
+        # do some sort of thing where we tell ppl to only upload images
+        pass
+    # security things
     expires = int(time.time()+10)
     amz_headers = "x-amz-acl:public-read"
     put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, S3_BUCKET, object_name)
-    signature = base64.encodestring(hmac.new(AWS_SECRET_KEY.encode(encoding='utf-8'), put_request.encode(encoding='utf-8'), sha1).digest())
+    signature = base64.encodestring(hmac.new(AWS_SECRET_KEY.encode(encoding='utf-8'), put_request.encode(encoding='utf-8'), hashlib.sha1).digest())
     signature = urllib.parse.quote_plus(signature.strip())
     url = 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, object_name)
     #

@@ -45,7 +45,13 @@
   a:hover {
   text-decoration: underline; }
 
-nav {
+.icon {
+ display: inline-block; }
+
+ .quirell-icon {
+ font-family: "Quirell", Arial; }
+
+ nav {
  position: fixed;
  width: 100%;
  background-color: #EFEFEF;
@@ -69,29 +75,29 @@ nav {
  color: #EFEFEF; }
 
  nav .button {
- display: inline-block;
- background-color: transparent;
- padding: 0;
- margin: 0;
- border: none; }
+  display: inline-block;
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  border: none; }
 
- nav .button i, .nav-text, .quirell-icon {
- color: #554488; }
+  nav .button i, .nav-text, .quirell-icon {
+  color: #554488; }
 
- .icon {
-  display: inline-block; }
+  .banner {
+  width: 100%;
+  background-color: #EFEFEF;
+  padding: 10px 10px;
+  margin-top: 10px; }
 
-  .quirell-icon {
-  font-family: "Quirell", Arial; }
-
-  article.post {
+  article {
   background-color: #EFEFEF; }
 
   pre {
   color: white;
   background-color: black;
   font-family: "Lucida Console", "Lucida Sans Typewriter", Monaco, "Bitstream Vera Sans Mono",
-   monospace; }
+    monospace; }
 
   p code {
   background-color: #D0D0D0; }
@@ -103,11 +109,11 @@ nav {
   font-style: italic; }
 
   .post-meta-top {
-  display: inline-block;
-  white-space: nowrap;
-  overflow: hidden; }
+   display: inline-block;
+   white-space: nowrap;
+   overflow: hidden; }
 
-  .avatar {
+   .avatar {
    display: inline-block;
    border-radius: 20%; }
 
@@ -136,7 +142,7 @@ nav {
    display: inline-block; }
 
    @media all {
-   html {
+    html {
     font-size: 16px;
     line-height: 1.3em; }
     .img-mid {
@@ -148,7 +154,7 @@ nav {
     nav {
     padding-top: 5px;
     height: 50px;
-    height: 13vw; }
+    height: 11vw; }
     nav i {
     font-size: 30px;
     font-size: 10vw;
@@ -161,14 +167,14 @@ nav {
     .nav-text {
     display: none; }
     main {
-    width: 95%;
-    margin: 0 auto;
-    padding-top: 60px; }
-    img {
+     margin: 0 auto;
+     padding-top: 60px; }
+     img {
      height: 160px;
      width: 160px; }
-     article.post {
-     margin: 10px 0;
+     article {
+     width: 90%;
+     margin: 10px auto;
      padding: 10px;
      border-radius: 10px; }
      .post-meta-top {
@@ -187,8 +193,8 @@ nav {
      float: right;
      text-align: right; }
      .post-action-bar > * {
-     padding: 0 10px; }
-     .content {
+      padding: 0 10px; }
+      .content {
       padding: 10px 15px; }
       p {
       padding: 0 10px; }
@@ -205,11 +211,11 @@ nav {
  padding-top: 15px;
  font-size: 50px;
  display: inline-block; }
- main {
- width: 70%; }
  .post-meta-top {
  max-width: 400px;
  max-width: calc(95% - 60px); }
+ article {
+ width: 70%; }
 }
 
 @media all and (min-width: 1000px) {
@@ -226,7 +232,7 @@ nav {
  font-weight: 600;
  font-size: 1.3em;
  height: 40px; }
- main {
+ article {
  width: 40%; }
 }
 

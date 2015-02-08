@@ -3,6 +3,7 @@
 # builtin
 import os
 import sys
+import hashlib
 # external
 import markdown
 import flask
@@ -27,6 +28,20 @@ class Cms (object):
         self.bcrypt = bcrypt.Bcrypt(app) # encryption
         self.login_manager =flask_login.LoginManager().init_app(app)
         self.user_container = dict()
+        self.hash = hashlib.sha1()
+
+    def clean_html (self, html):
+        # cleans html to prevent people doing evil things with it like
+        # like... idk. things with evil scripts and inline css
+        from bs4 import BeautifulSoup
+        html = BeautifulSoup(html)
+        # destroy evil tags
+        for tag in html(['iframe', 'script']): tag.decompose()
+        # remove evil attributes
+        for tag in html():
+            for attribute in ["class", "id", "name", "style"]:
+                del tag[attribute]
+        return html
 
     #########
     # USERS #

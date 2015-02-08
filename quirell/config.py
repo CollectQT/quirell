@@ -17,6 +17,9 @@ import yaml
 # BASE_PATH = location of the highest level of the project
 BASE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..',))
 
+# where files go
+UPLOAD_SERVER = 'https://qiurell.s3.amazonaws.com/'
+
 def set_env():
     try:
         with open(BASE_PATH+'/quirell/ENV.yaml', 'r') as yaml_file:

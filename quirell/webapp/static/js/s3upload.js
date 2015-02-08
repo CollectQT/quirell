@@ -1,12 +1,10 @@
-(function() {
+  (function() {
 
   window.S3Upload = (function() {
 
-    S3Upload.prototype.s3_object_name = 'default_name';
-
     S3Upload.prototype.s3_sign_put_url = '/signS3put';
-
     S3Upload.prototype.file_dom_selector = 'file_upload';
+    S3Upload.prototype.unique_image = true;
 
     S3Upload.prototype.onFinishS3Put = function(public_url) {
       return console.log('base.onFinishS3Put()', public_url);
@@ -59,7 +57,7 @@
       var this_s3upload, xhr;
       this_s3upload = this;
       xhr = new XMLHttpRequest();
-      xhr.open('GET', this.s3_sign_put_url + '?s3_object_type=' + file.type + '&s3_object_name=' + this.s3_object_name, true);
+      xhr.open('GET', this.s3_sign_put_url + '?s3_object_type=' + file.type + '&unique_image=' + this.unique_image, true);
       xhr.overrideMimeType('text/plain; charset=x-user-defined');
       xhr.onreadystatechange = function(e) {
         var result;

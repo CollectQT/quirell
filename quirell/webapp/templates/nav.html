@@ -4,10 +4,12 @@
             <i class='fa fa-home'></i>
             <div class='nav-text'>Home</div>
         </a>
+        {% if user.is_authenticated() %}
         <a href='/notes' class='button'>
             <i class='fa fa-exclamation'></i>
             <div class='nav-text'>Notes</div>
         </a>
+        {% endif %}
         <!--
         <button class='button'>
             <i class='fa fa-comment'></i>

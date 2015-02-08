@@ -26,6 +26,8 @@ Organization:
     HELPERS
 -----------------*/
 
+{{ config.WTF_CSRF_ENABLED }}
+
 .visible {opacity: 1;}
 .invisible {opacity: 0;}
 .none {display: none;}
@@ -35,6 +37,7 @@ Organization:
 
 $primary_color: #554488;
 $accent_color: #397D02;
+
 $filler_darkest: black;
 $filler_dark: #808080;
 $filler_medium: #D0D0D0;
@@ -47,6 +50,8 @@ $monospaced_font: "Lucida Console", "Lucida Sans Typewriter", Monaco, "Bitstream
 /*---------------
     GLOBAL
 -----------------*/
+
+/* global */
 
 html, body {
     color: $filler_darkest;
@@ -62,6 +67,8 @@ body {
     font-family: $body_font;
 }
 
+/* inline */
+
 h1, h2, h3, h4, h5, p {
     color: $filler_darkest;
     font-family: $body_font;
@@ -76,6 +83,16 @@ a {
         text-decoration: underline;
     }
 }
+
+.icon {
+    display: inline-block;
+}
+
+.quirell-icon {
+    font-family: "Quirell", Arial;
+}
+
+/* nav */
 
 nav {
     position: fixed;
@@ -118,15 +135,16 @@ nav .button i, .nav-text, .quirell-icon {
     color: $primary_color;
 }
 
-.icon {
-    display: inline-block;
+/* main content */
+
+.banner {
+    width: 100%;
+    background-color: $filler_light;
+    padding: 10px 10px;
+    margin-top: 10px;
 }
 
-.quirell-icon {
-    font-family: "Quirell", Arial;
-}
-
-article.post {background-color: $filler_light;}
+article {background-color: $filler_light;}
 
 pre {
     color: $filler_lightest;
@@ -210,7 +228,7 @@ blockquote {
     nav {
         padding-top: 5px;
         height: 50px;
-        height: 13vw;
+        height: 11vw;
     }
 
     nav i {
@@ -231,7 +249,6 @@ blockquote {
     }
 
     main {
-        width: 95%;
         margin: 0 auto;
         padding-top: 60px;
     }
@@ -241,8 +258,9 @@ blockquote {
         width: 160px;
     }
 
-    article.post {
-        margin: 10px 0;
+    article {
+        width: 90%;
+        margin: 10px auto;
         padding: 10px;
         border-radius: 10px;
     }
@@ -314,13 +332,13 @@ blockquote {
         display: inline-block;
     }
 
-    main {
-        width: 70%;
-    }
-
     .post-meta-top {
         max-width: 400px;
         max-width: calc(95% - 60px);
+    }
+
+    article {
+        width: 70%;
     }
 }
 
@@ -345,9 +363,10 @@ blockquote {
         height: 40px;
     }
 
-    main {
+    article {
         width: 40%;
     }
+
 }
 
 /*---------------
