@@ -16,16 +16,17 @@
             </div>
         </div>
     </div>
-    <article class='post'>
+    {% if user.is_authenticated() %}
+        <article class='post'>
+            <input type="file" class="img_upload profile_picture"/>
+            <p class="upload_status">Please select a file</p>
+            <img class="img_preview profile_picture" src="{{ requested_user.data.profile_picture }}"/>
 
-        <input type="file" class="img_upload profile_picture"/>
-        <p class="upload_status">Please select a file</p>
-        <img class="img_preview profile_picture" src="{{ requested_user.data.profile_picture }}"/>
-
-        <form method="POST" action="/change_profile_picture?next={{ flask.request.url }}">
-            <input type="hidden" class="avatar_url" name="avatar_url" value=" {{ requested_user.data.profile_picture }}" />
-            <input type="submit" value="Update profile" />
-        </form>
-    </article>
+            <form method="POST" action="/change_profile_picture?next={{ flask.request.url }}">
+                <input type="hidden" class="avatar_url" name="avatar_url" value=" {{ requested_user.data.profile_picture }}" />
+                <input type="submit" value="Update profile" />
+            </form>
+        </article>
+    {% endif %}
 </main>
 {% endblock %}
