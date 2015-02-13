@@ -11,6 +11,7 @@ PyYAML==3.11
 WTForms==2.0.1
 Werkzeug==0.9.6
 argh==0.25.0
+beautifulsoup4==4.3.2
 gunicorn==19.1.1
 heroku==0.1.4
 itsdangerous==0.24
