@@ -3,54 +3,30 @@
 <main>
     <div class='banner'>
         <div class='middle'>
-            <a class='middle' href='/cyrin'>
-                <img class='avatar img-mid' src="http://www.gravatar.com/avatar/b1cde28ce033c8cd6f4be4059efbe00b" alt='Lynn Cyrins Avatar'>
-            </a>
-            <div class='post-meta-top'>
-                <a class='middle' href='/cyrin'>
+            <div class='middle banner-left' href='/u/{{ requested_user.username }}'>
+                <div class='avatar'><img class='avatar img-large' src="{{ requested_user.data.profile_picture }}" alt='{{ requested_user.username}} Avatar'></div>
+                <div>
                     <span class='display-name'>Battle Femme Cyrin</span>
-                    <span class='pronouns subtext'>(zi / zir)</span>
-                    <span class='userID subtext'>@lynncyrin</span>
+                    <span class='pronouns subtext'>(she)</span>
+                    <span class='username subtext'>{{ requested_user.username }}</span>
+                </div>
+            </div>
+            <div class='banner-right'>
+                <a class='middle' href='/cyrin'>
                 </a>
-                <br>
-                <a class='subtext' href='/post/100'>Yesterday</a>
-                <span class='subtext'> ~ Public <i class="fa fa-globe"></i></span>
             </div>
         </div>
     </div>
     <article class='post'>
 
-        <input type="file" class="img_upload" onchange="s3_upload(unique_image=false)"/>
-        <p id="status">Please select a file</p>
-        <img class="img_preview profile_picture" src="/static/img/default.png"/>
+        <input type="file" class="img_upload profile_picture"/>
+        <p class="upload_status">Please select a file</p>
+        <img class="img_preview profile_picture" src="{{ requested_user.data.profile_picture }}"/>
 
-        <form method="POST" action="/submit_form/">
-            <input type="hidden" id="avatar_url" name="avatar_url" value="/static/img/default.png" />
+        <form method="POST" action="/change_profile_picture">
+            <input type="hidden" class="avatar_url" name="avatar_url" value=" {{ requested_user.data.profile_picture }}" />
             <input type="submit" value="Update profile" />
         </form>
     </article>
 </main>
-
-<script type="text/javascript">
-function s3_upload(unique_image){
-    var status_elem = document.getElementById("status");
-    var url_elem = document.getElementById("avatar_url");
-    var s3upload = new S3Upload({
-        file_dom_selector: 'files',
-        s3_sign_put_url: '/sign_s3/',
-        unique_image: unique_image,
-        onProgress: function(percent, message) {
-            status_elem.innerHTML = 'Upload progress: ' + percent + '% ' + message;
-        },
-        onFinishS3Put: function(url) {
-            status_elem.innerHTML = 'Upload completed. Uploaded to: '+ url;
-            url_elem.value = url;
-        },
-        onError: function(status) {
-            status_elem.innerHTML = 'Upload error: ' + status;
-        }
-    });
-}
-</script>
-
 {% endblock %}

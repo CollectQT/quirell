@@ -24,9 +24,9 @@
         <!-- user account functions -->
         {% if user.is_authenticated() %}
             <!-- user actions -->
-            <a href='/u/{{ user['userID'] }}' class='button'>
+            <a href='/u/{{ user.username }}' class='button'>
                 <i class='fa fa-user'></i>
-                <div class='nav-text'>{{ user['userID'] }}</div>
+                <div class='nav-text'>{{ user.username }}</div>
             </a>
             <!-- settings -->
             <a herf='/settings' class='button'>

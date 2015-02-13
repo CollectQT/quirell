@@ -27,7 +27,7 @@ class Test (object):
         # should 401, you aren't logged in yet
         assert session.get(quirell+'/new_post').status_code == 401
         # user 'rawr' is bad at security, clearly
-        login = {'userID': 'rawr', 'password': 'rawr',}
+        login = {'username': 'rawr', 'password': 'rawr',}
         assert session.post('http://0.0.0.0:5000/login_POST', data=login).status_code == 200
         # purposeful 404
         assert session.get(quirell+'/cats?hi=hi&no=no').status_code == 404

@@ -26,8 +26,6 @@ Organization:
     HELPERS
 -----------------*/
 
-{{ config.WTF_CSRF_ENABLED }}
-
 .visible {opacity: 1;}
 .invisible {opacity: 0;}
 .none {display: none;}
@@ -52,6 +50,9 @@ $monospaced_font: "Lucida Console", "Lucida Sans Typewriter", Monaco, "Bitstream
 -----------------*/
 
 /* global */
+
+/* idk, does something */
+@-ms-viewport{ width: device-width; }
 
 html, body {
     color: $filler_darkest;
@@ -138,10 +139,14 @@ nav .button i, .nav-text, .quirell-icon {
 /* main content */
 
 .banner {
-    width: 100%;
+    font-size: 1.1em;
     background-color: $filler_light;
     padding: 10px 10px;
     margin-top: 10px;
+}
+
+.banner .avatar {
+    margin: 0 auto;
 }
 
 article {background-color: $filler_light;}
@@ -215,14 +220,25 @@ blockquote {
         line-height: 1.3em;
     }
 
+    .banner-left {
+        width: 75%;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .img-large {
+        height: 80px;
+        width: 80px;
+    }
+
     .img-mid {
-        height: 60px;
-        width: 60px;
+        height: 50px;
+        width: 50px;
     }
 
     .img-small {
-        height: 40px;
-        width: 40px;
+        height: 30px;
+        width: 30px;
     }
 
     nav {
@@ -263,6 +279,11 @@ blockquote {
         margin: 10px auto;
         padding: 10px;
         border-radius: 10px;
+    }
+
+    .banner {
+        padding-left: 15px;
+        padding-right: 15px;
     }
 
     .post-author {
@@ -326,6 +347,29 @@ blockquote {
         font-size: 40px;
     }
 
+    .banner-left {
+        width: 30%;
+    }
+
+    .banner-right {
+        width: 50%;
+    }
+
+    .img-large {
+        height: 100px;
+        width: 100px;
+    }
+
+    .img-mid {
+        height: 60px;
+        width: 60px;
+    }
+
+    .img-small {
+        height: 40px;
+        width: 40px;
+    }
+
     .quirell-icon {
         padding-top: 15px;
         font-size: 50px;
@@ -340,6 +384,12 @@ blockquote {
     article {
         width: 70%;
     }
+
+    .banner {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
 }
 
 /*---------------

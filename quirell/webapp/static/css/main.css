@@ -17,6 +17,9 @@
  margin-left: auto;
  margin-right: auto; }
 
+ @-ms-viewport {
+ width: device-width; }
+
  html, body {
  color: black;
  padding: 0;
@@ -25,13 +28,13 @@
  height: 100%; }
 
  body {
- background-color: #554488;
- overflow-x: hidden;
- font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica,
-  FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo, Helvetica, Arial,
-  sans-serif; }
+  background-color: #554488;
+  overflow-x: hidden;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica,
+   FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo, Helvetica, Arial,
+   sans-serif; }
 
- h1, h2, h3, h4, h5, p {
+  h1, h2, h3, h4, h5, p {
   color: black;
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica,
    FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo, Helvetica, Arial,
@@ -85,10 +88,13 @@
   color: #554488; }
 
   .banner {
-  width: 100%;
+  font-size: 1.1em;
   background-color: #EFEFEF;
   padding: 10px 10px;
   margin-top: 10px; }
+
+  .banner .avatar {
+  margin: 0 auto; }
 
   article {
   background-color: #EFEFEF; }
@@ -106,9 +112,9 @@
   list-style-type: square; }
 
   blockquote {
-  font-style: italic; }
+   font-style: italic; }
 
-  .post-meta-top {
+   .post-meta-top {
    display: inline-block;
    white-space: nowrap;
    overflow: hidden; }
@@ -139,34 +145,41 @@
    display: inline-block; }
 
    .post-action-bar {
-   display: inline-block; }
+    display: inline-block; }
 
-   @media all {
+    @media all {
     html {
     font-size: 16px;
     line-height: 1.3em; }
+    .banner-left {
+    width: 75%;
+    margin: 0 auto;
+    text-align: center; }
+    .img-large {
+    height: 80px;
+    width: 80px; }
     .img-mid {
-    height: 60px;
-    width: 60px; }
+    height: 50px;
+    width: 50px; }
     .img-small {
-    height: 40px;
-    width: 40px; }
+    height: 30px;
+    width: 30px; }
     nav {
     padding-top: 5px;
     height: 50px;
     height: 11vw; }
     nav i {
-    font-size: 30px;
-    font-size: 10vw;
-    margin-left: 15px;
-    margin-right: 5px; }
-    .quirell-icon {
-    font-size: 50px;
-    font-size: 10vw;
-    display: none; }
-    .nav-text {
-    display: none; }
-    main {
+     font-size: 30px;
+     font-size: 10vw;
+     margin-left: 15px;
+     margin-right: 5px; }
+     .quirell-icon {
+     font-size: 50px;
+     font-size: 10vw;
+     display: none; }
+     .nav-text {
+     display: none; }
+     main {
      margin: 0 auto;
      padding-top: 60px; }
      img {
@@ -177,22 +190,25 @@
      margin: 10px auto;
      padding: 10px;
      border-radius: 10px; }
+     .banner {
+     padding-left: 15px;
+     padding-right: 15px; }
      .post-meta-top {
      max-width: 230px;
      max-width: calc(95% - 60px);
      margin-left: 5px;
      line-height: 1.4em; }
      .post-meta-bottom {
-     width: 100%; }
-     .post-notes {
-     width: 40%; }
-     .post-tags {
-     margin-bottom: 10px; }
-     .post-action-bar {
-     padding-right: 20px;
-     float: right;
-     text-align: right; }
-     .post-action-bar > * {
+      width: 100%; }
+      .post-notes {
+      width: 40%; }
+      .post-tags {
+      margin-bottom: 10px; }
+      .post-action-bar {
+      padding-right: 20px;
+      float: right;
+      text-align: right; }
+      .post-action-bar > * {
       padding: 0 10px; }
       .content {
       padding: 10px 15px; }
@@ -207,15 +223,31 @@
  height: 50px; }
  nav i {
  font-size: 40px; }
+ .banner-left {
+ width: 30%; }
+ .banner-right {
+ width: 50%; }
+ .img-large {
+ height: 100px;
+ width: 100px; }
+ .img-mid {
+ height: 60px;
+ width: 60px; }
+ .img-small {
+ height: 40px;
+ width: 40px; }
  .quirell-icon {
- padding-top: 15px;
- font-size: 50px;
- display: inline-block; }
- .post-meta-top {
- max-width: 400px;
- max-width: calc(95% - 60px); }
- article {
- width: 70%; }
+  padding-top: 15px;
+  font-size: 50px;
+  display: inline-block; }
+  .post-meta-top {
+  max-width: 400px;
+  max-width: calc(95% - 60px); }
+  article {
+  width: 70%; }
+  .banner {
+  padding-left: 5%;
+  padding-right: 5%; }
 }
 
 @media all and (min-width: 1000px) {

@@ -1,7 +1,6 @@
 '''database.py'''
 
 import os
-import json
 #
 import yaml
 import py2neo
@@ -14,11 +13,11 @@ class Database (object):
         verfiy identity of request
         bind neo4j database
     create_user (user_info)
-    user (userID)
+    user (username)
         profile information
         settings
-    get_timeline (userID)
-    create_relationship(userID_from, userID_to, rel_type)
+    get_timeline (username)
+    create_relationship(username_from, username_to, rel_type)
     get_relationship
     create_post ()
     '''
@@ -26,8 +25,8 @@ class Database (object):
     def __init__ (self):
         graphenedb_url = os.environ.get("GRAPHENEDB_URL", "http://localhost:7474/")
         self.db = py2neo.ServiceRoot(graphenedb_url).graph
-        # no duplicate userID or email
-        self.create_uniqueness_constraint('user', 'userID')
+        # no duplicate username or email
+        self.create_uniqueness_constraint('user', 'username')
         self.create_uniqueness_constraint('user', 'email')
 
     def create_user (self, node_data):
@@ -37,9 +36,9 @@ class Database (object):
         self.db.create(new_user)
         print('[NOTE] Creating new user')
 
-    def get_user (self, userID):
-        '''get the node (a python object) for a given userID'''
-        result = self.db.find_one('user', 'userID', userID)
+    def get_user (self, username):
+        '''get the node (a python object) for a given username'''
+        result = self.db.find_one('user', 'username', username)
         return result
 
     def create_post (self, node_data, user):
@@ -47,7 +46,7 @@ class Database (object):
         self.add_label(post, 'post')
         user_created_post = py2neo.Relationship(user, 'CREATED', post)
         self.db.create(post, user_created_post)
-        print('[NOTE] Creating new post for user '+user['userID'])
+        print('[NOTE] Creating new post for user '+user['username'])
 
     def create_uniqueness_constraint (self, label, constraint):
         # so with these try excepts... what I -think- is happening is that

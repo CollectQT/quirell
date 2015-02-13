@@ -8,9 +8,9 @@
             <form action="/login" method="POST">
                 {{ login.hidden_tag() }}
                 <p>
-                    Please enter your userID:<br>
-                    {{ login.userID(size=40) }}<br>
-                    Please enter your Password:<br>
+                    Enter your username:<br>
+                    {{ login.username(size=40) }}<br>
+                    Enter your Password:<br>
                     {{ login.password(size=40) }}<br>
                 </p>
                 <p>{{ login.remember_me }} Remember Me</p>

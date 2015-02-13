@@ -5,13 +5,13 @@
             <form action="/signup_POST" method="POST" name="signup">
                 {{ signup.hidden_tag() }}
                 <p>
-                    enter your userID:<br>
-                    {{ signup.userID(size=40) }}<br>
-                    enter your email:<br>
+                    Enter your username:<br>
+                    {{ signup.username(size=40) }}<br>
+                    Enter your email:<br>
                     {{ signup.email(size=40) }}<br>
-                    enter your Password:<br>
+                    Enter your password:<br>
                     {{ signup.password(size=40) }}<br>
-                    confirm password:<br>
+                    Confirm password:<br>
                     {{ signup.confirm(size=40) }}<br>
                 </p>
                 <p><input type="submit" value="Sign In"></p>

@@ -59,7 +59,7 @@ def account():
 @app.route('/profile')
 @flask_login.login_required
 def user_redirect():
-    return flask.redirect('/u/'+flask_login.current_user.userID)
+    return flask.redirect('/u/'+flask_login.current_user.username)
 
 # render static files
 @app.route('/static/<path:filename>')
@@ -92,7 +92,7 @@ def login_POST():
     from quirell.webapp.user import User
     form = forms.login()
     user = User()
-    success, message = user.login(userID=form.userID.data,
+    success, message = user.login(username=form.username.data,
         password=form.password.data, remember=form.remember_me.data)
     if not success: # user credentials invalid in some way
         return flask.render_template('forms/login.html',
@@ -107,7 +107,7 @@ def signup_POST():
     from quirell.webapp.user import User
     form = forms.signup()
     user = User()
-    user.create(userID=form.userID.data, password=form.password.data,
+    user.create(username=form.username.data, password=form.password.data,
         email=form.email.data)
     return flask.render_template('message.html', html_content='signup successful')
 
@@ -117,8 +117,8 @@ def new_post_POST():
     flask_login.current_user.create_post(content=form.content.data)
     return flask.render_template('message.html', html_content='post created')
 
-@app.route("/submit_form/", methods=["POST"])
-def submit_form():
+@app.route("/change_profile_picture/", methods=["POST"])
+def change_profile_picture():
     image_url = request.form["avatar_url"]
     #update_account(username, full_name, avatar_url)
     return flask.redirect('/')
@@ -127,23 +127,24 @@ def submit_form():
 # USERS #
 #########
 
-@app.route('/u/<userID>')
-def user_request(userID):
+@app.route('/u/<username>')
+def user_request(username):
+    if username[0] == '@': username = username[1:]
     from quirell.webapp.user import User
-    if not cms.user_exists(userID):
+    if not cms.user_exists(username):
         # will eventually return a more specfic 'user not found' page
         return flask.abort(404)
-    user = User().get_user(userID)
+    user = User().get_user(username)
     # Determine if current user is self
     # If you aren't logged in, then user isn't self
     if not flask_login.current_user.is_authenticated():
-        return flask.render_template('paths/user.html', user_is_self=False)
-    # If you are logged in and have the same userID, then it is
-    elif '@'+userID == flask_login.current_user.userID:
-        return flask.render_template('paths/user.html', user_is_self=True)
-    # Otherwise (you are logged in but different userID) it isnt
+        return flask.render_template('paths/user.html', user_is_self=False, requested_user=user)
+    # If you are logged in and have the same username, then it is
+    elif '@'+username == flask_login.current_user.username:
+        return flask.render_template('paths/user.html', user_is_self=True, requested_user=user)
+    # Otherwise (you are logged in but different username) it isnt
     else:
-        return flask.render_template('paths/user.html', user_is_self=False)
+        return flask.render_template('paths/user.html', user_is_self=False, requested_user=user)
 
 @app.route('/user/<path>')
 def user_to_u(path):
@@ -192,7 +193,7 @@ def unathorized(e):
 
 @app.errorhandler(404)
 def page_not_found(e):
-    # So this is a method to try and automatically let userIDs be
+    # So this is a method to try and automatically let usernames be
     # accessed from the top level. If any given request 404s, search
     # for a user with the same name as the request path. i.e.
     # http://quirell.net/cats will 404 if nobody defines a cats file
@@ -202,10 +203,10 @@ def page_not_found(e):
     if cms.user_exists(user):
         return flask.redirect('/u'+flask.request.path+
             '?'+flask.request.query_string.decode("utf-8"))
-    return flask.render_template('paths/404.html'), 401
+    return flask.render_template('paths/404.html'), 404
 
 @app.login_manager.user_loader
-def load_user (userID): return cms.get_user(userID)
+def load_user (username): return cms.get_user(username)
 
 # shutdown the server
 @app.route('/shutdown', methods=['POST'])
@@ -221,18 +222,20 @@ def favicon():
         'webapp', 'static'), 'favicon.png')
 
 # sign an upload request before if goes up to the s3 server
-@app.route('/sign_s3_kitten/')
+@app.route('/sign_s3/')
 @flask_login.login_required
 def sign_s3():
     import base64
     import hmac
     import mimetypes
+    #
     AWS_ACCESS_KEY = os.environ.get('AWS_ACCESS_KEY_ID')
     AWS_SECRET_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
     S3_BUCKET = os.environ.get('S3_BUCKET')
     # object naming
-    cms.hash.update(('').encode(encoding='utf-8'))
-    object_name = cms.hash.hexdigest()
+    if bool(flask.requests.get('is_profile_picture')):
+        cms.hash.update((object_name).encode(encoding='utf-8'))
+    object_name = cms.hash.hexdigest() + '.' + flask.request.args.get('file_ext')
     mime_type = flask.request.args.get('s3_object_type')
     if not mime_type.split('/')[0] == 'image':
         # do some sort of thing where we tell ppl to only upload images
@@ -245,6 +248,7 @@ def sign_s3():
     signature = urllib.parse.quote_plus(signature.strip())
     url = 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, object_name)
     #
+    print('rawr')
     return json.dumps({
         'signed_request': '%s?AWSAccessKeyId=%s&Expires=%d&Signature=%s' % (url, AWS_ACCESS_KEY, expires, signature),
          'url': url
