@@ -23,6 +23,14 @@ Organization:
 */
 
 /*---------------
+    IMPORTS
+-----------------*/
+
+// Partials
+@import "partials/_variables.scss";
+@import "partials/_mixins.scss";
+
+/*---------------
     HELPERS
 -----------------*/
 
@@ -33,17 +41,7 @@ Organization:
 .positionStatic {position: static;}
 .center {margin-left: auto; margin-right: auto;}
 
-$primary_color: #554488;
-$accent_color: #397D02;
 
-$filler_darkest: black;
-$filler_dark: #808080;
-$filler_medium: #D0D0D0;
-$filler_light: #EFEFEF;
-$filler_lightest: white;
-
-$body_font: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo, Helvetica, Arial, sans-serif;
-$monospaced_font: "Lucida Console", "Lucida Sans Typewriter", Monaco, "Bitstream Vera Sans Mono", monospace;
 
 /*---------------
     GLOBAL
@@ -55,7 +53,7 @@ $monospaced_font: "Lucida Console", "Lucida Sans Typewriter", Monaco, "Bitstream
 @-ms-viewport{ width: device-width; }
 
 html, body {
-    color: $filler_darkest;
+    color: $color_body_text;
     padding: 0;
     margin: 0;
     width: 100%;
@@ -63,22 +61,22 @@ html, body {
 }
 
 body {
-    background-color: $primary_color;
+    background-color: $color_body_bg;
     overflow-x: hidden;
-    font-family: $body_font;
+    font-family: $font_body;
 }
 
 /* inline */
 
 h1, h2, h3, h4, h5, p {
-    color: $filler_darkest;
-    font-family: $body_font;
+    color: $color_header_text;
+    font-family: $font_body;
     padding: 5px 15px;
 }
 
 a {
     cursor: inherit;
-    color: $accent_color;
+    color: $color_link_text;
     text-decoration: inherit;
     &:hover {
         text-decoration: underline;
@@ -90,7 +88,7 @@ a {
 }
 
 .quirell-icon {
-    font-family: "Quirell", Arial;
+    font-family: $font_quirell_icon;
 }
 
 /* nav */
@@ -98,8 +96,8 @@ a {
 nav {
     position: fixed;
     width: 100%;
-    background-color: $filler_light;
-    box-shadow: 0 0 10px $filler_darkest;
+    background-color: $color_nav_bg;
+    box-shadow: 0 0 10px $color_nav_box_shadow;
 }
 
 .nav-block {
@@ -133,13 +131,13 @@ nav .button {
 }
 
 nav .button i, .nav-text, .quirell-icon {
-    color: $primary_color;
+    color: $color_nav_foreground;
 }
 
 /* main content */
 
 .banner {
-    background-color: $filler_light;
+    background-color: $color_banner_bg;
     padding: 10px 10px;
     margin-top: 10px;
 }
@@ -153,19 +151,19 @@ nav .button i, .nav-text, .quirell-icon {
 }
 
 .banner-right {
-    background-color: $filler_medium;
+    background-color: $color_banner_right;
 }
 
-article {background-color: $filler_light;}
+article {background-color: $color_article_bg;}
 
 pre {
-    color: $filler_lightest;
-    background-color: $filler_darkest;
-    font-family: $monospaced_font;
+    color: $color_pre_text;
+    background-color: $color_pre_bg;
+    font-family: $font_pre;
 }
 
 p code {
-    background-color: $filler_medium;
+    background-color: $color_code_bg;
 }
 
 ul {list-style-type: square;}
@@ -186,12 +184,12 @@ blockquote {
 }
 
 .display-name {
-    color: $filler_darkest;
+    color: $color_display_name;
     font-weight: bold;
 }
 
 .subtext {
-    color: $filler_dark;
+    color: $color_subtext;
     font-size: 0.9em;
 }
 
@@ -204,7 +202,7 @@ blockquote {
     font-size: 1.0em;
     margin-left: auto;
     margin-right: auto;
-    color: $filler_dark;
+    color: $color_post_meta_bottom;
 }
 
 .post-notes {
