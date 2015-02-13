@@ -139,14 +139,21 @@ nav .button i, .nav-text, .quirell-icon {
 /* main content */
 
 .banner {
-    font-size: 1.1em;
     background-color: $filler_light;
     padding: 10px 10px;
     margin-top: 10px;
 }
 
+.banner-left {
+    font-size: 1.1em;
+}
+
 .banner .avatar {
     margin: 0 auto;
+}
+
+.banner-right {
+    background-color: $filler_medium;
 }
 
 article {background-color: $filler_light;}
@@ -224,6 +231,12 @@ blockquote {
         width: 75%;
         margin: 0 auto;
         text-align: center;
+    }
+
+    .banner-right {
+        margin-top: 10px;
+        border-radius: 20px;
+        padding: 10px 20px;
     }
 
     .img-large {
@@ -348,10 +361,15 @@ blockquote {
     }
 
     .banner-left {
-        width: 30%;
+        margin-left: 30px;
+        display: inline-block;
+        width: 20%;
     }
 
     .banner-right {
+        margin-left: 40px;
+        padding: 15px 30px;
+        display: inline-block;
         width: 50%;
     }
 

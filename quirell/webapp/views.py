@@ -26,7 +26,7 @@ def set_globals():
     login = forms.login()
     new_post = forms.new_post()
     signup = forms.signup()
-    return dict(user=user, login=login, signup=signup, new_post=new_post,)
+    return dict(flask=flask, user=user, login=login, signup=signup, new_post=new_post,)
 
 #@app.before_first_request
 #@app.before_request
@@ -45,7 +45,7 @@ def index ():
 
 @app.route('/login')
 def login():
-    return flask.render_template('forms/login.html')
+    return flask.render_template('forms/login.html', next=flask.request.args.get('next'))
 
 @app.route('/signup')
 def signup():
@@ -100,7 +100,10 @@ def login_POST():
         #return flask.jsonify(messsage=message)
     # a successful login should return the user to where they were
     # before via the 'next' variable in a query string
-    return flask.render_template('message.html', html_content='login successful')
+    if flask.request.args.get('next'):
+        return flask.redirect(flask.request.args.get('next'))
+    else:
+        return flask.redirect('/')
 
 @app.route('/signup', methods=['POST'])
 def signup_POST():
@@ -117,11 +120,15 @@ def new_post_POST():
     flask_login.current_user.create_post(content=form.content.data)
     return flask.render_template('message.html', html_content='post created')
 
-@app.route("/change_profile_picture/", methods=["POST"])
+@app.route("/change_profile_picture", methods=["POST"])
 def change_profile_picture():
-    image_url = request.form["avatar_url"]
-    #update_account(username, full_name, avatar_url)
-    return flask.redirect('/')
+    image_url = flask.request.form['avatar_url']
+    flask_login.current_user.data['profile_picture'] = image_url
+    flask_login.current_user.commit()
+    if flask.request.args.get('next'):
+        return flask.redirect(flask.request.args.get('next'))
+    else:
+        return flask.redirect('/')
 
 #########
 # USERS #
@@ -206,7 +213,9 @@ def page_not_found(e):
     return flask.render_template('paths/404.html'), 404
 
 @app.login_manager.user_loader
-def load_user (username): return cms.get_user(username)
+def load_user (username):
+    if username[0] == '@': username = username[1:]
+    return cms.get_user(username)
 
 # shutdown the server
 @app.route('/shutdown', methods=['POST'])
@@ -232,9 +241,17 @@ def sign_s3():
     AWS_ACCESS_KEY = os.environ.get('AWS_ACCESS_KEY_ID')
     AWS_SECRET_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
     S3_BUCKET = os.environ.get('S3_BUCKET')
+    # no huge pictues
+    if flask.request.args.get('file_size') > 300000:
+        flask.abort(401)
     # object naming
-    if bool(flask.requests.get('is_profile_picture')):
-        cms.hash.update((object_name).encode(encoding='utf-8'))
+    # if its a profile picture, name it with a hash of username
+    if bool(flask.request.args.get('is_profile_picture')):
+        cms.hash.update((flask_login.current_user.username).encode(encoding='utf-8'))
+    # if its a regular picture, name it was a hash of username + number of pictures
+    else:
+        name = flask_login.current_user.username + flask.current_user.data['pictures']['amount']
+        cms.hash.update((name).encode(encoding='utf-8'))
     object_name = cms.hash.hexdigest() + '.' + flask.request.args.get('file_ext')
     mime_type = flask.request.args.get('s3_object_type')
     if not mime_type.split('/')[0] == 'image':

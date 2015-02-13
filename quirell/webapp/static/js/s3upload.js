@@ -50,7 +50,7 @@
             file_ext = file.name.split('.').pop()
             this_s3upload = this;
             xhr = new XMLHttpRequest();
-            xhr.open('GET', '/sign_s3/?s3_object_type=' + file.type + '&is_profile_picture=' + this.is_profile_picture + '&file_ext=' + file_ext, true);
+            xhr.open('GET', '/sign_s3/?s3_object_type=' + file.type + '&is_profile_picture=' + this.is_profile_picture + '&file_ext=' + file_ext + '&file_size=' + file.size, true);
             xhr.overrideMimeType('text/plain; charset=x-user-defined');
             xhr.onreadystatechange = function(e) {
                 var result;

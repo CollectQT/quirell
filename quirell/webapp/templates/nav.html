@@ -35,7 +35,7 @@
             </a>
         {% else %}
             <!-- login -->
-            <a href='/login' class='button'>
+            <a href='/login?next={{ flask.request.url }}' class='button'>
                     <i class='fa fa-user'></i>
                     <div class='nav-text'>Login</div>
             </a>

@@ -6,14 +6,13 @@
             <div class='middle banner-left' href='/u/{{ requested_user.username }}'>
                 <div class='avatar'><img class='avatar img-large' src="{{ requested_user.data.profile_picture }}" alt='{{ requested_user.username}} Avatar'></div>
                 <div>
-                    <span class='display-name'>Battle Femme Cyrin</span>
-                    <span class='pronouns subtext'>(she)</span>
+                    <span class='display-name'>{{ requested_user.data.display_name }}</span>
+                    <span class='pronouns subtext'>({{ requested_user.data.pronouns }})</span>
                     <span class='username subtext'>{{ requested_user.username }}</span>
                 </div>
             </div>
             <div class='banner-right'>
-                <a class='middle' href='/cyrin'>
-                </a>
+                {{ requested_user.data.description }}
             </div>
         </div>
     </div>
@@ -23,7 +22,7 @@
         <p class="upload_status">Please select a file</p>
         <img class="img_preview profile_picture" src="{{ requested_user.data.profile_picture }}"/>
 
-        <form method="POST" action="/change_profile_picture">
+        <form method="POST" action="/change_profile_picture?next={{ flask.request.url }}">
             <input type="hidden" class="avatar_url" name="avatar_url" value=" {{ requested_user.data.profile_picture }}" />
             <input type="submit" value="Update profile" />
         </form>

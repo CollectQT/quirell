@@ -47,17 +47,17 @@ class Cms (object):
     # USERS #
     #########
 
-    def user_exists (self, userID):
-        result = self.db.get_user('@'+userID)
+    def user_exists (self, username):
+        result = self.db.get_user('@'+username)
         if result == None: return False
         else: return True
 
-    def add_user (self, userID, user):
-        self.user_container[userID] = user
-        print('[NOTE] Logging in user @'+userID)
+    def add_user (self, username, user):
+        self.user_container[username] = user
+        print('[NOTE] Logging in user @'+username)
 
-    def get_user (self, userID):
-        try: user = self.user_container[userID]
+    def get_user (self, username):
+        try: user = self.user_container[username]
         except KeyError: user = None
         return user
 

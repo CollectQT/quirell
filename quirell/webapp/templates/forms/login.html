@@ -5,7 +5,7 @@
             <script>
             </script>
             {% autoescape false %}{{ login_message }}{% endautoescape %}
-            <form action="/login" method="POST">
+            <form action="/login?next={{ next }}" method="POST">
                 {{ login.hidden_tag() }}
                 <p>
                     Enter your username:<br>

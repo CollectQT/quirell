@@ -5,6 +5,15 @@ from quirell.webapp import cms # this is the cms instance, not the class
 class User (flask_login.UserMixin):
     '''the user class represents an individual user in the database'''
 
+    def __str__ (self):
+        '''testing sillyness. allows for nicer printing of the user instance'''
+        out = str()
+        for k, v in vars(self).items():
+            if k == 'node': continue
+            if type(v) == dict: v = '\n\t'+str(v)+'\n'
+            out += k+': '+str(v)+'\n'
+        return out
+
     def refresh (self):
         '''refresh the user object with information from the database'''
         self.get_user(self.username)
@@ -71,6 +80,8 @@ class User (flask_login.UserMixin):
             'password': cms.bcrypt.generate_password_hash(password),
             'data': {
                 'email': email,
+                'display_name': username,
+                'pronouns': 'they',
                 'profile_picture': '/static/img/default.png',
                 'pictures': {
                     'amount': 0,
