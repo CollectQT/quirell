@@ -3,7 +3,7 @@ main.css
 
 Organization:
 
-[HELPERS]
+[HELPER CLASSES]
     basic stuff, like add to invisble or disable none
 [GLOBAL]
     global styling
@@ -31,7 +31,7 @@ Organization:
 @import "partials/_mixins.scss";
 
 /*---------------
-    HELPERS
+    HELPER CLASSES
 -----------------*/
 
 .visible {opacity: 1;}
@@ -40,8 +40,6 @@ Organization:
 .positionAbsolute {position: absolute;}
 .positionStatic {position: static;}
 .center {margin-left: auto; margin-right: auto;}
-
-
 
 /*---------------
     GLOBAL
@@ -53,9 +51,8 @@ Organization:
 @-ms-viewport{ width: device-width; }
 
 html, body {
+    @extend %margin_padding_zero;
     color: $color_body_text;
-    padding: 0;
-    margin: 0;
     width: 100%;
     height: 100%;
 }
@@ -123,10 +120,9 @@ nav i {
 }
 
 nav .button {
+    @extend %margin_padding_zero;
     display: inline-block;
     background-color: transparent;
-    padding: 0;
-    margin: 0;
     border: none;
 }
 
@@ -140,21 +136,23 @@ nav .button i, .nav-text, .quirell-icon {
     background-color: $color_banner_bg;
     padding: 10px 10px;
     margin-top: 10px;
+
+    .avatar {
+    margin: 0 auto;
+    }
 }
 
 .banner-left {
     font-size: 1.1em;
 }
 
-.banner .avatar {
-    margin: 0 auto;
-}
-
 .banner-right {
     background-color: $color_banner_right;
 }
 
-article {background-color: $color_article_bg;}
+article {
+    background-color: $color_article_bg;
+}
 
 pre {
     color: $color_pre_text;
@@ -256,13 +254,13 @@ blockquote {
         padding-top: 5px;
         height: 50px;
         height: 11vw;
-    }
 
-    nav i {
-        font-size: 30px;
-        font-size: 10vw;
-        margin-left: 15px;
-        margin-right: 5px;
+        i {
+                font-size: 30px;
+                font-size: 10vw;
+                margin-left: 15px;
+                margin-right: 5px;
+        }
     }
 
     .quirell-icon {
