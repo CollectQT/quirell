@@ -69,7 +69,12 @@ def base_static(filename):
 # mostly used to render the readmes
 @app.route('/files/<path:filename>')
 def render_file(filename):
-    with open(BASE_PATH+'/'+filename, 'r') as f:
+    # get all files
+    files = glob.glob(BASE_PATH+'/'+filename+'*')
+    # the shortest file with the beggining the user requested is probably right
+    # ie. if the request was /readme we want /readme.md not /readme-webapp.md
+    files.sort(key=len);
+    with open(files[0], 'r') as f:
         content = f.read()
     return flask.render_template('message.html', html_content=content)
 
