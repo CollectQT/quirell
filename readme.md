@@ -19,7 +19,7 @@ If you don't have any of those requirements, you can install them via the comman
 
 If this is your first time setting up Quirell, you need to use these commands to set up the virutal environment. You can opt not to set up a virtual environment but you will probably end up with all sorts of obscure errors.
 
-    $ git clone git@gitlab.com:collectqt/quirell.git
+    $ git clone git@gitlab.com:collectqt/quirell.git -b develop
     $ cd quirell
     $ virtualenv -p python3.4 venv
 
