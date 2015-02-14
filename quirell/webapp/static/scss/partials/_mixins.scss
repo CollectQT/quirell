@@ -1,0 +1,10 @@
+/*---------------
+  MARGINS & PADDING
+-----------------*/
+
+// silent extend: do not use inside @media queries!
+// This code only compiles when called.
+%margin_padding_zero {
+    padding: 0;
+    margin: 0;
+}
