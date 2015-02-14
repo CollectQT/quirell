@@ -47,9 +47,22 @@ This will start up a local flask debug server. After a few seconds the terminal 
 
 Figure out what sort of changes you are going to make, and how comfortable you are making them.
 
-* If you are making a content (that is, not code) change you can do that via editing files on gitlab's online interface. For example [this link would allow you to edit the readme](https://gitlab.com/collectqt/quirell/edit/develop/readme.md)
+* If you are making content (that is, not code) change you can do that via editing files on gitlab's online interface. For example [this link would allow you to edit the readme](https://gitlab.com/collectqt/quirell/edit/develop/readme.md)
 * If you are a project maintainer and are adding large sections of code that nobody will disagree with, feel free to add them to branch **'develop'**
 * If you are new to the project and want to make a suggested change (code or otherwise), create the feature on a new branch that describes the feature name (example: **'add-smiley-support'**) and submit a merge request versus **'develop'**
+
+Setting up a new branch and submitting a merge request is a... process. It goes like so. Starting from inside of a currently existing git repo (which can be empty):
+
+    git checkout -b add-smiley-support # <- create a new branch
+    # set a link to our quirell remote via ssh...
+    git config remote.quirell.url git@gitlab.com:collectqt/quirell.git
+    # ...or https, your choice.
+    git config remote.quirell.url https://gitlab.com/collectqt/quirell.git
+    git pull quirell develop
+
+This should pull our develop branch onto your "add-smiley-support" branch (or wahtever its called). If this doesn't work, go find someone to ask for help!
+
+(there are more directions, namely making a remote on gitlab and submitting a merge request there. I'll write them later)
 
 If the change you are going to make has [an issue](https://gitlab.com/collectqt/quirell/issues), make yourself the assignee for that issue once you know that you are going to start working on it.
 
