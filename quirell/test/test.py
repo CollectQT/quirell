@@ -24,14 +24,15 @@ class Test (object):
         assert session.get(quirell).status_code == 200
         assert session.get(quirell+'/login').status_code == 200
         assert session.get(quirell+'/signup').status_code == 200
-        # should 401, you aren't logged in yet
-        assert session.get(quirell+'/new_post').status_code == 401
         # user 'rawr' is bad at security, clearly
         login = {'username': 'rawr', 'password': 'rawr',}
-        assert session.post('http://0.0.0.0:5000/login_POST', data=login).status_code == 200
+        assert session.post(quirell+'/login', data=login).status_code == 200
         # purposeful 404
         assert session.get(quirell+'/cats?hi=hi&no=no').status_code == 404
-
+        # create a post
+        new_post = {'content': 'rawr rawr candy'}
+        assert session.post(quirell+'/new_post', data=new_post).status_code == 200
+        assert session.get(quirell+'/cats?hi=hi&no=no').status_code == 404
         # don't leave the server on forever
         session.post('http://0.0.0.0:5000/shutdown')
 

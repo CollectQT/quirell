@@ -41,7 +41,7 @@ class Cms (object):
         for tag in html():
             for attribute in ["class", "id", "name", "style"]:
                 del tag[attribute]
-        return html
+        return str(html)
 
     #########
     # USERS #

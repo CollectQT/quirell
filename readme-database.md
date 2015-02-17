@@ -43,6 +43,9 @@ The majority of the content for a node should be third class, and stored on a `d
             'pronouns': 'she/her',
             'description': 'computer femme!!!!',
             'profile_picture': 'rawr_catten.jpg'
+            'posts': {
+                'amount': 2,
+            }
             'pictures': {
                 'amount': 2,
                 0:

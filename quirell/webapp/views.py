@@ -122,6 +122,7 @@ def signup_POST():
 @app.route('/new_post', methods=['POST'])
 @flask_login.login_required
 def new_post_POST():
+    form = forms.new_post()
     flask_login.current_user.create_post(content=form.content.data)
     return flask.render_template('message.html', html_content='post created')
 
@@ -183,11 +184,6 @@ def logout():
 @flask_login.login_required
 def timeline():
     pass
-
-@app.route('/new_post')
-@flask_login.login_required
-def new_post():
-    return flask.render_template('forms/new_post.html')
 
 ########
 # TECH #

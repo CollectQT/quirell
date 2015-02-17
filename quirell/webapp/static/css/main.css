@@ -1,3 +1,6 @@
+html, body, nav .button {
+ padding: 0;
+ margin: 0; }
 .visible {
  opacity: 1; }
 
@@ -21,9 +24,7 @@
  width: device-width; }
 
  html, body {
- color: black;
- padding: 0;
- margin: 0;
+ color: #000000;
  width: 100%;
  height: 100%; }
 
@@ -35,7 +36,7 @@
    sans-serif; }
 
   h1, h2, h3, h4, h5, p {
-  color: black;
+  color: #000000;
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica,
    FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo, Helvetica, Arial,
    sans-serif;
@@ -58,7 +59,7 @@
  position: fixed;
  width: 100%;
  background-color: #EFEFEF;
- box-shadow: 0 0 10px black; }
+ box-shadow: 0 0 10px #000000; }
 
  .nav-block {
  float: left; }
@@ -80,8 +81,6 @@
  nav .button {
   display: inline-block;
   background-color: transparent;
-  padding: 0;
-  margin: 0;
   border: none; }
 
   nav .button i, .nav-text, .quirell-icon {
@@ -91,140 +90,139 @@
   background-color: #EFEFEF;
   padding: 10px 10px;
   margin-top: 10px; }
-
-  .banner-left {
-  font-size: 1.1em; }
-
   .banner .avatar {
   margin: 0 auto; }
 
-  .banner-right {
-  background-color: #D0D0D0; }
+.banner-left {
+ font-size: 1.1em; }
 
-  article {
-  background-color: #EFEFEF; }
+ .banner-right {
+ background-color: #D0D0D0; }
 
-  pre {
-  color: white;
-  background-color: black;
-  font-family: "Lucida Console", "Lucida Sans Typewriter", Monaco, "Bitstream Vera Sans Mono",
-    monospace; }
+ article {
+ background-color: #EFEFEF; }
 
-  p code {
-   background-color: #D0D0D0; }
+ pre {
+ color: white;
+ background-color: #000000;
+ font-family: "Lucida Console", "Lucida Sans Typewriter", Monaco, "Bitstream Vera Sans Mono",
+ monospace; }
 
-   ul {
-   list-style-type: square; }
+ p code {
+ background-color: #D0D0D0; }
 
-   blockquote {
-   font-style: italic; }
+ ul {
+ list-style-type: square; }
 
+ blockquote {
+ font-style: italic; }
+
+ .post-meta-top {
+ display: inline-block;
+ white-space: nowrap;
+ overflow: hidden; }
+
+ .avatar {
+  display: inline-block;
+  border-radius: 20%; }
+
+  .display-name {
+  color: #000000;
+  font-weight: bold; }
+
+  .subtext {
+  color: #808080;
+  font-size: 0.9em; }
+
+  .middle > * {
+  vertical-align: middle; }
+
+  .post-meta-bottom {
+  padding: 0;
+  font-size: 1em;
+  margin-left: auto;
+  margin-right: auto;
+  color: #808080; }
+
+  .post-notes {
+  display: inline-block; }
+
+  .post-action-bar {
+  display: inline-block; }
+
+  @media all {
+  html {
+   font-size: 16px;
+   line-height: 1.3em; }
+   .banner-left {
+   width: 75%;
+   margin: 0 auto;
+   text-align: center; }
+   .banner-right {
+   margin-top: 10px;
+   border-radius: 20px;
+   padding: 10px 20px; }
+   .img-large {
+   height: 80px;
+   width: 80px; }
+   .img-mid {
+   height: 50px;
+   width: 50px; }
+   .img-small {
+   height: 30px;
+   width: 30px; }
+   nav {
+   padding-top: 5px;
+   height: 50px;
+   height: 11vw; }
+   nav i {
+   font-size: 30px;
+   font-size: 10vw;
+   margin-left: 15px;
+   margin-right: 5px; }
+  .quirell-icon {
+   font-size: 50px;
+   font-size: 10vw;
+   display: none; }
+   .nav-text {
+   display: none; }
+   main {
+   margin: 0 auto;
+   padding-top: 60px; }
+   img {
+   height: 160px;
+   width: 160px; }
+   article {
+   width: 90%;
+   margin: 10px auto;
+   padding: 10px;
+   border-radius: 10px; }
+   .banner {
+   padding-left: 15px;
+   padding-right: 15px; }
    .post-meta-top {
-   display: inline-block;
-   white-space: nowrap;
-   overflow: hidden; }
-
-   .avatar {
-   display: inline-block;
-   border-radius: 20%; }
-
-   .display-name {
-   color: black;
-   font-weight: bold; }
-
-   .subtext {
-   color: #808080;
-   font-size: 0.9em; }
-
-   .middle > * {
-   vertical-align: middle; }
-
+   max-width: 230px;
+   max-width: calc(95% - 60px);
+   margin-left: 5px;
+   line-height: 1.4em; }
    .post-meta-bottom {
-    padding: 0;
-    font-size: 1em;
-    margin-left: auto;
-    margin-right: auto;
-    color: #808080; }
-
-    .post-notes {
-    display: inline-block; }
-
+   width: 100%; }
+   .post-notes {
+    width: 40%; }
+    .post-tags {
+    margin-bottom: 10px; }
     .post-action-bar {
-    display: inline-block; }
-
-    @media all {
-    html {
-    font-size: 16px;
-    line-height: 1.3em; }
-    .banner-left {
-    width: 75%;
-    margin: 0 auto;
-    text-align: center; }
-    .banner-right {
-    margin-top: 10px;
-    border-radius: 20px;
-    padding: 10px 20px; }
-    .img-large {
-    height: 80px;
-    width: 80px; }
-    .img-mid {
-     height: 50px;
-     width: 50px; }
-     .img-small {
-     height: 30px;
-     width: 30px; }
-     nav {
-     padding-top: 5px;
-     height: 50px;
-     height: 11vw; }
-     nav i {
-     font-size: 30px;
-     font-size: 10vw;
-     margin-left: 15px;
-     margin-right: 5px; }
-     .quirell-icon {
-     font-size: 50px;
-     font-size: 10vw;
-     display: none; }
-     .nav-text {
-     display: none; }
-     main {
-     margin: 0 auto;
-     padding-top: 60px; }
-     img {
-     height: 160px;
-     width: 160px; }
-     article {
-      width: 90%;
-      margin: 10px auto;
-      padding: 10px;
-      border-radius: 10px; }
-      .banner {
-      padding-left: 15px;
-      padding-right: 15px; }
-      .post-meta-top {
-      max-width: 230px;
-      max-width: calc(95% - 60px);
-      margin-left: 5px;
-      line-height: 1.4em; }
-      .post-meta-bottom {
-      width: 100%; }
-      .post-notes {
-      width: 40%; }
-      .post-tags {
-      margin-bottom: 10px; }
-      .post-action-bar {
-      padding-right: 20px;
-      float: right;
-      text-align: right; }
-      .post-action-bar > * {
-      padding: 0 10px; }
-      .content {
-       padding: 10px 15px; }
-       p {
-       padding: 0 10px; }
-       pre {
-       padding: 5px; }
+    padding-right: 20px;
+    float: right;
+    text-align: right; }
+    .post-action-bar > * {
+    padding: 0 10px; }
+    .content {
+    padding: 10px 15px; }
+    p {
+    padding: 0 10px; }
+    pre {
+    padding: 5px; }
 }
 
 @media all and (min-width: 500px) {

@@ -27,8 +27,8 @@ Organization:
 -----------------*/
 
 // Partials
-@import "partials/_variables.scss";
-@import "partials/_mixins.scss";
+@import "quirell/webapp/static/scss/partials/_variables.scss";
+@import "quirell/webapp/static/scss/partials/_mixins.scss";
 
 /*---------------
     HELPER CLASSES
@@ -421,7 +421,7 @@ blockquote {
     .nav-text {
         vertical-align: middle;
         display: inline-block;
-        font-family: $body_font;
+        font-family: $font_body;
         font-weight: 600;
         font-size: 1.3em;
         height: 40px;

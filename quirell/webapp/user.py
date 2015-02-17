@@ -83,9 +83,12 @@ class User (flask_login.UserMixin):
                 'display_name': username,
                 'pronouns': 'they',
                 'profile_picture': '/static/img/default.png',
+                'posts': {
+                    'amount': 0,
+                },
                 'pictures': {
                     'amount': 0,
-                }
+                },
             }
         }
         cms.db.create_user(properties)
@@ -95,7 +98,7 @@ class User (flask_login.UserMixin):
         properties = {
             'content': content
         }
-        cms.db.create_post(properties, self.node)
+        cms.db.create_post(node_data=properties, user=self.node)
 
     def is_authenticated (self):
         return True
