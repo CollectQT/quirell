@@ -66,6 +66,10 @@ class Database (object):
             if error.__class__.__name__ == 'ConstraintViolationException': pass
             else: raise
 
+    def timeline (self, user, start='', end=''):
+        '''takes in a user node and the rel_type for post nodes'''
+        return self.db.match(start_node=user, rel_type='CREATED')
+
     def add_label (self, node, label):
         # py2neo throws an exception if a node that you just added a label
         # to is unbound :/

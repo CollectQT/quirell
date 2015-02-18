@@ -140,6 +140,9 @@ def change_profile_picture():
 # USERS #
 #########
 
+def present_post(post):
+    return post.properties
+
 @app.route('/u/<username>')
 def user_request(username):
     if username[0] == '@': username = username[1:]
@@ -148,16 +151,17 @@ def user_request(username):
         # will eventually return a more specfic 'user not found' page
         return flask.abort(404)
     user = User().get_user(username)
+    timeline = user.timeline()
     # Determine if current user is self
     # If you aren't logged in, then user isn't self
     if not flask_login.current_user.is_authenticated():
-        return flask.render_template('paths/user.html', user_is_self=False, requested_user=user)
+        return flask.render_template('paths/user.html', user_is_self=False, requested_user=user, timeline=timeline)
     # If you are logged in and have the same username, then it is
     elif '@'+username == flask_login.current_user.username:
-        return flask.render_template('paths/user.html', user_is_self=True, requested_user=user)
+        return flask.render_template('paths/user.html', user_is_self=True, requested_user=user, timeline=timeline)
     # Otherwise (you are logged in but different username) it isnt
     else:
-        return flask.render_template('paths/user.html', user_is_self=False, requested_user=user)
+        return flask.render_template('paths/user.html', user_is_self=False, requested_user=user,timeline=timeline)
 
 @app.route('/user/<path>')
 def user_to_u(path):

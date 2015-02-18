@@ -28,5 +28,10 @@
             </form>
         </article>
     {% endif %}
+    {% for post in timeline %}
+        <article class='timeline'>                   
+            {{ post.content }}
+        </article>
+    {% endfor %}
 </main>
 {% endblock %}
