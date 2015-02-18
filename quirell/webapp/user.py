@@ -75,12 +75,7 @@ class User (flask_login.UserMixin):
 
     def timeline (self):
         '''gets post nodes from the database and return a list of posts'''
-        timeline = list()
-        for post_node in cms.db.timeline(self.node):
-            data  = {'content': post_node.properties['content']}
-            timeline.append(data)
-        print(type(timeline[0]))
-        print(timeline[0]['content'])
+        timeline = [post.end_node.properties for post in cms.db.timeline(self.node)]
         return timeline
 
     def create (self, username, password, email):
