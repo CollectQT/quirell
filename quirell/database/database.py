@@ -29,17 +29,22 @@ class Database (object):
         self.create_uniqueness_constraint('user', 'username')
         self.create_uniqueness_constraint('user', 'email')
 
-    def create_user (self, node_data):
+    def create_user (self, user_node):
         '''Create a new user in the database'''
-        new_user = py2neo.Node(**node_data)
-        self.add_label(new_user, 'user')
-        self.db.create(new_user)
+        self.add_label(user_node, 'user')
+        self.db.create(user_node)
         print('[NOTE] Creating new user')
 
     def get_user (self, username):
         '''get the node (a python object) for a given username'''
         result = self.db.find_one('user', 'username', username)
         return result
+
+    def get_post (self, post_id, user):
+        parameters = {'username': user.username, 'post_id': parameters}
+        db.cypher.execute('''
+            MATCH (:user {username:\"{username}\"})-[CREATED]->(n:post {post_id={post_id}})
+            RETURN n''', parameters=parameters)
 
     def create_post (self, node_data, user):
         post = py2neo.Node(**node_data)

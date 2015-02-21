@@ -16,18 +16,18 @@ class User (flask_login.UserMixin):
 
     def refresh (self):
         '''refresh the user object with information from the database'''
-        self.get_user(self.username)
+        self.get_user(username=self.username)
 
-    def get_user (self,  username):
+    def get_user (self,  username=None, node=None):
         '''load a user from the database onto a instance of the User class'''
-        # make sure we have a user to get
-        try: self.node
-        except AttributeError:
+        if node:
+            self.node = node
+        elif username:
             self.node = cms.db.get_user('@'+username)
             if self.node == None: return None
-        # pull down node properties and assign them to user instance
+        else:
+            return None
         self.node.pull()
-        self.data = dict()
         for k, v in self.node.properties.items():
             # the 'data' attribute is encoded as json in the database
             # and represented as a dictionary by the user object
@@ -67,8 +67,7 @@ class User (flask_login.UserMixin):
                 </div>
                 '''
         # user considered successfully logged in at this point
-        self.node = node
-        self.get_user(username=username)
+        self.get_user(node=node)
         cms.add_user(username, self) # add user instance to cms
         flask_login.login_user(self, remember=remember) # add to login manager
         return True, self
@@ -80,10 +79,12 @@ class User (flask_login.UserMixin):
 
     def create (self, username, password, email):
         '''create a new user'''
-        properties = {
-            'username': '@'+username,
+        import py2neo
+        # initalize a node
+        user_node = py2neo.Node(**{
+            'username': username,
             'password': cms.bcrypt.generate_password_hash(password),
-            'data': {
+            'data': json.dumps({
                 'email': email,
                 'display_name': username,
                 'pronouns': 'they',
@@ -93,17 +94,31 @@ class User (flask_login.UserMixin):
                 },
                 'pictures': {
                     'amount': 0,
-                },
-            }
-        }
-        cms.db.create_user(properties)
+                }
+           })
+        })
+        # then send it to the database
+        cms.db.create_user(user_node)
 
     def create_post (self, content):
+        from datetime import datetime
+        # post id is current number of posts, which we then increment
+        post_id = self.data['posts']['amount']
+        self.data['posts']['amount'] += 1
+        # make sure the post isn't filled with EVIL
         content = cms.clean_html(content)
         properties = {
-            'content': content
+            'content': content,
+            'datetime': datetime.now(),
+            'post_id': post_id,
         }
+        # push to database
         cms.db.create_post(node_data=properties, user=self.node)
+        self.commit()
+
+    def edit_post (self, post_id):
+        pass
+        #cms.db.get_post(post_id=post_id, user=self.node)
 
     def is_authenticated (self):
         return True

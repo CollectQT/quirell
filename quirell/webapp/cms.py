@@ -13,22 +13,27 @@ from quirell.database import Database
 
 class Cms (object):
 
-    def __init__ (self, app):
-        import flask.ext.bcrypt as bcrypt
-        import flask.ext.login as flask_login
-        import flask.ext.misaka as misaka
-        # configs
-        for k,v in CONFIG.items(): app.config[k] = v
-        # content building
-        misaka.Misaka(app) # markdown
-        self.build_css_automatic()
-        # user management
-        try: self.db = Database()
-        except: print('[ERROR] Cannot connect to database')
-        self.bcrypt = bcrypt.Bcrypt(app) # encryption
-        self.login_manager =flask_login.LoginManager().init_app(app)
-        self.user_container = dict()
-        self.hash = hashlib.sha1()
+    def __init__ (self, app=None):
+        if app:
+            import flask.ext.bcrypt as bcrypt
+            import flask.ext.login as flask_login
+            import flask.ext.misaka as misaka
+            # configs
+            for k,v in CONFIG.items(): app.config[k] = v
+            # content building
+            misaka.Misaka(app) # markdown
+            self.build_css_automatic()
+            # user management
+            try: self.db = Database()
+            except: print('[ERROR] Cannot connect to database')
+            self.bcrypt = bcrypt.Bcrypt(app) # encryption
+            self.login_manager =flask_login.LoginManager().init_app(app)
+            self.user_container = dict()
+            self.hash = hashlib.sha1()
+        # runs the cms in 'headless mode':
+        else:
+            try: self.db = Database()
+            except: print('[ERROR] Cannot connect to database')
 
     def clean_html (self, html):
         # cleans html to prevent people doing evil things with it like
@@ -60,6 +65,20 @@ class Cms (object):
         try: user = self.user_container[username]
         except KeyError: user = None
         return user
+
+    def reformat_all_users (self):
+        users = self.db.db.find('user')
+        for user in users:
+            user = cms.format_user(user)
+        cms.db.db.push()
+
+    def reformat_all_posts (self):
+        posts = self.db.db.find('post')
+        for post in posts:
+            pass
+
+    def format_user (self, node):
+        return node
 
     ################
     # CSS BUILDING #

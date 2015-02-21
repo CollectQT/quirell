@@ -51,10 +51,6 @@ def login():
 def signup():
     return flask.render_template('forms/signup.html')
 
-@app.route('/account')
-def account():
-    return flask.render_template('paths/account.html')
-
 @app.route('/user')
 @app.route('/profile')
 @flask_login.login_required
@@ -150,7 +146,7 @@ def user_request(username):
     if not cms.user_exists(username):
         # will eventually return a more specfic 'user not found' page
         return flask.abort(404)
-    user = User().get_user(username)
+    user = User().get_user(username=username)
     timeline = user.timeline()
     # Determine if current user is self
     # If you aren't logged in, then user isn't self
@@ -220,7 +216,7 @@ def page_not_found(e):
 @app.login_manager.user_loader
 def load_user (username):
     if username[0] == '@': username = username[1:]
-    return cms.get_user(username)
+    return cms.get_user(username=username)
 
 # shutdown the server
 @app.route('/shutdown', methods=['POST'])
