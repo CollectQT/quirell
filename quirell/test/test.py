@@ -30,7 +30,7 @@ class Test (object):
         # purposeful 404
         assert session.get(quirell+'/cats?hi=hi&no=no').status_code == 404
         # create a post
-        new_post = {'content': 'rawr rawr candy'}
+        new_post = {'content': 'saturday kitten'}
         assert session.post(quirell+'/new_post', data=new_post).status_code == 200
         assert session.get(quirell+'/cats?hi=hi&no=no').status_code == 404
         # don't leave the server on forever
