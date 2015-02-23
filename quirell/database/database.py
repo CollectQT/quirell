@@ -71,7 +71,7 @@ class Database (object):
             if error.__class__.__name__ == 'ConstraintViolationException': pass
             else: raise
 
-    def timeline (self, user, start='', end=''):
+    def my_posts (self, user, start='', end=''):
         '''takes in a user node and the rel_type for post nodes'''
         return self.db.match(start_node=user, rel_type='CREATED')
 

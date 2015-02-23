@@ -31,7 +31,7 @@ class User (flask_login.UserMixin):
         for k, v in self.node.properties.items():
             # the 'data' attribute is encoded as json in the database
             # and represented as a dictionary by the user object
-            if k == 'data':
+            if k == ('data' or 'timeline_cache'):
                 v = json.loads(v)
                 self.data = v
             else:
@@ -44,7 +44,7 @@ class User (flask_login.UserMixin):
             #  no recurive assignment ;p
             if k == 'node': continue
             # the data attribute is a dictionary so we encode is as a string
-            if k == 'data': v = json.dumps(v)
+            if k == ('data' or 'timeline_cache'): v = json.dumps(v)
             self.node.properties[k]=v
         self.node.push()
 
@@ -72,10 +72,10 @@ class User (flask_login.UserMixin):
         flask_login.login_user(self, remember=remember) # add to login manager
         return True, self
 
-    def timeline (self):
+    def my_posts (self):
         '''gets post nodes from the database and return a list of posts'''
-        timeline = [post.end_node.properties for post in cms.db.timeline(self.node)]
-        return timeline
+        my_posts = [post.end_node.properties for post in cms.db.timeline(self.node)]
+        return my_posts
 
     def create (self, username, password, email):
         '''create a new user'''
@@ -94,8 +94,8 @@ class User (flask_login.UserMixin):
                 },
                 'pictures': {
                     'amount': 0,
-                }
-           })
+                },
+            })
         })
         # then send it to the database
         cms.db.create_user(user_node)
@@ -124,3 +124,58 @@ class User (flask_login.UserMixin):
         return True
 
     def get_id (self): return self.username
+
+'''
+About timeline_cache
+--------------------
+a timeline_cache is a subclass of lists, used to store
+a list of user posts in a timeline format. In the most basic
+implementation it is a list of post nodes.
+
+About timeline creation
+-----------------------
+timeline creation is modeled after the idea that whenever a post
+is created that would belong on a user's timeline, that post is
+then pushed to all applicable `timeline_cache`s. Also whenever
+there is a relationship state change.
+
+Structure
+---------
+timeline_cache
+    [
+        post_node,
+            .properties['datetime']
+        post_node,
+        post_node,
+        ...,
+    ]
+accesing:
+    (:user)-[READS]->(:timeline)
+'''
+
+class timeline_cache (list):
+
+    max_entries = 300
+
+    def __init__ (self, content, *args, **kwargs):
+        if type(content) == str: content = json.loads(content)
+        super(timeline_cache, self).__init__(content, *args, **kwargs)
+
+    def replace_id (self, post_id, node):
+        '''for when a node has been edited'''
+        for index, node in enumerate(self):
+            if node.properties['post_id'] == post_id: self[index] = node
+
+    def clean (self):
+        '''sort it and clip it'''
+        self.sort(key=lambda node: node.properties['datetime'], reverse=True)
+        self = self[:self.max_entries]
+
+    def refresh (self):
+        del self[:]
+        '''
+        the cypher query looks something like :
+
+        MATCH (:user {username:\"{username}\"})-[FOLLOWING]->(:user)-[CREATED]->(n:post)
+        RETURN n ORDER BY n.datetime desc LIMIT {limit}
+        '''

@@ -147,7 +147,7 @@ def user_request(username):
         # will eventually return a more specfic 'user not found' page
         return flask.abort(404)
     user = User().get_user(username=username)
-    timeline = user.timeline()
+    timeline = user.my_posts()
     # Determine if current user is self
     # If you aren't logged in, then user isn't self
     if not flask_login.current_user.is_authenticated():
@@ -183,7 +183,7 @@ def logout():
 @app.route('/timeline')
 @flask_login.login_required
 def timeline():
-    pass
+    user = flask_login.current_user
 
 ########
 # TECH #
