@@ -8,19 +8,6 @@ import py2neo
 from quirell.config import *
 
 class Database (object):
-    '''
-    __init__ (identity_information)
-        verfiy identity of request
-        bind neo4j database
-    create_user (user_info)
-    user (username)
-        profile information
-        settings
-    get_timeline (username)
-    create_relationship(username_from, username_to, rel_type)
-    get_relationship
-    create_post ()
-    '''
 
     def __init__ (self):
         graphenedb_url = os.environ.get("GRAPHENEDB_URL", "http://localhost:7474/")
@@ -29,11 +16,26 @@ class Database (object):
         self.create_uniqueness_constraint('user', 'username')
         self.create_uniqueness_constraint('user', 'email')
 
-    def create_user (self, user_node):
+    def create_user (self, node_data):
         '''Create a new user in the database'''
+        user_node = py2neo.Node(**node_data)
         self.add_label(user_node, 'user')
         self.db.create(user_node)
         print('[NOTE] Creating new user')
+
+    def create_post (self, node_data, user):
+        post = py2neo.Node(**node_data)
+        self.add_label(post, 'post')
+        user_created_post = py2neo.Relationship(user, 'CREATED', post)
+        self.db.create(post, user_created_post)
+        print('[NOTE] Creating new post for user '+user['username'])
+
+    def create_timeline (self, node_data, user):
+        timeline = py2neo.Node(**node_data)
+        self.add_label(timeline, 'timeline')
+        user_reads_timeline = py2neo.Relationship(user, 'READS', timeline)
+        self.db.create(timeline, user_reads_timeline)
+        print('[NOTE] New timeline created')
 
     def get_user (self, username):
         '''get the node (a python object) for a given username'''
@@ -45,13 +47,6 @@ class Database (object):
         db.cypher.execute('''
             MATCH (:user {username:\"{username}\"})-[CREATED]->(n:post {post_id={post_id}})
             RETURN n''', parameters=parameters)
-
-    def create_post (self, node_data, user):
-        post = py2neo.Node(**node_data)
-        self.add_label(post, 'post')
-        user_created_post = py2neo.Relationship(user, 'CREATED', post)
-        self.db.create(post, user_created_post)
-        print('[NOTE] Creating new post for user '+user['username'])
 
     def create_uniqueness_constraint (self, label, constraint):
         # so with these try excepts... what I -think- is happening is that

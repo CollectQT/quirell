@@ -1,3 +1,47 @@
+'''
+The user class
+--------------
+The user class is a subclass of flask login's user mixin, although at this point
+we've probably overridden all of it's functions. The user class, in general,
+handles functions that run on individual users, and an instance of the user
+class is primary way that any change that happens via a view function can
+affect user data. The only other way that a view function can affect user data
+is via the cms (quirell.webapp.cms), but in that case it should be an admin who
+is calling that function, not an individual user.
+
+Creating a user instance
+------------------------
+Given that its a user instance that a view function is generally interacting
+with, the user class has to be instanced before changes can start happening to
+it. Also, the only time when you should be instancing a user class instead of
+reading data directly from the node is when the view function is being called by
+a human who has access to edit the user data for the node. To be less technical,
+you instance the user class only a login or signup. If you need a user instance
+outside of either of those contexts, you user `user=flask_login.current_user`
+(that is, you assume the user is logged in already)
+
+The user class and flask login
+------------------------------
+Flask login handles some of the more technical aspects of user logins. those
+being: user sessions, basic view permissions, and remembering logged in users.
+I'll explain those things in order.
+
+    When a user logs in (via `user.login`) an instance of the user class is
+    created. That instance is passed to `flask_login.login_user` and also the
+    `cms.user_container` dictionary. flask_login.login_user is a black box, but
+    cms.user_container is used to hold the user instance of all the currently
+    logged in users. When flask login wants to load a user instance, it reads it
+    out of the user_container.
+
+    Basic view permissions work via adding the flask_login.login_required
+    decorated. Which just checks to see if there is a user instance attached
+    to the browser session of the user making the request.
+
+    Remembering logged in users: I haven't actually tested how this works >_>
+    But a functionality I would like that may not be written into flask login,
+    is the ability to remember logged in users across server restarts.
+'''
+
 import json
 import flask.ext.login as flask_login
 from quirell.webapp import cms # this is the cms instance, not the class
@@ -31,7 +75,7 @@ class User (flask_login.UserMixin):
         for k, v in self.node.properties.items():
             # the 'data' attribute is encoded as json in the database
             # and represented as a dictionary by the user object
-            if k == ('data' or 'timeline_cache'):
+            if k == 'data':
                 v = json.loads(v)
                 self.data = v
             else:
@@ -44,7 +88,7 @@ class User (flask_login.UserMixin):
             #  no recurive assignment ;p
             if k == 'node': continue
             # the data attribute is a dictionary so we encode is as a string
-            if k == ('data' or 'timeline_cache'): v = json.dumps(v)
+            if k == 'data': v = json.dumps(v)
             self.node.properties[k]=v
         self.node.push()
 
@@ -72,16 +116,11 @@ class User (flask_login.UserMixin):
         flask_login.login_user(self, remember=remember) # add to login manager
         return True, self
 
-    def my_posts (self):
-        '''gets post nodes from the database and return a list of posts'''
-        my_posts = [post.end_node.properties for post in cms.db.timeline(self.node)]
-        return my_posts
-
     def create (self, username, password, email):
         '''create a new user'''
         import py2neo
         # initalize a node
-        user_node = py2neo.Node(**{
+        node_data = py2neo.Node(**{
             'username': username,
             'password': cms.bcrypt.generate_password_hash(password),
             'data': json.dumps({
@@ -116,66 +155,23 @@ class User (flask_login.UserMixin):
         cms.db.create_post(node_data=properties, user=self.node)
         self.commit()
 
-    def edit_post (self, post_id):
-        pass
-        #cms.db.get_post(post_id=post_id, user=self.node)
-
-    def is_authenticated (self):
-        return True
+    def is_authenticated (self): return True
 
     def get_id (self): return self.username
 
-'''
-About timeline_cache
---------------------
-a timeline_cache is a subclass of lists, used to store
-a list of user posts in a timeline format. In the most basic
-implementation it is a list of post nodes.
+    ##############
+    # post stuff #
+    ##############
 
-About timeline creation
------------------------
-timeline creation is modeled after the idea that whenever a post
-is created that would belong on a user's timeline, that post is
-then pushed to all applicable `timeline_cache`s. Also whenever
-there is a relationship state change.
-
-Structure
----------
-timeline_cache
-    [
-        post_node,
-            .properties['datetime']
-        post_node,
-        post_node,
-        ...,
-    ]
-accesing:
-    (:user)-[READS]->(:timeline)
-'''
-
-class timeline_cache (list):
-
-    max_entries = 300
-
-    def __init__ (self, content, *args, **kwargs):
-        if type(content) == str: content = json.loads(content)
-        super(timeline_cache, self).__init__(content, *args, **kwargs)
-
-    def replace_id (self, post_id, node):
-        '''for when a node has been edited'''
-        for index, node in enumerate(self):
-            if node.properties['post_id'] == post_id: self[index] = node
-
-    def clean (self):
-        '''sort it and clip it'''
-        self.sort(key=lambda node: node.properties['datetime'], reverse=True)
-        self = self[:self.max_entries]
-
-    def refresh (self):
-        del self[:]
+    def my_posts (self):
         '''
-        the cypher query looks something like :
+        Gets post nodes from the database and return a list of posts
 
-        MATCH (:user {username:\"{username}\"})-[FOLLOWING]->(:user)-[CREATED]->(n:post)
-        RETURN n ORDER BY n.datetime desc LIMIT {limit}
+        This implematation is very tame when compared to the timeline object
         '''
+        my_posts = [post.end_node.properties for post in cms.db.my_posts(self.node)]
+        return my_posts
+
+    def edit_post (self, post_id):
+        pass
+        #cms.db.get_post(post_id=post_id, user=self.node)
