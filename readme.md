@@ -1,5 +1,7 @@
 # Quirell Project Readme
 
+*Important! You have to make sure to clone the develop branch! Gitlab doesn't allow setting remote heads, so the default is master (which doesn't exist)*
+
 ## Running The Code Locally
 
 This section assumes you are running a Linux distrubution, specifically Ubuntu. The code will probably run on something other than that, but no promises! Beyond that requirement, you also need to have basic familiarity with:
