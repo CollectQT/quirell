@@ -1,6 +1,6 @@
 # Quirell Project Readme
 
-*Important! You have to make sure to clone the develop branch! Gitlab doesn't allow setting remote heads, so the default is master (which doesn't exist)*
+**Important! You have to make sure to clone the develop branch! Gitlab doesn't allow setting remote heads, so the default is master (which doesn't exist)**
 
 ## Running The Code Locally
 
