@@ -18,7 +18,7 @@ import yaml
 BASE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..',))
 
 # where files go
-UPLOAD_SERVER = 'https://qiurell.s3.amazonaws.com/'
+UPLOAD_SERVER = 'https://quirell.s3.amazonaws.com/'
 
 def set_env():
     try:
