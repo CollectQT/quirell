@@ -2,43 +2,51 @@
 
 **Important! You have to make sure to clone the develop branch! Gitlab doesn't allow setting remote heads, so the default is master (which doesn't exist)**
 
-## Running The Code Locally
+## Setting up Quirell Locally
 
 This section assumes you are running a Linux distrubution, specifically Ubuntu. The code will probably run on something other than that, but no promises! Beyond that requirement, you also need to have basic familiarity with:
 
 * [python 3.4](https://www.python.org/)
-* [git](http://git-scm.com/)
-* [pip](https://pip.pypa.io/en/latest/installing.html)
-* [virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/)
-* [heroku toolbelt](https://toolbelt.heroku.com/)
+* and [git](http://git-scm.com/)
 
-If you don't have any of those requirements, you can install them via the commands below. If you are unsure if you have them, then go through the commands anyway!
+Then there are project requirements. They are the following:
 
+	# python, 2 python developer packages, and other systemwide dependencies
     $ sudo add-apt-repository ppa:fkrull/deadsnakes
     $ sudo apt-get update
     $ sudo apt-get install python3.4 python3.4-dev python-dev
     $ sudo apt-get install git python-pip python-virtualenv
     $ wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
 
-If this is your first time setting up Quirell, you need to use these commands to set up the virutal environment. You can opt not to set up a virtual environment but you will probably end up with all sorts of obscure errors.
+Then getting the source code for Quirell itself...
 
     $ git clone git@gitlab.com:collectqt/quirell.git -b develop
+
+...and activating it.
+
     $ cd quirell
     $ virtualenv -p python3.4 venv
-
-Finally, everytime you start working on the project you need to run these commands within the `quirell/` folder to activate the environment. It's useful to alias this command to something shorter (I personally have it aliased as 'sv')
-
     $ source venv/bin/activate
-
-Then you install the project requirements (either to the virtual environment or your system installation of python) with
-
     $ pip install -r requirements.txt
+
+Note that you'll have to source the virtual environment everytime you open a new terminal window to work on Quirell code. This is the `$ source venv/bin/activate` line. Because of this, you should probaly alias that command to something shorter (I have it as `$ sv`). 
+
+The last 'installation' step is to set the access keys for remote resources (the neo4j database and the AWS server). Unfortunately there's only one set of keys at the moment (that is, there are no keys specifically for testing), so you'll have to ask someone on CollectQT to get you the environment keys. Or even better, create some resources on your own to test with! When you do get some keys, you should put them into an `ENV.yaml` file inside of of the quirell folder, beside `config.py`. The contents of the folder would look like this:
+
+	GRAPHENEDB_URL: 'http://app000000000:SRGSHSHSGHDSGSDRG@app00000000.sb02.stations.graphenedb.com:00000'
+	AWS_ACCESS_KEY_ID: 'AWAGFAHAVARVAGGARG'
+	AWS_SECRET_ACCESS_KEY: '1325151234312412341351325241234'
+	S3_BUCKET: 'kittens'
+
+You can probably run the code without using remote resources, but it'll be boring because there's no user content, assuming it runs at all. But at this point, you can start running at app! Yay!
+
+## Run Some Tests
 
 After everything has installed you should try to start a test run with
 
     $ python -m quirell.test
 
-A successful run will, amoung other things, not print any lines that start with `[ERROR]`, and will print a bunch of GET and POST requests. If something is super wrong you'll get a traceback with an `AssertionError`. If everything is fine then try and run the application proper, with
+A successful run will, amoung other things, not print any lines that start with `[ERROR]`, and will print a bunch of GET and POST requests. If something is super wrong you'll get a traceback with an `AssertionError`. If everything is fine then try and run the application outside of a testing context with
 
     $ python -m quirell.webapp
 
