@@ -1,5 +1,7 @@
 # Quirell Project Readme
 
+**Important! You have to make sure to clone the develop branch! Gitlab doesn't allow setting remote heads, so the default is master (which doesn't exist)**
+
 ## Running The Code Locally
 
 This section assumes you are running a Linux distrubution, specifically Ubuntu. The code will probably run on something other than that, but no promises! Beyond that requirement, you also need to have basic familiarity with:
@@ -15,7 +17,8 @@ If you don't have any of those requirements, you can install them via the comman
     $ sudo add-apt-repository ppa:fkrull/deadsnakes
     $ sudo apt-get update
     $ sudo apt-get install python3.4 python3.4-dev
-    $ sudo apt-get install git python-pip python-virtualenv heroku-toolbelt
+    $ sudo apt-get install git python-pip python-virtualenv
+    $ wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
 
 If this is your first time setting up Quirell, you need to use these commands to set up the virutal environment. You can opt not to set up a virtual environment but you will probably end up with all sorts of obscure errors.
 
