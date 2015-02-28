@@ -26,9 +26,11 @@ accesing:
     (:user)-[READS]->(:timeline)
 '''
 
+from quirell.config import *
+
 class Timeline (list):
 
-    max_entries = 300
+    max_entries = MAX_POSTS
 
     def __init__ (self, content=[], *args, **kwargs):
         import json
