@@ -30,10 +30,10 @@ class Timeline (list):
 
     max_entries = 300
 
-    def __init__ (self, content, *args, **kwargs):
+    def __init__ (self, content=[], *args, **kwargs):
         import json
         if type(content) == str: content = json.loads(content)
-        super(timeline, self).__init__(content, *args, **kwargs)
+        super(Timeline, self).__init__(content, *args, **kwargs)
 
     def replace_id (self, post_id, node):
         '''for when a node has been edited'''

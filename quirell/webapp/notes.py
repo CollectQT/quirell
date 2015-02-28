@@ -4,7 +4,7 @@
 
 from quirell.webapp.timeline import timeline
 
-class notes (timeline):
+class Notes (timeline):
 
     def __init__ (self, *args, **kwargs):
-        super(notes, self).__init__(*args, **kwargs)
+        super(Notes, self).__init__(*args, **kwargs)
