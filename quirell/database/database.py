@@ -69,6 +69,16 @@ class Database (object):
     def my_posts (self, user, start='', end=''):
         '''takes in a user node and the rel_type for post nodes'''
         return self.db.match(start_node=user, rel_type='CREATED')
+    def delete_account (self, user):
+        '''
+        should delete:
+        * all post relationships (incoming and outgoing)
+        * all post nodes
+        * the relationship and node for timeline and notes
+        * all incoming relationships
+        * (and finally) the user node
+        '''
+        pass
 
     def add_label (self, node, label):
         # py2neo throws an exception if a node that you just added a label
@@ -77,6 +87,13 @@ class Database (object):
         except py2neo.BindError as error:
             if error.__class__.__name__ == 'BindError': pass
             else: raise
+    def get_all_data (self, user):
+        '''
+        should return all user data as a CSV file, that user data being:
+        * the user node (password attribute ommitted... and maybe some others)
+        * all post nodes
+        '''
+        pass
 
 if __name__ == "__main__":
     db = Database().db

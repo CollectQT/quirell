@@ -175,3 +175,13 @@ class User (flask_login.UserMixin):
     def edit_post (self, post_id):
         pass
         #cms.db.get_post(post_id=post_id, user=self.node)
+
+    ########
+    # meta #
+    ########
+
+    def delete_account (self):
+        cms.db.delete_account(self.node)
+
+    def get_all_data (self):
+        cms.db.get_all_data(self.node)
