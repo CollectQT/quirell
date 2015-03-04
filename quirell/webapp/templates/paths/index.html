@@ -1,8 +1,76 @@
 {% extends "message.html" %}
 {% block article %}
 
-## Quirell
+![logo here](https://images.indiegogo.com/file_attachments/967076/files/20141028170452-vj6a9r2.jpg?1414541092)
 
-More official content coming soon ! For now check out [the gitlab repo](http://gitlab.com/collectqt/quirell) for any information you might need.
+Given how we have 3 incredibly different blocks of text (and given that the latter two are going to become their own entire post at some point), I think this whole thing could do with a short introduction.
+
+## What is Quirell ?
+
+Quirell is a social network currently in development by [queer/trans collective CollectQT](https://twitter.com/collectqt). 
+We completed an initial funding campaign over the holiday season of 2014, raising $12,000 toward initial development costs to build and code Quirrell. 
+A social network for marginalized communities with Quirrell’s level of customization is as of yet unheard of. 
+We aim to deliver a platform that serves the needs of marginalized micro-communities searching for a place to call their own when mainstream social networks are overrun with hate campaigns, stress, or you simply want to connect with others like you.
+
+
+We want to be a safe place where people can connect, share experiences, and know that they’re free to speak without fear.
+
+
+Quirrell is different in that it has been created by a team that is both queer and transgender, and works with the interests of marginalized community members at the forefront -- with the majority of our team (50%) being made up of PoC. 
+
+We have conducted extensive community surveys regarding 
+[pronoun options](https://gitlab.com/collectqt/quirell/issues/42),
+
+
+[blocking](https://gitlab.com/collectqt/quirell/issues/16) 
+Harassment feature implementation, [multiple user profiles](https://gitlab.com/collectqt/quirell/issues/52), and how to best structure our site to be welcoming and safe for sex workers. 
+
+
+While mainstream social networks cater to the status-quo, Quirrell aims to give the individuals that use its service a space to share their thoughts which is free of the issues plaguing more traditional social networks or other problematic startups.
+## “How will Quirell be different?” Defining Acceptable Behaviors with the Code of Conduct
+
+It is the case with [other social networks](https://www.facebook.com/legal/terms) that the [code of conduct](https://support.twitter.com/articles/18311) prohibits things such as harassment, impersonation, threats, and spamming. This obviously falls short for many people, particularly marginalized people, when dealing with activities that fall under the radar of what the moderation team of twitter considers harassment. 
+
+Quirell, a social network being made by queer people, trans people, and people of color, is working on addressing this with our Code of Conduct, primarily via an application of our politics. 
+
+* We recognize that harassment that acts upon systems of oppression is generally much worse than harassment that doesn’t. 
+
+
+* Misogynist harassment is going to be much more potent than “misandrist” harassment, by virtue of the structural forces backing the activity. 
+
+* Being black and having your posts ‘liked’ by someone wearing a KKK mask comes with enough structural backing behind it to provoke an emotional response similar to harassment even if there is no word exchange taking place. 
+
+These are the concepts on top of which we would be building Quirell’s forthcoming Code of Conduct.
+
+
+
+
+## “How will Quirell be different?” Design Direction and Implementation
+
+CollectQT’s goal is for Quirell to be as responsive to general user needs as possible, but every good project needs a design direction! Below is the design direction for Quirell, but for context you might also want to read [this article](https://medium.com/lets-not-pretend-we-have-it-all-figured-out/a-product-manager-s-farewell-4577372a8926) about Twitter’s design, so get a feeling for how we are different.
+
+**Content**
+
+The only content we expressly prohibit will be content that breaks or comes close to breaking US laws. Beyond that, it will be up to the people that post content to be aware of what sort of content other users do not wish to view. For example, body mutilation should be tagged “gore” or similar, and people need to make sure to make tags for other sorts of triggers / uncomfortable content such as “racism” / “murder” / “suicide” / etc. Constantly posting triggering content (example: stories about trans murders) without a sufficient warning is grounds for having a admin edit all your posts, and possibly give you a warning or apply a tag to every post on your account (example: someone exclusively posting suicide resources should probably have a suicide warning on every post that make, if they did not already).
+
+To sum up, if it’s illegal then we do not want it, but besides that just make sure to be content aware.
+
+**Networking, Socially**
+
+Quirell primarily exists as a platform for helping people build safe consenting relationships. Contrast this with Twitter which is built for massive engagement (often with #Brands, or with hordes of bigots), and Facebook which aims to become the “canonical” social network that most reflects meatspace relationships (hence the presence of your racist uncle). Twitter will still be a better option for getting 100,000 retweets on a cat gif, and Facebook will still be the place to find that old roommate that you only want to talk to once a year. But Quirell aims to be good at:
+
+* Creating smaller more manageable social spaces
+* Giving a lot of control over who and what you do or don’t want to engage with 
+* As close as possible to a realistic representation of human relationships, instead of relationships carried out by machines
+
+**Overarching Goals**
+
+The primary goal of Quirell is in creating comfortable relationships. This isn’t measured (directly) via signup numbers or amounts of posts. It’s most direct measure it most likely the degree to which users say that Quirell allows them to interact with users and content in the way that they want. So there will probably be a lot of polls, votes, forum threads, and requests for comments in our feature!
+
+## FAQ
+
+**Q: When is it going to be up?**
+[The original plan](https://gitlab.com/collectqt/quirell/milestones) was to have the first tech demo be up in early January. This proved to be extremely optimistic, and at the current rate of coding, that milestone will probably be hit in late March / early April. When we know for sure that we are approaching a first test release, you’ll probably see an announcement about it! But in the meantime, if you are technically inclined (or just curious) you can check the day to day [code commit log](https://gitlab.com/collectqt/quirell/commits/develop).
+
 
 {% endblock %}
