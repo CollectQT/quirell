@@ -31,16 +31,16 @@ html, body, nav .button {
  body {
   background-color: #554488;
   overflow-x: hidden;
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica,
-   FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo, Helvetica, Arial,
-   sans-serif; }
+  font-family: 'Sniglet', cursive; }
 
   h1, h2, h3, h4, h5, p {
   color: #000000;
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica,
-   FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo, Helvetica, Arial,
-   sans-serif;
+  font-family: 'Sniglet', cursive;
   padding: 5px 15px; }
+
+  h1, h2 {
+  text-align: center;
+  padding: 15px inherit; }
 
   a {
   cursor: inherit;
@@ -270,9 +270,7 @@ html, body, nav .button {
  .nav-text {
  vertical-align: middle;
  display: inline-block;
- font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica,
- FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo, Helvetica, Arial,
- sans-serif;
+ font-family: 'Sniglet', cursive;
  font-weight: 600;
  font-size: 1.3em;
  height: 40px; }

@@ -71,6 +71,11 @@ h1, h2, h3, h4, h5, p {
     padding: 5px 15px;
 }
 
+h1, h2 {
+    text-align: center;
+    padding: 15px inherit;
+}
+
 a {
     cursor: inherit;
     color: $color_link_text;

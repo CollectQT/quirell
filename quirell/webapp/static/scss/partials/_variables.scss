@@ -60,6 +60,7 @@ $color_post_meta_bottom: $filler_dark;
 
 // Literal
 
+$font_sniglet: 'Sniglet', cursive;
 $font_monospaced: "Lucida Console", "Lucida Sans Typewriter", Monaco, "Bitstream Vera Sans Mono", monospace;
 $font_helvetica: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo, Helvetica, Arial, sans-serif;
 $font_quirell: "Quirell", Arial;
@@ -70,7 +71,7 @@ $font_quirell: "Quirell", Arial;
 
 // Specific Purpose
 
-$font_body: $font_helvetica;
+$font_body: $font_sniglet;
 $font_quirell_icon: $font_quirell;
 $font_pre: $font_monospaced;
 
