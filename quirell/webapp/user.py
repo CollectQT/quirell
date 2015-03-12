@@ -42,108 +42,74 @@ I'll explain those things in order.
     is the ability to remember logged in users across server restarts.
 '''
 
-import json
 import flask.ext.login as flask_login
 from quirell.webapp import cms # this is the cms instance, not the class
 
 class User (flask_login.UserMixin):
     '''the user class represents an individual user in the database'''
 
-    def __str__ (self):
-        '''testing sillyness. allows for nicer printing of the user instance'''
-        out = str()
-        for k, v in vars(self).items():
-            if k == 'node': continue
-            if type(v) == dict: v = '\n\t'+str(v)+'\n'
-            out += k+': '+str(v)+'\n'
-        return out
-
-    def refresh (self):
-        '''refresh the user object with information from the database'''
-        self.get_user(username=self.username)
-
-    def get_user (self,  username=None, node=None):
-        '''load a user from the database onto a instance of the User class'''
-        if node:
-            self.node = node
-        elif username:
-            self.node = cms.db.get_user('@'+username)
-            if self.node == None: return None
-        else:
-            return None
-        self.node.pull()
-        for k, v in self.node.properties.items():
-            # the 'data' attribute is encoded as json in the database
-            # and represented as a dictionary by the user object
-            if k == 'data':
-                v = json.loads(v)
-                self.data = v
-            else:
-                setattr(self, k, str(v))
-        return self
-
-    def commit (self):
-        '''commit changes make to a user instance to the database'''
-        for k, v in vars(self).items():
-            #  no recurive assignment ;p
-            if k == 'node': continue
-            # the data attribute is a dictionary so we encode is as a string
-            if k == 'data': v = json.dumps(v)
-            self.node.properties[k]=v
-        self.node.push()
+    #########
+    # inits #
+    #########
 
     def login (self, username, password, remember):
         '''logs in a user'''
         node = cms.db.get_user('@'+username)
         # check that inputs are correct
-        # like, if this user exists
+        # that is, if this user exists
         if node == None:
-            return False, '''
-                <div class='login_message'>
-                No user exists with this username
-                </div>
-                '''
+            return False, 'No user exists with this username'
         # and if their password matches the db password
         if not cms.bcrypt.check_password_hash(node['password'], password):
-            return False, '''
-                <div class='login_message'>
-                Incorrect password
-                </div>
-                '''
+            return False, 'Incorrect password'
         # user considered successfully logged in at this point
-        self.get_user(node=node)
+        self.node = node # attrach node to instance
         cms.add_user(username, self) # add user instance to cms
         flask_login.login_user(self, remember=remember) # add to login manager
         return True, self
 
     def create (self, username, password, email):
         '''create a new user'''
-        import py2neo
         # initalize a node
-        node_data = py2neo.Node(**{
+        properties = {
             'username': username,
             'password': cms.bcrypt.generate_password_hash(password),
-            'data': json.dumps({
-                'email': email,
-                'display_name': username,
-                'pronouns': 'they',
-                'profile_picture': '/static/img/default.png',
-                'posts': {
-                    'amount': 0,
-                },
-                'pictures': {
-                    'amount': 0,
-                },
-            })
-        })
+            'email': email,
+            'display_name': username,
+            'pronouns': 'they',
+            'profile_picture': '/static/img/default.png',
+            'posts_amount': 0,
+            'pictures': [],
+            'pictures_amount': 0,
+            }
         # then send it to the database
-        cms.db.create_user(user_node)
+        cms.db.create_user(properties)
+
+    ###############
+    # general use #
+    ###############
+
+    @property
+    def get_id (self): return self['username']
+
+    @property
+    def is_authenticated (self): return True
+
+    def delete_account (self):
+        cms.db.delete_account(self.node)
+
+    def get_all_data (self):
+        cms.db.get_all_data(self.node)
+
+    #########
+    # posts #
+    #########
 
     def create_post (self, content):
         from datetime import datetime
         # post id is current number of posts, which we then increment
-        post_id = self.data['posts']['amount']
-        self.data['posts']['amount'] += 1
+        post_id = self['posts_amount']
+        self['posts_amount'] += 1
         # make sure the post isn't filled with EVIL
         content = cms.clean_html(content)
         properties = {
@@ -152,36 +118,27 @@ class User (flask_login.UserMixin):
             'post_id': post_id,
         }
         # push to database
-        cms.db.create_post(node_data=properties, user=self.node)
-        self.commit()
-
-    def is_authenticated (self): return True
-
-    def get_id (self): return self.username
-
-    ##############
-    # post stuff #
-    ##############
-
-    def my_posts (self):
-        '''
-        Gets post nodes from the database and return a list of posts
-
-        This implematation is very tame when compared to the timeline object
-        '''
-        my_posts = [post.end_node.properties for post in cms.db.my_posts(self.node)]
-        return my_posts
+        cms.db.create_post(properties=properties, user=self.node)
+        self.node.push()
 
     def edit_post (self, post_id):
         pass
         #cms.db.get_post(post_id=post_id, user=self.node)
 
-    ########
-    # meta #
-    ########
+    ############
+    # builtins #
+    ############
 
-    def delete_account (self):
-        cms.db.delete_account(self.node)
+    # these functions allow the user object to function like a dictionary,
+    # in that you can retrieve attributes from user.node with user['username']
+    # (which resolves to user.node['username'])
 
-    def get_all_data (self):
-        cms.db.get_all_data(self.node)
+    def __getitem__ (self, key):
+        try: return self.node[key]
+        except KeyError: return None
+
+    def __setitem__ (self, key, value):
+        self.node[key] = value
+
+    def __delitem__ (self, key):
+        del self.node[key]
