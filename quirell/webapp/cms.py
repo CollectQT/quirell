@@ -66,20 +66,6 @@ class Cms (object):
         except KeyError: user = None
         return user
 
-    def reformat_all_users (self):
-        users = self.db.db.find('user')
-        for user in users:
-            user = cms.format_user(user)
-        cms.db.db.push()
-
-    def reformat_all_posts (self):
-        posts = self.db.db.find('post')
-        for post in posts:
-            pass
-
-    def format_user (self, node):
-        return node
-
     ################
     # CSS BUILDING #
     ################
