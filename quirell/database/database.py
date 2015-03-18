@@ -2,28 +2,31 @@
 database.py
 
 Some formatting notes:
+* labels = lowercase (ex: user, post)
+* relationships = ALLCAPS (ex: POSTED, FRIEND)
 
-labels = lowercase (ex: user, post)
-relationships = ALLCAPS (ex: POSTED, FRIEND)
-
-Current and planned labels are:
-
+There are 4 labels, which define the primary types of content in the database
 * user
 * post
 * notes
 * timeline
 
-Current and planned relationships are:
+For (user)-->(user), theres two types of relationships. The BLOCKS
+relationship can be thought of as a subset of RELATES (one with no permissions)
+although honestly it's more complex than that:
+* BLOCKS
+* RELATES
 
-# for user relations
-* KNOWS
-* FOLLOW (might not be needed explicitly)
-* FRIEND
-* FAVORITE
+For (user)-->() there is CREATED for posts, and OWNS for notes and timelines.
+At some point there will probably also be relationship types that represent
+reactions (ex: like / fav) and sharing
+* CREATED->(post)
+* OWNS->(notes|timline)
 
-# for database relations
-* CREATED
-* OWNS
+Whenever you run a query that returns content that is subject to visibility
+settings (which should really be all the content that can be seen), you need
+to run a query to make sure the querying user (or lack thereof) has view access
+for that content
 '''
 
 import os
@@ -32,6 +35,14 @@ import yaml
 import py2neo
 #
 from quirell.config import *
+
+####################
+# helper functions #
+####################
+
+#######################
+# main database class #
+#######################
 
 class Database (object):
 
