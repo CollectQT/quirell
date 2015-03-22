@@ -216,7 +216,7 @@ def page_not_found(e):
 @app.login_manager.user_loader
 def load_user (username):
     if username[0] == '@': username = username[1:]
-    return cms.get_user(username=username)
+    return cms.get_logged_in_user(username=username)
 
 # shutdown the server
 @app.route('/shutdown', methods=['POST'])

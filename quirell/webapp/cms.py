@@ -61,7 +61,7 @@ class Cms (object):
         self.user_container[username] = user
         print('[NOTE] Logging in user @'+username)
 
-    def get_user (self, username):
+    def get_logged_in_user (self, username):
         try: user = self.user_container[username]
         except KeyError: user = None
         return user
