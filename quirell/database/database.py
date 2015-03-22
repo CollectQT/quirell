@@ -11,34 +11,88 @@ There are 4 labels, which define the primary types of content in the database
 * notes
 * timeline
 
-For (user)-->(user), theres two types of relationships. The BLOCKS
-relationship can be thought of as a subset of RELATES (one with no permissions)
-although honestly it's more complex than that:
+For (user)-->(user), theres two types of relationships:
 * BLOCKS
 * RELATES
 
-For (user)-->() there is CREATED for posts, and OWNS for notes and timelines.
-At some point there will probably also be relationship types that represent
-reactions (ex: like / fav) and sharing
-* CREATED->(post)
-* OWNS->(notes|timline)
+Other (user)-->() relationships are:
+* [CREATED]->(post)
+* [OWNS]->(notes|timline)
+* [REACTS]->(post) // SUPER WIP!!!
 
 Whenever you run a query that returns content that is subject to visibility
 settings (which should really be all the content that can be seen), you need
 to run a query to make sure the querying user (or lack thereof) has view access
 for that content
+
+#################################
+# Testing access control schema #
+#################################
+
+Mind you, this REALLY doesn't go here. It should go into quirell/test, and as an
+actual test. Which would require there being a neo4j database deticated to
+testing stuff.
+
+// initialize nodes and relationships
+
+CREATE
+    // posts
+    (owner:user {name:"owner"})-[:CREATED {access:[]}]->(:post {content:"publically visible"}),
+    (owner)-[:CREATED {access:['c']}]->(:post {content:"visible to two"}),
+    (owner)-[:CREATED {access:['c','d']}]->(:post {content:"visible to one"}),
+    (owner)-[:CREATED {access:['z','y']}]->(:post {content:"visible to nobody"}),
+    // relationships
+    (owner)-[:RELATES {access:['a','b','c','d']}]->(:user {name:"reader_full_priv"}),
+    (owner)-[:RELATES {access:['a','b','c']}]->(:user {name:"reader_some_priv"}),
+    (owner)-[:RELATES {access:[]}]->(:user {name:"reader_none_priv"}),
+    (owner)-[:BLOCKS]->(:user {name:"reader_blocked"}),
+    (:user {name:"reader_unknown"})
+
+// test every individual reader. each one needs their own query that needs to be inspected
+
+// basic query, with reader parameter
+
+MATCH (owner:user {name:"owner"}), (reader:user {name:"{reader_name}"})
+MERGE (owner)-[relates:RELATES]->(reader) ON CREATE SET relates.access=[] WITH *
+MATCH (owner)-[created:CREATED]->(content:post)
+WHERE NOT (owner)-[:BLOCKS]->(reader) AND
+    length(filter(permission IN relates.access WHERE permission in created.access))>=length(created.access)
+RETURN content
+
+// Testing format is... parameter : assert(len(content)
+
+reader="reader_full_priv" : 3
+reader="reader_some_priv" : 2
+reader="reader_none_priv" : 1
+reader="reader_unknown" : 1
+reader="reader_blocked" : 0
 '''
 
+# builtin
 import os
-#
+# external
 import yaml
 import py2neo
-#
+# custom
 from quirell.config import *
 
 ####################
 # helper functions #
 ####################
+
+def access_posts ():
+    # filters for access between two users. inputs:
+    # * owner:user
+    # * reader:user
+    # * relates:RELATES
+    # * created:CREATED
+    return '''WHERE NOT (owner)-[:BLOCKS]->(reader) AND
+        length(filter(permission IN relates.access WHERE permission in created.access))>=length(created.access)'''
+
+def access_posts_public ():
+    # filters for public access. inputs:
+    # * created:CREATED
+    return 'WHERE length(created.access)=0'
 
 #######################
 # main database class #
@@ -58,6 +112,23 @@ class Database (object):
         # Posts are searched by either post_id or datetime, so we index those
         self.db.cypher.execute('CREATE INDEX ON :post(post_id)')
         self.db.cypher.execute('CREATE INDEX ON :post(datetime)')
+
+    def create_uniqueness_constraint (self, label, constraint):
+        try: self.db.schema.create_uniqueness_constraint(label, constraint)
+        except py2neo.GraphError as error:
+            if error.__class__.__name__ == 'ConstraintViolationException': pass
+            else: raise
+
+    ##########
+    # create #
+    ##########
+
+    # used for making new things. assumes that the user has already done
+    # any needed permissions checks.
+
+    # the new user creation process REALLY needs to be merged into a single
+    # function. Although right now it's only creating a single node so its
+    # not needed just yet
 
     def create_user (self, properties):
         # create a new user
@@ -81,47 +152,38 @@ class Database (object):
         self.db.create(timeline, user_owns_timeline)
         print('[NOTE] New timeline created')
 
-    def get_user (self, username):
-        '''get the node (a python object) for a given username'''
-        result = self.db.find_one('user', 'username', username)
-        return result
+    ##################
+    # load functions #
+    ##################
 
-    def get_post (self, post_id, user):
-        parameters = {'username': user.username, 'post_id': parameters}
-        self.db.cypher.execute('''
+    # a 'load' operation is one where any required permissions are handled
+    # externally so the database is free to do a simple query and return
+
+    def load_user (self, username):
+        return self.db.find_one('user', 'username', username)
+
+    def load_post (self, post_id, user):
+        # will eventually be "load_thread"
+        parameters = {'username': user['username'], 'post_id': post_id}
+        result = self.db.cypher.execute('''
             MATCH (:user {username:\"{username}\"})-[CREATED]->(n:post {post_id={post_id}})
             RETURN n''', parameters=parameters)
+        return result
 
-    def create_uniqueness_constraint (self, label, constraint):
-        # so with these try excepts... what I -think- is happening is that
-        # you cant set a uniqueness constraint if one already exists, so you
-        # get an exception.
-        #
-        # Which I can understand if it was just printing a warning message, but
-        # raising an exception? :/ [UPDATE] The issue could also be that the
-        # database is currently empty
-        #
-        # At any rate, the try except was copied from a py2neo extension, so the
-        # dev is totally aware of this... 'problem'. It may be the case that he
-        # doesn't really that behavior like this really doesn't warrant raising
-        # an exception. I'll probably point this out on github at some point.
-        try: self.db.schema.create_uniqueness_constraint(label, constraint)
-        except py2neo.GraphError as error:
-            if error.__class__.__name__ == 'ConstraintViolationException': pass
-            else: raise
+    def load_single_timeline (self, user):
+        pass
 
-    def timeline (self, user_requested, user_self=None):
+    ##################
+    # self functions #
+    ##################
+
+    def get_all_user_data (self, user):
         '''
-        generate a standalone timelime of a specific user
+        should return all user data as a CSV file, that user data being:
+        * the user node (password attribute ommitted... and maybe some others)
+        * all post nodes
         '''
-        parameters = {'username': user.username}
-        results = self.db.cypher.execute('''
-            MATCH (:user {username:\"{username}\"})-[CREATED]->(n:post)
-            RETURN n ORDER BY n.datetime desc LIMIT {0}'''.format(MAX_POSTS),
-            parameters=parameters)
-        posts = [result[0] for result in results]
-        return posts
-
+        pass
 
     def delete_account (self, user):
         parameters = {'username': user.username}
@@ -154,21 +216,39 @@ class Database (object):
         # go !
         tx.commit()
 
-    def add_label (self, node, label):
-        # py2neo throws an exception if a node that you just added a label
-        # to is unbound :/
-        try: node.add_labels(label)
-        except py2neo.BindError as error:
-            if error.__class__.__name__ == 'BindError': pass
-            else: raise
+    ###############
+    # view others #
+    ###############
 
-    def get_all_data (self, user):
-        '''
-        should return all user data as a CSV file, that user data being:
-        * the user node (password attribute ommitted... and maybe some others)
-        * all post nodes
-        '''
+    # view operations are the opposite of load operations in that they require
+    # a permissions check on the database level
+
+    def view_post (self, post_id, owner, reader,):
         pass
+
+    def view_user_page (self, user_req, user_self=None):
+        # generate a standalone timelime of a specific user
+        parameters = {'username': user_req}
+        if not user_self:
+            results = self.db.cypher.execute('''
+                MATCH (:user {username:\"{username}\"})-[CREATED]->(n:post)
+                RETURN n ORDER BY n.datetime desc LIMIT {0}'''.format(MAX_POSTS),
+                parameters=parameters)
+        if user_self:
+            pass
+        posts = [result[0] for result in results]
+        return posts
+
+    #################
+    # access checks #
+    #################
+
+    def is_blocked (self, user_req, user_self):
+        # sees if the requested user (user_req) blocks user_self
+        parameters = {'user_req':user_req, 'user_self':user_self}
+        blocked = bool(self.cypher.execute('''
+            MATCH (:user {username:\"{user_req}\"})-[r:BLOCKS]->(:user {username:\"{user_self}\"})
+            RETURN r''', parameters=parameters))
 
 if __name__ == "__main__":
     db = Database().db
