@@ -110,6 +110,10 @@ def login_POST():
 def signup_POST():
     from quirell.webapp.user import User
     form = forms.signup()
+    # temporary signup blocker thing
+    # this should probably go inside the code for forms, but whatever, its temp
+    THE_PASSWORD = os.environ.get('THE_PASSWORD')
+    if not form.secret_password.data == THE_PASSWORD: flask.abort(404)
     user = User()
     user.create(username=form.username.data, password=form.password.data,
         email=form.email.data)

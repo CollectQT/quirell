@@ -14,6 +14,7 @@ class signup (flask_wtf.Form):
     password = PasswordField('password',
         [validators.EqualTo('confirm', message='passwords must match')])
     confirm = PasswordField('repeat password')
+    secret_password = StringField('secret_password')
 
 class new_post (flask_wtf.Form):
     content = TextField('content')
