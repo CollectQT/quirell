@@ -1,57 +1,58 @@
 '''
 The timeline class
 ------------------
-a timeline is a subclass of lists, used to store
-a list of user posts in a timeline format. In the most basic
-implementation it is a list of post nodes.
 
-About timeline creation
------------------------
-timeline creation is modeled after the idea that whenever a post
-is created that would belong on a user's timeline, that post is
-then pushed to all applicable `timeline`s. Also whenever
-there is a relationship state change.
+A timeline is a read only list, where each item contains a post_node,
+and the user_node of the user that made the post. It takes in a
+parallel list of post nodes and user nodes, so really all this class
+does is zip those lists and stick them in a dictionary.
 
 Structure
 ---------
-timeline
-    [
-        post_node,
-            .properties['datetime']
-        post_node,
-        post_node,
-        ...,
-    ]
-accesing:
-    (:user)-[READS]->(:timeline)
-'''
 
-from quirell.config import *
+The access chain is
+
+    timeline list dict dict X
+
+Where X can be anything that neo4j can store. The structure can
+also be represented like this
+
+[
+    {
+        'post': post_node
+            ['content'] = X
+            ['datetime'] = X
+        'user': user_node
+            ['username']
+            ['profile_picture']
+    },
+    {'post'..., 'user'...,}
+    {},
+    {},
+    ...
+]
+
+Example Uses
+------------
+
+# python
+for line in timeline:
+    line['post']['content']
+    line['user']['username']
+
+# html
+{% for line in timeline %}
+    <div>{{ line.user.username }}</div>
+    <div>{{ line.post.content }}</div>
+{% endfor %}
+'''
 
 class Timeline (list):
 
-    max_entries = MAX_POSTS
+    def __init__ (self, users, posts=[], *args, **kwargs):
+        self._content = [
+            {'post':post, 'user':user}
+            for user, post in zip(users, posts)]
 
-    def __init__ (self, content=[], *args, **kwargs):
-        import json
-        if type(content) == str: content = json.loads(content)
-        super(Timeline, self).__init__(content, *args, **kwargs)
-
-    def replace_id (self, post_id, node):
-        '''for when a node has been edited'''
-        for index, node in enumerate(self):
-            if node.properties['post_id'] == post_id: self[index] = node
-
-    def clean (self):
-        '''sort it and clip it'''
-        self.sort(key=lambda node: node.properties['datetime'], reverse=True)
-        self = self[:self.max_entries]
-
-    def refresh (self):
-        del self[:]
-        '''
-        the cypher query looks something like :
-
-        MATCH (:user {username:\"{username}\"})-[FOLLOWING]->(:user)-[CREATED]->(n:post)
-        RETURN n ORDER BY n.datetime desc LIMIT {limit}
-        '''
+    def __getitem__ (self, key):
+        return self.content[key]
