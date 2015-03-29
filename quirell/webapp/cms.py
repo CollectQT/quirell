@@ -52,6 +52,26 @@ class Cms (object):
     # USERS #
     #########
 
+    def get_user_page (self, user_self, user_req):
+        '''
+        generates a user page give a username for a requested user
+        (user_req) and an object for a current user (user_self)
+
+        returns status, user, timeline
+        '''
+        # format user_self so that user_self and user_req are strings
+        if not user_self.is_authenticated(): user_self=''
+        else: user_self = user_self['username']
+        # do a database query
+        user, timeline = cms.db.user_page_view(
+            user_self=user_self, user_req=user_req)
+        # determine the status of said query
+        if user == None: status='not found'
+        elif user['username'] == user_self: status='self'
+        else: status=None
+        # done
+        return status, user, timeline
+
     def user_exists (self, username):
         result = self.db.get_user('@'+username)
         if result == None: return False

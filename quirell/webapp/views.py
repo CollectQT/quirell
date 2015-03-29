@@ -146,22 +146,13 @@ def present_post(post):
 @app.route('/u/<username>')
 def user_request(username):
     if username[0] == '@': username = username[1:]
-    from quirell.webapp.user import User
-    if not cms.user_exists(username):
-        # will eventually return a more specfic 'user not found' page
-        return flask.abort(404)
-    user = User().get_user(username=username)
-    timeline = user.my_posts()
-    # Determine if current user is self
-    # If you aren't logged in, then user isn't self
-    if not flask_login.current_user.is_authenticated():
-        return flask.render_template('paths/user.html', user_is_self=False, requested_user=user, timeline=timeline)
-    # If you are logged in and have the same username, then it is
-    elif '@'+username == flask_login.current_user.username:
-        return flask.render_template('paths/user.html', user_is_self=True, requested_user=user, timeline=timeline)
-    # Otherwise (you are logged in but different username) it isnt
+    status, timeline, user = cms.get_user_page(user_self=flask_login.current_user, user_req=username)
+    if status == 'not_found':
+        return flask.render_template('paths/user_not_found.html')
+    elif status == 'self':
+        pass
     else:
-        return flask.render_template('paths/user.html', user_is_self=False, requested_user=user,timeline=timeline)
+        pass
 
 @app.route('/user/<path>')
 def user_to_u(path):
