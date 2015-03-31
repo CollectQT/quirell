@@ -181,9 +181,6 @@ def change_profile_picture():
 # USERS #
 #########
 
-def present_post(post):
-    return post.properties
-
 @app.route('/u/<username>')
 def user_request(username):
     if username[0] == '@': username = username[1:]
