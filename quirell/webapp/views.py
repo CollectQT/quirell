@@ -84,6 +84,11 @@ def render_file(filename):
 # * the function name
 # * the form that posts to it
 # * the testing request (you added one, right?)
+#
+# An thing to note is that login / signup are the only functions that
+# will ever be allowed to create a user object. That's what the
+# `user = User()` line does. Every other function that needs a user
+# object (as opposed to a node) needs to pull from `self`
 
 @app.route('/login', methods=['POST'])
 def login_POST():
