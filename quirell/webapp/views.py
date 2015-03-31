@@ -18,15 +18,53 @@ from quirell.webapp import cms
 # GLOBALS #
 ###########
 
+# So, the use of the 'user' namespace within templates:
+#
+# user = the target user in this context.
+#
+# It should always be clear who the 'target user' is within a
+# certain context. Some 'target user' examples:
+#
+#   context = who the target user is in this context
+#   a post = the owner of the post
+#   a profile page = the owner of the profile page
+#   a settings page = the user for whom settings are being edited
+#
+# In a situation where multiple user contexts' are overlapping,
+# the 'smaller' context is the one that applies.  For example,
+# if you are on a user page (larger) and reading a series of
+# individual posts (smaller), the post context always applies
+# where applicable.
+#
+# self = the currently logged in user
+#
+# self is used for when a view needs to access the logged in user.
+# Whenever you went to call self, you first have to check if
+# self.is_authenticated(). There are three ways to do this:
+#
+#   calling self.is_authenticated() directly
+#   running is_self(user)
+#   wrapping the entire view function in login_required
+
+self = flask_login.current_user
+
+def is_self(user):
+    if self.is_authenticated():
+        try: return (self['username'] == user['username'])
+        # if user is already the username string, we'll get an error
+        # b/c of trying to subscript a string with another string
+        except TypeError: return (self['username'] == user)
+    else:
+        return False
+
 @app.context_processor
 def set_globals():
-    # user = current active user
-    user = flask_login.current_user
-    # forms from quirell.webapp.forms
+    # forms
     login = forms.login()
     new_post = forms.new_post()
     signup = forms.signup()
-    return dict(flask=flask, user=user, login=login, signup=signup, new_post=new_post,)
+    return dict(flask=flask, self=self, is_self=is_self, login=login,
+        signup=signup, new_post=new_post,)
 
 #@app.before_first_request
 #@app.before_request
@@ -52,7 +90,7 @@ def signup():
 @app.route('/profile')
 @flask_login.login_required
 def user_redirect():
-    return flask.redirect('/u/'+flask_login.current_user.username)
+    return flask.redirect('/u/'+self['username'])
 
 # render static files
 @app.route('/static/<path:filename>')
@@ -126,14 +164,14 @@ def signup_POST():
 @flask_login.login_required
 def new_post_POST():
     form = forms.new_post()
-    flask_login.current_user.create_post(content=form.content.data)
+    self.create_post(content=form.content.data)
     return flask.render_template('message.html', html_content='post created')
 
 @app.route("/change_profile_picture", methods=["POST"])
 def change_profile_picture():
     image_url = flask.request.form['avatar_url']
-    flask_login.current_user.data['profile_picture'] = image_url
-    flask_login.current_user.commit()
+    self['profile_picture'] = image_url
+    self.commit()
     if flask.request.args.get('next'):
         return flask.redirect(flask.request.args.get('next'))
     else:
@@ -149,13 +187,12 @@ def present_post(post):
 @app.route('/u/<username>')
 def user_request(username):
     if username[0] == '@': username = username[1:]
-    status, timeline, user = cms.get_user_page(user_self=flask_login.current_user, user_req=username)
-    if status == 'not_found':
+    user, timeline = cms.get_user_page(user_self=self, user_req=username)
+    # user was not found, or blocked, who knows
+    if not user:
         return flask.render_template('paths/user_not_found.html')
-    elif status == 'self':
-        pass
     else:
-        pass
+        return flask.render_template('paths/user.html')
 
 @app.route('/user/<path>')
 def user_to_u(path):
@@ -181,7 +218,7 @@ def logout():
 @app.route('/timeline')
 @flask_login.login_required
 def timeline():
-    user = flask_login.current_user
+    pass
 
 ########
 # TECH #
@@ -246,10 +283,10 @@ def sign_s3():
     # object naming
     # if its a profile picture, name it with a hash of username
     if bool(flask.request.args.get('is_profile_picture')):
-        cms.hash.update((flask_login.current_user.username).encode(encoding='utf-8'))
+        cms.hash.update((self['username']).encode(encoding='utf-8'))
     # if its a regular picture, name it was a hash of username + number of pictures
     else:
-        name = flask_login.current_user.username + flask.current_user.data['pictures']['amount']
+        name = self['username'] + self['pictures_amount']
         cms.hash.update((name).encode(encoding='utf-8'))
     object_name = cms.hash.hexdigest() + '.' + flask.request.args.get('file_ext')
     mime_type = flask.request.args.get('s3_object_type')
