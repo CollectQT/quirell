@@ -36,9 +36,6 @@ def set_globals():
 # BASIC PATHS #
 ###############
 
-# NOTE: Flask methods default to POST, so if there's no method listed
-# then its a POST request
-
 @app.route('/')
 def index ():
     return flask.render_template('paths/index.html')
