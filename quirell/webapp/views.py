@@ -98,6 +98,7 @@ def login_POST():
         #return flask.jsonify(messsage=message)
     # a successful login should return the user to where they were
     # before via the 'next' variable in a query string
+    # except if 'next' was login and/or signup ?
     if flask.request.args.get('next'):
         return flask.redirect(flask.request.args.get('next'))
     else:
