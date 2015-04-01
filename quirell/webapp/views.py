@@ -197,6 +197,10 @@ def user_to_u(path):
     return flask.redirect('/u/'+path+
         '?'+flask.request.query_string.decode("utf-8"))
 
+@app.route('/u/<username>/post/<post_id>')
+def post_request(username, post_id):
+    pass
+
 @app.route('/settings')
 @flask_login.login_required
 def settings():
