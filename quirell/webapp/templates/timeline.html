@@ -1,0 +1,32 @@
+{% for line in timeline %}
+<div class='post'>
+    <div class='middle'>
+        <a class='middle' href='/u/{{ line.user.username }}'><img class='avatar img-mid' src="{{ line.user.profile_picture }}" alt='{{ line.user.username}}s Avatar'></a>
+        <div class='post-meta-top'>
+            <a class='middle' href='/u/{{ line.user.username }}'>
+                <span class='display-name'>{{ line.user.display_name }}</span>
+                <span class='pronouns subtext'>{{ line.user.pronouns }}</span>
+                <span class='user-id subtext'>{{ line.user.username }}</span>
+            </a>
+            <br>
+            <a class='subtext' href='/u/{{ line.user.username }}/post/{{ line.post.post_id }}'>{{ line.post.datetime }}</a>
+            <span class='subtext'>{{ line.post.visibility }}<i class="fa fa-globe"></i></span>
+        </div>
+    </div>
+    <div class='content'>{{ line.post.content }}</div>
+    <div class='post-meta-bottom'>
+        <div class='post-tags'>
+            {% for tag in line.post.tags %}
+                <span>{{ tag }}</span>
+            {% endfor %}
+        </div>
+        <div class='post-notes'>{{ line.post.notes }}</div>
+        <div class='post-action-bar'>
+            <i class="fa fa-reply"></i>
+            <i class="fa fa-retweet"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-ellipsis-h"></i>
+        </div>
+    </div>
+</div>
+{% endfor %}

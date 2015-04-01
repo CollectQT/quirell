@@ -3,37 +3,36 @@
 <main>
     <div class='banner'>
         <div class='middle'>
-            <div class='middle banner-left' href='/u/{{ requested_user.username }}'>
-                <div class='avatar'><img class='avatar img-large' src="{{ requested_user.profile_picture }}" alt='{{ requested_user.username}} Avatar'></div>
+            <div class='middle banner-left' href='/u/{{ user.username }}'>
+                <div class='avatar'><img class='avatar img-large' src="{{ user.profile_picture }}" alt='{{ user.username}} Avatar'></div>
                 <div>
-                    <span class='display-name'>{{ requested_user.display_name }}</span>
-                    <span class='pronouns subtext'>({{ requested_user.pronouns }})</span>
-                    <span class='username subtext'>{{ requested_user.username }}</span>
+                    <span class='display-name'>{{ user.display_name }}</span>
+                    <span class='pronouns subtext'>({{ user.pronouns }})</span>
+                    <span class='username subtext'>{{ user.username }}</span>
                 </div>
             </div>
             <div class='banner-right'>
-                {{ requested_user.description }}
+                {{ user.description }}
             </div>
         </div>
     </div>
-    {% if user.is_authenticated() %}
+
+    {% if is_self(user) %}
         <article class='post'>
             <input type="file" class="img_upload profile_picture"/>
             <p class="upload_status">Please select a file</p>
-            <img class="img_preview profile_picture" src="{{ requested_user.profile_picture }}"/>
+            <img class="img_preview profile_picture" src="{{ self.profile_picture }}"/>
 
             <form method="POST" action="/change_profile_picture?next={{ flask.request.url }}">
-                <input type="hidden" class="avatar_url" name="avatar_url" value=" {{ requested_user.profile_picture }}" />
+                <input type="hidden" class="avatar_url" name="avatar_url" value=" {{ self.profile_picture }}" />
                 <input type="submit" value="Update profile" />
             </form>
         </article>
+
     {% endif %}
-    <article class='timeline'>
-        {% for post in timeline %}
-            <div class='timeline-post'>
-                {{ post.content }}
-            </div>
-        {% endfor %}
+    <article class='profile-timeline'>
+        {% include 'timeline.html' %}
     </article>
+
 </main>
 {% endblock %}
