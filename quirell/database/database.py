@@ -75,10 +75,15 @@ import yaml
 import py2neo
 # custom
 from quirell.config import *
+from quirell.database.timeline import Timeline
 
 ####################
 # helper functions #
 ####################
+
+# these are formatted as functions mainly because it is easier to read
+# them in that format. They shouldn't actually be called, instead copy
+# their return into the appropriate place in the query.
 
 def access_posts ():
     # filters for access between two users. inputs:
@@ -162,7 +167,7 @@ class Database (object):
     def load_user (self, username):
         return self.db.find_one('user', 'username', username)
 
-    def load_post (self, post_id, user):
+    def load_post (self, post_id, owner):
         # will eventually be "load_thread"
         parameters = {'username': user['username'], 'post_id': post_id}
         result = self.db.cypher.execute('''
@@ -170,7 +175,7 @@ class Database (object):
             RETURN n''', parameters=parameters)
         return result
 
-    def load_single_timeline (self, user):
+    def load_timeline (self, user):
         pass
 
     ##################
@@ -223,21 +228,34 @@ class Database (object):
     # view operations are the opposite of load operations in that they require
     # a permissions check on the database level
 
-    def view_post (self, post_id, owner, reader,):
+    def view_user_page (self, user_req, user_self=None):
+        parameters = {'reader': user_self, 'owner': user_req}
+        if user_self == user_req:
+            user, timeline = self.load_timeline(**parameters)
+        if not user_self:
+            user, timeline = self.view_public_timeline(**parameters)
+        else:
+            user, timeline = self.view_timeline
+        # format a timeline object
+        return user, timeline
+
+    def view_public_post (self, owner, post_id):
         pass
 
-    def view_user_page (self, user_req, user_self=None):
-        # generate a standalone timelime of a specific user
-        parameters = {'username': user_req}
-        if not user_self:
-            results = self.db.cypher.execute('''
-                MATCH (:user {username:\"{username}\"})-[CREATED]->(n:post)
-                RETURN n ORDER BY n.datetime desc LIMIT {0}'''.format(MAX_POSTS),
-                parameters=parameters)
-        if user_self:
-            pass
-        posts = [result[0] for result in results]
-        return posts
+    def view_post (self, owner, reader, post_id):
+        pass
+
+    def view_public_timeline (self, owner):
+        results = self.db.cypher.execute('''
+            MATCH (owner:user {username:\"{user_req}\"})-[created:CREATED]->(n:post)
+            {access_posts_public}
+            RETURN n ORDER BY n.datetime desc LIMIT {limit}
+            '''.format(limit=MAX_POSTS, access_posts_public=access_posts_public()),
+            parameters=parameters)
+        return results
+
+    def view_timeline (self, owner, reader):
+        pass
 
     #################
     # access checks #
