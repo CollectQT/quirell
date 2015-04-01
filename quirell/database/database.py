@@ -214,7 +214,7 @@ class Database (object):
     def load_post (self, post_id, owner):
         pass
 
-    def load_timeline (self, user):
+    def load_timeline (self, owner):
         parameters = {'username': user}
         recordlist = self.db.cypher.execute('''
             MATCH (user:user {username:{username}})-[CREATED]->(post:post)

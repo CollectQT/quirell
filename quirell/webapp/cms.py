@@ -64,6 +64,12 @@ class Cms (object):
         else: user_self = user_self['username']
         # run the appropriate db query
         # cases are: public, self, else
+        #
+        # if you were to run the else case (i.e. view_timeline)
+        # on either "self" or "public" the results would be the same.
+        # The only reason they get special cases is so that we aren't
+        # making unneeded access checks. For example: you can always
+        # view all of your own posts, so no need to check permissions
         if not user_self:
             user, timeline = self.db.view_public_timeline(owner=user_req)
         elif user_self == user_req:
