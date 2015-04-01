@@ -37,7 +37,7 @@ testing stuff.
 
 CREATE
     // posts
-    (owner:user {name:"owner"})-[:CREATED {access:[]}]->(:post {content:"publically visible"}),
+    (owner:user {username:"rawr"})-[:CREATED {access:[]}]->(:post {content:"publically visible"}),
     (owner)-[:CREATED {access:['c']}]->(:post {content:"visible to two"}),
     (owner)-[:CREATED {access:['c','d']}]->(:post {content:"visible to one"}),
     (owner)-[:CREATED {access:['z','y']}]->(:post {content:"visible to nobody"}),
@@ -66,6 +66,46 @@ reader="reader_some_priv" : 2
 reader="reader_none_priv" : 1
 reader="reader_unknown" : 1
 reader="reader_blocked" : 0
+
+#######################
+# Accessing Timelines #
+#######################
+
+The access chain is
+
+    list dict dict X
+
+Where X can be anything that neo4j can store. The structure can
+also be represented like this
+
+[
+    {
+        'post': post_node
+            ['content'] = X
+            ['datetime'] = X
+        'user': user_node
+            ['username']
+            ['profile_picture']
+    },
+    {'post'..., 'user'...,}
+    {},
+    {},
+    ...
+]
+
+Example Uses
+------------
+
+# python
+for line in timeline:
+    line['post']['content']
+    line['user']['username']
+
+# html
+{% for line in timeline %}
+    <div>{{ line.user.username }}</div>
+    <div>{{ line.post.content }}</div>
+{% endfor %}
 '''
 
 # builtin
@@ -83,7 +123,7 @@ from quirell.database.timeline import Timeline
 
 # these are formatted as functions mainly because it is easier to read
 # them in that format. They shouldn't actually be called, instead copy
-# their return into the appropriate place in the query.
+# their return into the appropriate place in the code.
 
 def access_posts ():
     # filters for access between two users. inputs:
@@ -98,6 +138,10 @@ def access_posts_public ():
     # filters for public access. inputs:
     # * created:CREATED
     return 'WHERE length(created.access)=0'
+
+def create_timeline ():
+    # used to create a timeline from a record list
+    return [{'post':post, 'user':user} for user, post in recordlist]
 
 #######################
 # main database class #
@@ -168,14 +212,41 @@ class Database (object):
         return self.db.find_one('user', 'username', username)
 
     def load_post (self, post_id, owner):
-        # will eventually be "load_thread"
-        parameters = {'username': user['username'], 'post_id': post_id}
-        result = self.db.cypher.execute('''
-            MATCH (:user {username:\"{username}\"})-[CREATED]->(n:post {post_id={post_id}})
-            RETURN n''', parameters=parameters)
-        return result
+        pass
 
     def load_timeline (self, user):
+        parameters = {'username': user}
+        recordlist = self.db.cypher.execute('''
+            MATCH (user:user {username:{username}})-[CREATED]->(post:post)
+            RETURN user, post ORDER BY post.datetime desc LIMIT 50
+            ''', parameters=parameters)
+        timeline = [{'post':post, 'user':user} for user, post in recordlist]
+        return recordlist[0]['user'], timeline
+
+    ###############
+    # view others #
+    ###############
+
+    # view operations are the opposite of load operations in that they require
+    # a permissions check on the database level
+
+    def view_public_post (self, owner, post_id):
+        pass
+
+    def view_post (self, owner, reader, post_id):
+        pass
+
+    def view_public_timeline (self, owner):
+        parameters = {'username':owner}
+        recordlist = self.db.cypher.execute('''
+            MATCH (owner:user {username:{username}})-[created:CREATED]->(post:post)
+            WHERE length(created.access)=0
+            RETURN owner, post ORDER BY post.datetime desc LIMIT 50
+            ''', parameters=parameters)
+        timeline = [{'post':post, 'user':user} for user, post in recordlist]
+        return recordlist[0]['owner'], timeline
+
+    def view_timeline (self, owner, reader):
         pass
 
     ##################
@@ -199,63 +270,27 @@ class Database (object):
 
         # delete created post relationships
         tx.append('''
-            MATCH (u:user {username:\"{username}\"})-[r:CREATED]->(n:post)
+            MATCH (u:user {username:{username}})-[r:CREATED]->(n:post)
             DELETE r
             ''', parameters=parameters)
         # delete notes and timeline
         tx.append('''
-            MATCH (u:user {username:\"{username}\"})-[r:OWNS]->(n)
+            MATCH (u:user {username:{username}})-[r:OWNS]->(n)
             WHERE n:timeline or n:notes
             DELETE r, n
             ''', parameters=parameters)
         # delete all incoming and outgoing user relationships
         tx.append('''
-            MATCH (u:user {username:\"{username}\"})-[r]-(:user)
+            MATCH (u:user {username:{username}})-[r]-(:user)
             DELETE r
             ''', parameters=parameters)
         # and finally, delete the user node
         tx.append('''
-            MATCH (u:user {username:\"{username}\"})
+            MATCH (u:user {username:{username}})
             DELETE u
             ''', parameters=parameters)
         # go !
         tx.commit()
-
-    ###############
-    # view others #
-    ###############
-
-    # view operations are the opposite of load operations in that they require
-    # a permissions check on the database level
-
-    def view_user_page (self, user_req, user_self=None):
-        parameters = {'reader': user_self, 'owner': user_req}
-        if user_self == user_req:
-            user, timeline = self.load_timeline(**parameters)
-        if not user_self:
-            user, timeline = self.view_public_timeline(**parameters)
-        else:
-            user, timeline = self.view_timeline
-        # format a timeline object
-        return user, timeline
-
-    def view_public_post (self, owner, post_id):
-        pass
-
-    def view_post (self, owner, reader, post_id):
-        pass
-
-    def view_public_timeline (self, owner):
-        results = self.db.cypher.execute('''
-            MATCH (owner:user {username:\"{user_req}\"})-[created:CREATED]->(n:post)
-            {access_posts_public}
-            RETURN n ORDER BY n.datetime desc LIMIT {limit}
-            '''.format(limit=MAX_POSTS, access_posts_public=access_posts_public()),
-            parameters=parameters)
-        return results
-
-    def view_timeline (self, owner, reader):
-        pass
 
     #################
     # access checks #
@@ -265,7 +300,7 @@ class Database (object):
         # sees if the requested user (user_req) blocks user_self
         parameters = {'user_req':user_req, 'user_self':user_self}
         blocked = bool(self.cypher.execute('''
-            MATCH (:user {username:\"{user_req}\"})-[r:BLOCKS]->(:user {username:\"{user_self}\"})
+            MATCH (:user {username:{user_req}})-[r:BLOCKS]->(:user {username:{user_self}})
             RETURN r''', parameters=parameters))
 
 if __name__ == "__main__":
