@@ -2,17 +2,12 @@
 The timeline class
 ------------------
 
-A timeline is a read only list, where each item contains a post_node,
-and the user_node of the user that made the post. It takes in a
-parallel list of post nodes and user nodes, so really all this class
-does is zip those lists and stick them in a dictionary.
-
-Structure
----------
+Is used to reformat a recordlist into something we actually want
+to deal with.
 
 The access chain is
 
-    timeline list dict dict X
+    list dict dict X
 
 Where X can be anything that neo4j can store. The structure can
 also be represented like this
@@ -49,10 +44,6 @@ for line in timeline:
 
 class Timeline (list):
 
-    def __init__ (self, users, posts=[], *args, **kwargs):
-        self._content = [
-            {'post':post, 'user':user}
-            for user, post in zip(users, posts)]
-
-    def __getitem__ (self, key):
-        return self.content[key]
+    def __init__ (self, recordlist):
+        content = [{'post':post, 'user':user} for user, post in recordlist]
+        super().__init__(content)
