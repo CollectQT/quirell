@@ -216,7 +216,8 @@ class Database (object):
     def load_timeline (self, owner):
         parameters = {'username': user}
         recordlist = self.db.cypher.execute('''
-            MATCH (user:user {username:{username}})-[CREATED]->(post:post)
+            MATCH (user:user {username:{username}})
+            OPTIONAL MATCH (user)-[CREATED]->(post:post)
             RETURN user, post ORDER BY post.datetime desc LIMIT 50
             ''', parameters=parameters)
         timeline = [{'post':post, 'user':user} for user, post in recordlist]
@@ -238,7 +239,8 @@ class Database (object):
     def view_public_timeline (self, owner):
         parameters = {'username':owner}
         recordlist = self.db.cypher.execute('''
-            MATCH (owner:user {username:{username}})-[created:CREATED]->(post:post)
+            MATCH (owner:user {username:{username}})
+            OPTIONAL MATCH (owner)-[created:CREATED]->(post:post)
             WHERE length(created.access)=0
             RETURN owner, post ORDER BY post.datetime desc LIMIT 50
             ''', parameters=parameters)
