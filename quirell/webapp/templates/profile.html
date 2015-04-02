@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class='banner-right'>
-                {{ user.description }}
+                {% block user_description %}{{ user.description }}{% endblock %}
             </div>
         </div>
     </div>
