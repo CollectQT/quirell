@@ -115,7 +115,6 @@ import yaml
 import py2neo
 # custom
 from quirell.config import *
-from quirell.database.timeline import Timeline
 
 ####################
 # helper functions #

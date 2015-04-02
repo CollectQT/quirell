@@ -24,6 +24,8 @@ class Test (object):
         assert session.get(quirell).status_code == 200
         assert session.get(quirell+'/login').status_code == 200
         assert session.get(quirell+'/signup').status_code == 200
+        assert session.get(quirell+'/u/rawr').status_code == 200
+        '''
         # user 'rawr' is bad at security, clearly
         login = {'username': 'rawr', 'password': 'rawr',}
         assert session.post(quirell+'/login', data=login).status_code == 200
@@ -34,6 +36,7 @@ class Test (object):
         assert session.post(quirell+'/new_post', data=new_post).status_code == 200
         assert session.get(quirell+'/cats?hi=hi&no=no').status_code == 404
         # don't leave the server on forever
+        '''
         session.post('http://0.0.0.0:5000/shutdown')
 
 if __name__ == "__main__":
