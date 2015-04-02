@@ -54,7 +54,7 @@ class User (flask_login.UserMixin):
 
     def login (self, username, password, remember):
         '''logs in a user'''
-        node = cms.db.get_user('@'+username)
+        node = cms.db.load_user('@'+username)
         # check that inputs are correct
         # that is, if this user exists
         if node == None:
