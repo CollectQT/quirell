@@ -25,6 +25,7 @@ class Test (object):
         assert session.get(quirell+'/login').status_code == 200
         assert session.get(quirell+'/signup').status_code == 200
         assert session.get(quirell+'/u/rawr').status_code == 200
+        assert session.get(quirell+'/u/nobody_with_this_username').status_code == 200
         '''
         # user 'rawr' is bad at security, clearly
         login = {'username': 'rawr', 'password': 'rawr',}

@@ -71,15 +71,14 @@ class Cms (object):
         # making unneeded access checks. For example: you can always
         # view all of your own posts, so no need to check permissions
         if not user_self:
-            user, timeline = self.db.view_public_timeline(owner=user_req)
+            return self.db.view_public_timeline(owner=user_req)
         elif user_self == user_req:
-            user, timeline = self.db.load_timeline(owner=user_req)
+            return self.db.load_timeline(owner=user_req)
         else:
-            user, timeline = self.db.view_timeline(owner=user_req, reader=user_self)
-        return user, timeline
+            return self.db.view_timeline(owner=user_req, reader=user_self)
 
     def user_exists (self, username):
-        result = self.db.get_user('@'+username)
+        result = self.db.load_user('@'+username)
         if result == None: return False
         else: return True
 

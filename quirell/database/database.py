@@ -243,7 +243,9 @@ class Database (object):
             RETURN owner, post ORDER BY post.datetime desc LIMIT 50
             ''', parameters=parameters)
         timeline = [{'post':post, 'user':user} for user, post in recordlist]
-        return recordlist[0]['owner'], timeline
+        try: user = recordlist[0]['owner']
+        except IndexError: user = None
+        return user, timeline
 
     def view_timeline (self, owner, reader):
         pass
