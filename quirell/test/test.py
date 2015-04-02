@@ -1,5 +1,6 @@
 '''test.py'''
 
+import os
 from quirell.config import *
 
 class Test (object):
@@ -26,18 +27,16 @@ class Test (object):
         assert session.get(quirell+'/signup').status_code == 200
         assert session.get(quirell+'/u/rawr').status_code == 200
         assert session.get(quirell+'/u/nobody_with_this_username').status_code == 200
-        '''
-        # user 'rawr' is bad at security, clearly
-        login = {'username': 'rawr', 'password': 'rawr',}
+        # use environment vars, ward off the vandals
+        login = {'username': 'cyrin', 'password': os.environ.get('CYRIN'),}
         assert session.post(quirell+'/login', data=login).status_code == 200
         # purposeful 404
         assert session.get(quirell+'/cats?hi=hi&no=no').status_code == 404
         # create a post
-        new_post = {'content': 'saturday kitten'}
-        assert session.post(quirell+'/new_post', data=new_post).status_code == 200
-        assert session.get(quirell+'/cats?hi=hi&no=no').status_code == 404
+        # new_post = {'content': 'saturday kitten'}
+        # assert session.post(quirell+'/new_post', data=new_post).status_code == 200
+        # assert session.get(quirell+'/cats?hi=hi&no=no').status_code == 404
         # don't leave the server on forever
-        '''
         session.post('http://0.0.0.0:5000/shutdown')
 
 if __name__ == "__main__":
