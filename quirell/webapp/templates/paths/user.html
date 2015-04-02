@@ -17,14 +17,14 @@
         </div>
     </div>
 
-    {% if is_self(user) %}
+    {% if is_current(user) %}
         <article class='post'>
             <input type="file" class="img_upload profile_picture"/>
             <p class="upload_status">Please select a file</p>
-            <img class="img_preview profile_picture" src="{{ self.profile_picture }}"/>
+            <img class="img_preview profile_picture" src="{{ current_user.profile_picture }}"/>
 
             <form method="POST" action="/change_profile_picture?next={{ flask.request.url }}">
-                <input type="hidden" class="avatar_url" name="avatar_url" value=" {{ self.profile_picture }}" />
+                <input type="hidden" class="avatar_url" name="avatar_url" value=" {{ current_user.profile_picture }}" />
                 <input type="submit" value="Update profile" />
             </form>
         </article>

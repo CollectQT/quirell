@@ -4,7 +4,7 @@
             <i class='fa fa-home'></i>
             <div class='nav-text'>Home</div>
         </a>
-        {% if user.is_authenticated() %}
+        {% if current_user.is_authenticated() %}
         <a href='/notes' class='button'>
             <i class='fa fa-exclamation'></i>
             <div class='nav-text'>Notes</div>
@@ -22,11 +22,11 @@
     </div>
     <div class='nav-block nav-right'>
         <!-- user account functions -->
-        {% if user.is_authenticated() %}
+        {% if current_user.is_authenticated() %}
             <!-- user actions -->
-            <a href='/u/{{ user.username }}' class='button'>
+            <a href='/u/{{ current_user.username }}' class='button'>
                 <i class='fa fa-user'></i>
-                <div class='nav-text'>{{ user.username }}</div>
+                <div class='nav-text'>{{ current_user.username }}</div>
             </a>
             <!-- settings -->
             <a herf='/settings' class='button'>
