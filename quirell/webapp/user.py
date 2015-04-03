@@ -54,7 +54,8 @@ class User (flask_login.UserMixin):
 
     def login (self, username, password, remember):
         '''logs in a user'''
-        node = cms.db.load_user('@'+username)
+        if not username[0] == '@': username = '@'+username
+        node = cms.db.load_user(username)
         # check that inputs are correct
         # that is, if this user exists
         if node == None:
@@ -72,7 +73,7 @@ class User (flask_login.UserMixin):
         '''create a new user'''
         # initalize a node
         properties = {
-            'username': username,
+            'username': '@'+username,
             'password': cms.bcrypt.generate_password_hash(password),
             'email': email,
             'display_name': username,
@@ -89,10 +90,10 @@ class User (flask_login.UserMixin):
     # general use #
     ###############
 
-    @property
+    def commit (self): self.node.push()
+
     def get_id (self): return self['username']
 
-    @property
     def is_authenticated (self): return True
 
     def delete_account (self):
@@ -132,6 +133,12 @@ class User (flask_login.UserMixin):
     # these functions allow the user object to function like a dictionary,
     # in that you can retrieve attributes from user.node with user['username']
     # (which resolves to user.node['username'])
+
+    def __str__ (self):
+        return str(self.node)
+
+    def __repr__ (self):
+        return str(self.node)
 
     def __getitem__ (self, key):
         try: return self.node[key]

@@ -78,13 +78,14 @@ class Cms (object):
             return self.db.view_timeline(owner=user_req, reader=user_self)
 
     def user_exists (self, username):
-        result = self.db.load_user('@'+username)
+        if not username[0] == '@': username = '@'+username
+        result = self.db.load_user(username)
         if result == None: return False
         else: return True
 
     def add_user (self, username, user):
         self.user_container[username] = user
-        print('[NOTE] Logging in user @'+username)
+        print('[NOTE] Logging in user '+username)
 
     def get_logged_in_user (self, username):
         try: user = self.user_container[username]
