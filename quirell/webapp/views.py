@@ -231,11 +231,11 @@ def settings():
 def notes():
     pass
 
-@app.route('/logout_user', methods=['POST'])
+@app.route('/logout', methods=['GET', 'POST'])
 @flask_login.login_required
 def logout():
     flask_login.logout_user()
-    return flask.redirect('/index')
+    return flask.redirect('/')
 
 @app.route('/timeline')
 @flask_login.login_required
