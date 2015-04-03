@@ -189,8 +189,13 @@ def user_request(username):
     if not user:
         return flask.render_template('paths/user_not_found.html')
     else:
-        return flask.render_template('paths/user.html', user=user,
+        return flask.render_template('user.html', user=user,
             timeline=timeline)
+
+@app.route('/u/profile/edit')
+@flask_login.login_required
+def edit_profile():
+    pass
 
 @app.route('/user/<path>')
 def user_to_u(path):
