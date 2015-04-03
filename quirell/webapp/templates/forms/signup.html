@@ -5,6 +5,7 @@
             <form action="/signup" method="POST" name="signup">
                 {{ signup.hidden_tag() }}
                 <p>
+                    <span class='username-prepend'>@</span>
                     Enter your username:<br>
                     {{ signup.username(size=40) }}<br>
                     Enter your email:<br>
