@@ -89,8 +89,11 @@ def signup():
 @app.route('/user')
 @app.route('/profile')
 @flask_login.login_required
-def user_redirect():
-    return flask.redirect('/u/'+current_user['username'])
+def profile_page():
+    user, timeline = cms.get_user_page(user_self=current_user,
+        user_req=current_user['username'])
+    return flask.render_template('profile.html', user=user,
+        timeline=timeline)
 
 # render static files
 @app.route('/static/<path:filename>')
@@ -167,7 +170,8 @@ def new_post_POST():
     current_user.create_post(content=form.content.data)
     return flask.render_template('message.html', html_content='post created')
 
-@app.route("/update_profile", methods=["POST"])
+@app.route("/profile/edit", methods=["POST"])
+@flask_login.login_required
 def update_profile():
     # DANGEROUS!!!!! CONTENTS HAVE TO BE PARSED FIRST!!!!!!!!!!!!!
     # gonna leave it here for a bit though
@@ -193,16 +197,16 @@ def update_profile():
 
 @app.route('/u/<username>')
 def user_request(username):
-    if username[0] == '@': username = username[1:]
+    if not username[0] == '@': username = '@'+username
     user, timeline = cms.get_user_page(user_self=current_user, user_req=username)
     # user was not found, or blocked, who knows
     if not user:
         return flask.render_template('paths/user_not_found.html')
     else:
-        return flask.render_template('user.html', user=user,
+        return flask.render_template('profile.html', user=user,
             timeline=timeline)
 
-@app.route('/u/profile/edit')
+@app.route('/profile/edit')
 @flask_login.login_required
 def edit_profile():
     return flask.render_template('profile_edit.html',

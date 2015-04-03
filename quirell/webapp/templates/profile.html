@@ -21,7 +21,11 @@
 
     {% block user_profile_picture %}{% endblock %}
 
-    {% block user_account_end %}{% endblock %}
+    {% block user_account_end %}
+        {% if is_current(user) %}
+            <a href='/profile/edit'><button>Edit Profile</button></a>
+        {% endif %}
+    {% endblock %}
 
     {% block timeline %}
     <article class='profile-timeline'>

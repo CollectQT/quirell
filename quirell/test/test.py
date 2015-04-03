@@ -18,6 +18,7 @@ class Test (object):
         testing_thread.start()
 
     def webapp_test (app):
+        import random
         import requests
         session = requests.Session()
         quirell = 'http://0.0.0.0:5000'
@@ -30,6 +31,18 @@ class Test (object):
         # use environment vars, ward off the vandals
         login = {'username': 'cyrin', 'password': os.environ.get('CYRIN'),}
         assert session.post(quirell+'/login', data=login).status_code == 200
+        assert session.get(quirell+'/', data=login).status_code == 200
+        assert session.get(quirell+'/profile', data=login).status_code == 200
+        assert session.get(quirell+'/profile/edit', data=login).status_code == 200
+        profile_edit = {
+            'description': random.choice([
+                'first',
+                'second',
+                'third',
+                'fourth',
+                ])
+        }
+        assert session.post(quirell+'/profile/edit', data=profile_edit).status_code == 200
         # purposeful 404
         assert session.get(quirell+'/cats?hi=hi&no=no').status_code == 404
         # create a post

@@ -1,7 +1,7 @@
 {% extends "profile.html" %}
 
 {% block user_account_start %}
-    <form method="POST" action="/update_profile?next=/profile">
+    <form method="POST" action="/profile/edit?next=/profile">
 {% endblock %}
 
 {% block user_display_name %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block user_description %}
-    <input type="text" name="pronouns" class="description" value="{{ current_user.description }}" placeholder="Some words about yourself">
+    <input type="text" name="description" class="description" value="{{ current_user.description }}" placeholder="Some words about yourself">
 {% endblock %}
 
 {% block user_profile_picture %}
