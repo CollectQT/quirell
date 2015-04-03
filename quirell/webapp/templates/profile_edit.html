@@ -1,3 +1,34 @@
-{% block user_description %}
-    <input type="" name="" value="" placeholder="">
+{% extends "timeline.html" %}
+
+{% block user_account_start %}
+    <form method="POST" action="/update_profile?next=/profile">
 {% endblock %}
+
+{% block user_display_name %}
+    <input type="text" name="display_name" class="display_name" value="{{ current_user.display_name }}" placeholder="">
+{% endblock %}
+
+{% block user_pronouns %}
+    <input type="text" name="pronouns" class="pronouns" value="{{ current_user.pronouns }}" placeholder="she / they / ze / etc...">
+{% endblock %}
+
+{% block user_description %}
+    <input type="text" name="pronouns" class="description" value="{{ current_user.description }}" placeholder="Some words about yourself">
+{% endblock %}
+
+{% block user_profile_picture %}
+    <article class='post'>
+        <input type="file" class="img_upload profile_picture"/>
+        <p class="upload_status">Please select a file</p>
+        <img class="img_preview profile_picture" src="{{ current_user.profile_picture }}"/>
+        <input type="hidden" class="profile_picture" name="profile_picture" value=" {{ current_user.profile_picture }}" />
+        </form>
+    </article>
+{% endblock %}
+
+{% block user_account_end %}
+    <input type="submit" value="Update profile" />
+    </form>
+{% endblock %}
+
+{% block timeline %}{# don't need a timeline on the edit page #}{% endblock %}

@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
 <main>
+    {% block user_account_start %}{% endblock %}
+
     <div class='banner'>
         <div class='middle'>
             <div class='middle banner-left' href='/u/{{ user.username }}'>
                 <div class='avatar'><img class='avatar img-large' src="{{ user.profile_picture }}" alt='{{ user.username}} Avatar'></div>
                 <div>
-                    <span class='display-name'>{{ user.display_name }}</span>
-                    <span class='pronouns subtext'>({{ user.pronouns }})</span>
+                    <span class='display-name'>{% block user_display_name %}{{ user.display_name }}{% endblock %}</span>
+                    <span class='pronouns subtext'>({% block user_pronouns %}{{ user.pronouns }}{% endblock %})</span>
                     <span class='username subtext'>{{ user.username }}</span>
                 </div>
             </div>
@@ -17,22 +19,15 @@
         </div>
     </div>
 
-    {% if is_current(user) %}
-        <article class='post'>
-            <input type="file" class="img_upload profile_picture"/>
-            <p class="upload_status">Please select a file</p>
-            <img class="img_preview profile_picture" src="{{ current_user.profile_picture }}"/>
+    {% block user_profile_picture %}{% endblock %}
 
-            <form method="POST" action="/change_profile_picture?next={{ flask.request.url }}">
-                <input type="hidden" class="avatar_url" name="avatar_url" value=" {{ current_user.profile_picture }}" />
-                <input type="submit" value="Update profile" />
-            </form>
-        </article>
-    {% endif %}
+    {% block user_account_end %}{% endblock %}
 
+    {% block timeline %}
     <article class='profile-timeline'>
         {% include 'timeline.html' %}
     </article>
+    {% endblock %}
 
 </main>
 {% endblock %}

@@ -167,11 +167,21 @@ def new_post_POST():
     current_user.create_post(content=form.content.data)
     return flask.render_template('message.html', html_content='post created')
 
-@app.route("/change_profile_picture", methods=["POST"])
-def change_profile_picture():
-    image_url = flask.request.form['avatar_url']
-    current_user['profile_picture'] = image_url
+@app.route("/update_profile", methods=["POST"])
+def update_profile():
+    # DANGEROUS!!!!! CONTENTS HAVE TO BE PARSED FIRST!!!!!!!!!!!!!
+    # gonna leave it here for a bit though
+    for item in flask.request.form:
+        current_user[item] = flask.request.form[item]
+    # / DANGER
     current_user.commit()
+    # throw them back to the profile page with a message of some sort
+    # on the relevant profile field if on of the things they tried to
+    # edit turned out wrong somehow
+    #
+    # probably attach a class to the incorrect field so that it glows
+    # red of something. Also make sure to have a place where a
+    # "message" can be displayed
     if flask.request.args.get('next'):
         return flask.redirect(flask.request.args.get('next'))
     else:
@@ -195,7 +205,8 @@ def user_request(username):
 @app.route('/u/profile/edit')
 @flask_login.login_required
 def edit_profile():
-    pass
+    return flask.render_template('profile_edit.html',
+        user=current_user)
 
 @app.route('/user/<path>')
 def user_to_u(path):
