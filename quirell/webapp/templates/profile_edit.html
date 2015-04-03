@@ -1,4 +1,4 @@
-{% extends "timeline.html" %}
+{% extends "profile.html" %}
 
 {% block user_account_start %}
     <form method="POST" action="/update_profile?next=/profile">
@@ -22,7 +22,6 @@
         <p class="upload_status">Please select a file</p>
         <img class="img_preview profile_picture" src="{{ current_user.profile_picture }}"/>
         <input type="hidden" class="profile_picture" name="profile_picture" value=" {{ current_user.profile_picture }}" />
-        </form>
     </article>
 {% endblock %}
 
