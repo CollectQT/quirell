@@ -5,8 +5,7 @@
         <div class='post-meta-top'>
             <a class='middle' href='/u/{{ line.user.username }}'>
                 <span class='display-name'>{{ line.user.display_name }}</span>
-                <span class='pronouns subtext'>{{ line.user.pronouns }}</span>
-                <span class='user-id subtext'>{{ line.user.username }}</span>
+                <span class='pronouns subtext'>({{ line.user.pronouns }})</span>
             </a>
             <br>
             <a class='subtext' href='/u/{{ line.user.username }}/post/{{ line.post.post_id }}'>{{ line.post.datetime }}</a>
