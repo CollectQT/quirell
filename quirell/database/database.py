@@ -187,10 +187,10 @@ class Database (object):
             pass
         print('[NOTE] Creating new user')
 
-    def create_post (self, properties, user):
+    def create_post (self, user, post_properties, relationship_properties):
         # create new post, and a relationship for the poster
-        post = py2neo.Node('post', **properties)
-        user_created_post = py2neo.Relationship(user, 'CREATED', post)
+        post = py2neo.Node('post', **post_properties)
+        user_created_post = py2neo.Relationship(user, 'CREATED', post, **relationship_properties)
         self.db.create(post, user_created_post)
         print('[NOTE] Creating new post for user '+user['username'])
 
@@ -210,8 +210,14 @@ class Database (object):
     def load_user (self, username):
         return self.db.find_one('user', 'username', username)
 
-    def load_post (self, post_id, owner):
-        pass
+    def load_post (self, owner, post_id):
+        parameters = {'username': owner, 'post_id': post_id}
+        recordlist = self.db.cypher.execute('''
+            MATCH (user:user {username:{username}})
+            OPTIONAL MATCH (user)-[created:CREATED]->(post:post {post_id:{post_id}})
+            RETURN user, post, created
+            ''', parameters=parameters)
+        return recordlist[0]['user'], recordlist[0]['post'], recordlist[0]['created']
 
     def load_timeline (self, owner):
         parameters = {'username': owner}

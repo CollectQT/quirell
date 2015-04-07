@@ -112,14 +112,18 @@ class User (flask_login.UserMixin):
         post_id = self['posts_amount']
         self['posts_amount'] += 1
         # make sure the post isn't filled with EVIL
+        # then format the node and relationship data
         content = cms.clean_html(content)
-        properties = {
+        post_properties = {
             'content': content,
             'datetime': datetime.now(),
             'post_id': post_id,
         }
+        relationship_properties = {
+            'access': [],
+        }
         # push to database
-        cms.db.create_post(properties=properties, user=self.node)
+        cms.db.create_post(self.node, post_properties, relationship_properties)
         self.node.push()
 
     def edit_post (self, post_id):
