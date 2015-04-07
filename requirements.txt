@@ -14,6 +14,7 @@ argh==0.25.0
 beautifulsoup4==4.3.2
 gunicorn==19.1.1
 heroku==0.1.4
+ipython==3.1.0
 itsdangerous==0.24
 misaka==1.0.2
 pathtools==0.1.2
