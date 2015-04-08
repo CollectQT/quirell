@@ -1,39 +1,41 @@
 '''cms.py'''
 
 # builtin
-import os
-import sys
 import hashlib
 # external
 import markdown
-import flask
 # custom
 from quirell.config import *
 from quirell.database import Database
 
 class Cms (object):
+    '''
+    manages content and scripts for the webapp layer or the applications
 
-    def __init__ (self, app=None):
-        if app:
-            import flask.ext.bcrypt as bcrypt
-            import flask.ext.login as flask_login
-            import flask.ext.misaka as misaka
-            # configs
-            for k,v in CONFIG.items(): app.config[k] = v
-            # content building
-            misaka.Misaka(app) # markdown
-            self.build_css_automatic()
-            # user management
-            try: self.db = Database()
-            except: print('[ERROR] Cannot connect to database')
-            self.bcrypt = bcrypt.Bcrypt(app) # encryption
-            self.login_manager =flask_login.LoginManager().init_app(app)
-            self.user_container = dict()
-            self.hash = hashlib.sha1()
-        # runs the cms in 'headless mode':
-        else:
-            try: self.db = Database()
-            except: print('[ERROR] Cannot connect to database')
+    import with:
+        from quirell.webapp import cms
+    '''
+
+    def __init__ (self, app):
+        import flask.ext.bcrypt as bcrypt
+        import flask.ext.login as flask_login
+        import flask.ext.misaka as misaka
+        # configs
+        for k,v in CONFIG.items(): app.config[k] = v
+        # content building
+        misaka.Misaka(app) # markdown
+        self.build_css_automatic()
+        # user management
+        try: self.db = Database()
+        except: print('[ERROR] Cannot connect to database')
+        self.bcrypt = bcrypt.Bcrypt(app) # encryption
+        self.login_manager =flask_login.LoginManager().init_app(app)
+        self.user_container = dict()
+        self.hash = hashlib.sha1()
+
+    ###########
+    # GENERAL #
+    ###########
 
     def clean_html (self, html):
         # cleans html to prevent people doing evil things with it like
