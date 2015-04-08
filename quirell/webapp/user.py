@@ -96,7 +96,7 @@ class User (flask_login.UserMixin):
             'username': '@'+username,
             'password': cms.bcrypt.generate_password_hash(password),
             'email': email,
-            'description': ''
+            'description': '',
             'display_name': username,
             'pronouns': 'they',
             'posts_amount': 0,
