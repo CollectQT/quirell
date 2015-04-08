@@ -1,4 +1,5 @@
 # builtin
+import re
 import os
 import glob
 import json
@@ -148,11 +149,13 @@ def login_POST():
         return flask.render_template('forms/login.html',
             login_message=message)
         #return flask.jsonify(messsage=message)
-    # a successful login should return the user to where they were
-    # before via the 'next' variable in a query string
-    # except if 'next' was login and/or signup ?
+    # go somewhere
     if flask.request.args.get('next'):
-        return flask.redirect(flask.request.args.get('next'))
+        if re.search('.*/(login|signup)', flask.request.args.get('next')):
+            # should eventually go somewhere better
+            return flask.redirect('/')
+        else:
+            return flask.redirect(flask.request.args.get('next'))
     else:
         return flask.redirect('/')
 
