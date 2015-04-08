@@ -271,16 +271,16 @@ class Database (object):
         pass
 
     def delete_account (self, user):
-        parameters = {'username': user.username}
+        parameters = {'username': user}
         tx = self.db.cypher.begin()
 
-        # somewhere in here should be a line to run a "deletion" on
-        # all the users posts. assuming that's the desired behavior
+        # somewhere in here should be a line to run an edit and replace
+        #all the users posts. assuming that's the desired behavior
 
         # delete created post relationships
         tx.append('''
             MATCH (u:user {username:{username}})-[r:CREATED]->(n:post)
-            DELETE r
+            DELETE r, n
             ''', parameters=parameters)
         # delete notes and timeline
         tx.append('''
