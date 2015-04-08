@@ -311,6 +311,7 @@ blockquote {
     }
 
     .post-meta-bottom {
+        height: 15px;
         width: 100%;
     }
 
@@ -334,7 +335,10 @@ blockquote {
     }
 
     .content {
-        padding: 10px 15px;
+        padding-top: 10px;
+        padding-bottom: 0;
+        padding-right: 15px;
+        padding-left: 15px;
     }
 
     p {

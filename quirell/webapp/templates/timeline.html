@@ -9,7 +9,7 @@
             </a>
             <br>
             <a class='subtext' href='/u/{{ line.user.username }}/post/{{ line.post.post_id }}'>{{ format_time(line.post.datetime) }}</a>
-            <span class='subtext'>{{ line.post.visibility }}<i class="fa fa-globe"></i></span>
+            <!-- <span class='subtext'>{{ line.post.visibility }}<i class="fa fa-globe"></i></span> -->
         </div>
     </div>
     <div class='content'>{{ line.post.content }}</div>
@@ -19,7 +19,9 @@
                 <span></span>
             {# endfor #}
         </div>
-        <div class='post-notes'>{{ line.post.notes }}</div>
+        {% if line.post.notes %}
+            <div class='post-notes'>{{ line.post.notes }}</div>
+        {% endif %}
         <div class='post-action-bar'>
             <i class="fa fa-reply"></i>
             <i class="fa fa-retweet"></i>

@@ -206,6 +206,7 @@ html, body, nav .button {
    margin-left: 5px;
    line-height: 1.4em; }
    .post-meta-bottom {
+   height: 15px;
    width: 100%; }
    .post-notes {
     width: 40%; }
@@ -218,7 +219,10 @@ html, body, nav .button {
     .post-action-bar > * {
     padding: 0 10px; }
     .content {
-    padding: 10px 15px; }
+    padding-top: 10px;
+    padding-bottom: 0;
+    padding-right: 15px;
+    padding-left: 15px; }
     p {
     padding: 0 10px; }
     pre {
