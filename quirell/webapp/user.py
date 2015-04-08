@@ -70,16 +70,37 @@ class User (flask_login.UserMixin):
         return True, self
 
     def create (self, username, password, email):
-        '''create a new user'''
+        '''
+        create a new user
+
+        also serves as the reference for all of the data that should
+        exist on a user object. that being:
+
+        username: a URL safe string. which probably means UTF8 at the
+            very least, but also excluding certain special symbols
+        password: a string hashable by bcrypt
+        email: a string containing a valid email address
+        description: a string containing markdown
+        display_name: a string
+        pronouns: a string. In the future this field might be generalized
+            to a more vague descriptor (ex. shortname). So instead of just
+            being (he / she / they / ze) this field would also contain values
+            such as (group / robot / cat).
+        posts_amount: an int
+        profile_picture: a string containing a URL
+        pictures: a list of URLs
+        pictures_amount: an int
+        '''
         # initalize a node
         properties = {
             'username': '@'+username,
             'password': cms.bcrypt.generate_password_hash(password),
             'email': email,
+            'description': ''
             'display_name': username,
             'pronouns': 'they',
-            'profile_picture': '/static/img/default.png',
             'posts_amount': 0,
+            'profile_picture': '/static/img/default.png',
             'pictures': [],
             'pictures_amount': 0,
             }
