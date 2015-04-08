@@ -313,7 +313,7 @@ def sign_s3():
     AWS_SECRET_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
     S3_BUCKET = os.environ.get('S3_BUCKET')
     # no huge pictues
-    if flask.request.args.get('file_size') > 300000:
+    if int(flask.request.args.get('file_size')) > 5000000:
         flask.abort(401)
     # object naming
     # if its a profile picture, name it with a hash of username
