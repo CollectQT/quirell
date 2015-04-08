@@ -44,7 +44,7 @@ class Cms (object):
         for tag in html(['iframe', 'script']): tag.decompose()
         # remove evil attributes
         for tag in html():
-            for attribute in ["class", "id", "name", "style"]:
+            for attribute in ["class", "id", "name", "style", "data"]:
                 del tag[attribute]
         return str(html)
 
