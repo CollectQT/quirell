@@ -8,7 +8,7 @@
                 <span class='pronouns subtext'>({{ line.user.pronouns }})</span>
             </a>
             <br>
-            <a class='subtext' href='/u/{{ line.user.username }}/post/{{ line.post.post_id }}'>{{ line.post.datetime }}</a>
+            <a class='subtext' href='/u/{{ line.user.username }}/post/{{ line.post.post_id }}'>{{ format_time(line.post.datetime) }}</a>
             <span class='subtext'>{{ line.post.visibility }}<i class="fa fa-globe"></i></span>
         </div>
     </div>

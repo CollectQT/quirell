@@ -57,6 +57,12 @@ def is_current(user):
     else:
         return False
 
+def format_time(time_string, time_zone=None):
+    # eventually will need to do time zone stuff
+    import arrow
+    time_string = arrow.get(time_string).humanize()
+    return time_string
+
 @app.context_processor
 def set_globals():
     # forms
@@ -64,7 +70,7 @@ def set_globals():
     new_post = forms.new_post()
     signup = forms.signup()
     return dict(flask=flask, current_user=current_user, is_current=is_current,
-        login=login, signup=signup, new_post=new_post,)
+        login=login, signup=signup, new_post=new_post, format_time=format_time)
 
 #@app.before_first_request
 #@app.before_request
