@@ -1,4 +1,5 @@
 {% for line in timeline %}
+{% if line.post.content %}
 <div class='post'>
     <div class='middle'>
         <a class='middle' href='/u/{{ line.user.username }}'><img class='avatar img-mid' src="{{ line.user.profile_picture }}" alt='{{ line.user.username}}s Avatar'></a>
@@ -33,4 +34,5 @@
         </div>
     </div>
 </div>
+{% endif %}
 {% endfor %}
