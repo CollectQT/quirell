@@ -154,32 +154,57 @@ html, body, nav .button {
   html {
    font-size: 16px;
    line-height: 1.3em; }
+   article.double-form {
+   padding-left: 0;
+   padding-right: 0; }
+   article.double-form .login-signup-box {
+   margin: 0; }
+   .login-signup-box form {
+   width: 70%;
+   margin-left: auto;
+   margin-right: auto; }
+   .login-signup-box label input {
+   width: auto; }
+   .login-signup-box .submit {
+   width: auto;
+   display: block;
+   margin-left: auto;
+   margin-right: auto;
+   margin-top: 10px;
+   margin-bottom: 10px; }
+   .login-signup-box input {
+   box-sizing: border-box;
+   width: 100%;
+   margin-top: 5px;
+   margin-bottom: 5px;
+   padding-left: 10px;
+   padding-right: 10px; }
    .banner-left {
    width: 75%;
    margin: 0 auto;
    text-align: center; }
    .banner-right {
-   margin-top: 10px;
-   border-radius: 20px;
-   padding: 10px 20px; }
-   .img-large {
-   height: 80px;
-   width: 80px; }
-   .img-mid {
-   height: 50px;
-   width: 50px; }
-   .img-small {
-   height: 30px;
-   width: 30px; }
-   nav {
-   padding-top: 5px;
-   height: 50px;
-   height: 11vw; }
-   nav i {
-   font-size: 30px;
-   font-size: 10vw;
-   margin-left: 15px;
-   margin-right: 5px; }
+    margin-top: 10px;
+    border-radius: 20px;
+    padding: 10px 20px; }
+    .img-large {
+    height: 80px;
+    width: 80px; }
+    .img-mid {
+    height: 50px;
+    width: 50px; }
+    .img-small {
+    height: 30px;
+    width: 30px; }
+    nav {
+    padding-top: 5px;
+    height: 50px;
+    height: 11vw; }
+    nav i {
+    font-size: 30px;
+    font-size: 10vw;
+    margin-left: 15px;
+    margin-right: 5px; }
   .quirell-icon {
    font-size: 50px;
    font-size: 10vw;
@@ -189,9 +214,6 @@ html, body, nav .button {
    main {
    margin: 0 auto;
    padding-top: 60px; }
-   img {
-   height: 160px;
-   width: 160px; }
    article {
    width: 90%;
    margin: 10px auto;
@@ -209,8 +231,8 @@ html, body, nav .button {
    height: 15px;
    width: 100%; }
    .post-notes {
-    width: 40%; }
-    .post-tags {
+   width: 40%; }
+   .post-tags {
     margin-bottom: 10px; }
     .post-action-bar {
     padding-right: 20px;
@@ -261,6 +283,14 @@ html, body, nav .button {
   max-width: calc(95% - 60px); }
   article {
   width: 70%; }
+  main.double-form {
+  width: 75%;
+  text-align: center; }
+  .double-form .login-signup-box {
+  width: 100%;
+  display: inline-block;
+  margin-left: 10px;
+  margin-right: 10px; }
   .banner {
   padding-left: 5%;
   padding-right: 5%; }
@@ -279,7 +309,12 @@ html, body, nav .button {
  font-size: 1.3em;
  height: 40px; }
  article {
- width: 40%; }
+ width: 45%; }
+ .double-form article {
+ width: 85%; }
+ .double-form .login-signup-box {
+ width: 40%;
+ vertical-align: top; }
 }
 
 .fa-linkedin {

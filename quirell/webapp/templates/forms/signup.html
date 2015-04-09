@@ -1,7 +1,7 @@
-{% extends "base.html" %}
+{% if not standalone %}{% extends "base.html" %}{% endif %}
     {% block content %}
         <main><article class='post form'>
-            <h1>Signup</h1>
+            <h1>Sign Up</h1>
             <form action="/signup" method="POST" name="signup">
                 {{ signup.hidden_tag() }}
                 <p>

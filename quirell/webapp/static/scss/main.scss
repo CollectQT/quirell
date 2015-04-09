@@ -228,6 +228,47 @@ blockquote {
         line-height: 1.3em;
     }
 
+    article.double-form {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    article.double-form .login-signup-box {
+        margin: 0;
+    }
+
+    .login-signup-box form {
+        width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .login-signup-box label input {
+        width: auto;
+    }
+
+    article.double-form .login-signup-box.signup {
+
+    }
+
+    .login-signup-box .submit {
+        width: auto;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .login-signup-box input {
+        box-sizing: border-box;
+        width: 100%;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
     .banner-left {
         width: 75%;
         margin: 0 auto;
@@ -281,11 +322,6 @@ blockquote {
     main {
         margin: 0 auto;
         padding-top: 60px;
-    }
-
-    img {
-        height: 160px;
-        width: 160px;
     }
 
     article {
@@ -408,6 +444,18 @@ blockquote {
         width: 70%;
     }
 
+    main.double-form {
+        width: 75%;
+        text-align: center;
+    }
+
+    .double-form .login-signup-box {
+        width: 100%;
+        display: inline-block;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
     .banner {
         padding-left: 5%;
         padding-right: 5%;
@@ -437,7 +485,16 @@ blockquote {
     }
 
     article {
+        width: 45%;
+    }
+
+    .double-form article {
+        width: 85%;
+    }
+
+    .double-form .login-signup-box {
         width: 40%;
+        vertical-align: top;
     }
 
 }

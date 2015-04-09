@@ -82,17 +82,21 @@ def set_globals():
 # BASIC PATHS #
 ###############
 
+@app.route('/test')
+def testing():
+    return flask.render_template('forms/login_signup.html')
+
 @app.route('/')
 def index ():
     return flask.render_template('paths/index.html')
 
 @app.route('/login')
 def login():
-    return flask.render_template('forms/login.html', next=flask.request.args.get('next'))
+    return flask.render_template('forms/login_signup.html')
 
 @app.route('/signup')
 def signup():
-    return flask.render_template('forms/signup.html')
+    return flask.render_template('forms/login_signup.html')
 
 @app.route('/user')
 @app.route('/profile')
@@ -148,7 +152,7 @@ def login_POST():
         password=form.password.data, remember=form.remember_me.data)
     if not success: # user credentials invalid in some way
         return flask.render_template('forms/login.html',
-            login_message=message)
+            login_message=message, standalone=True)
         #return flask.jsonify(messsage=message)
     # go somewhere
     if flask.request.args.get('next'):

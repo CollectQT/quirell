@@ -1,0 +1,30 @@
+{% if not standalone %}{% extends "base.html" %}{% endif %}
+{% block content %}
+<main class='double-form'>
+<article>
+    <div class='login-signup-box login'>
+        <h2>Login</h2>
+        {% autoescape false %}{{ login_message }}{% endautoescape %}
+        <form action="/login?next={{ next }}" method="POST">
+            {{ login.hidden_tag() }}
+            {{ login.username(id='combo-login-username', placeholder='username') }}
+            {{ login.password(id='combo-login-password', placeholder='password') }}
+            <label>{{ login.remember_me() }} Remember Me</label>
+            <input type="submit" value="Login" class='submit'>
+        </form>
+    </div>
+    <div class='login-signup-box signup'>
+        <h2>Signup</h2>
+        <form action="/signup" method="POST" name="signup">
+            {{ signup.hidden_tag() }}
+            {{ signup.username(id='combo-signup-username', placeholder='username') }}
+            {{ signup.email(placeholder='email') }}
+            {{ signup.password(id='combo-signup-password', placeholder='password') }}
+            {{ signup.confirm(placeholder='verify password') }}
+            {{ signup.secret_password(placeholder='how many kittens?') }}
+            <input type="submit" value="Sign Up" class='submit'>
+        </form>
+    </div>
+</article>
+</main>
+{% endblock %}

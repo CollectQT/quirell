@@ -1,9 +1,7 @@
-{% extends "base.html" %}
+{% if not standalone %}{% extends "base.html" %}{% endif %}
     {% block content %}
         <main><article class='post form'>
             <h1>Login</h1>
-            <script>
-            </script>
             {% autoescape false %}{{ login_message }}{% endautoescape %}
             <form action="/login?next={{ next }}" method="POST">
                 {{ login.hidden_tag() }}
