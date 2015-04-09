@@ -20,7 +20,6 @@
     <article class='post'>
         <input type="file" class="img_upload profile_picture"/>
         <p class="upload_status">Please select a file</p>
-        <img class="img_preview profile_picture" src="{{ current_user.profile_picture }}"/>
         <input type="hidden" class="profile_picture avatar_url" name="profile_picture" value=" {{ current_user.profile_picture }}" />
     </article>
 {% endblock %}
