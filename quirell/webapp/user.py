@@ -129,6 +129,7 @@ class User (flask_login.UserMixin):
 
     def create_post (self, content):
         from datetime import datetime
+        from dateutil import tz
         # post id is current number of posts, which we then increment
         post_id = self['posts_amount']
         self['posts_amount'] += 1
@@ -137,7 +138,7 @@ class User (flask_login.UserMixin):
         content = cms.clean_html(content)
         post_properties = {
             'content': content,
-            'datetime': datetime.now(),
+            'datetime': datetime.now(tz.gettz('US/Pacific')),
             'post_id': post_id,
         }
         relationship_properties = {

@@ -36,13 +36,18 @@ class Test (object):
         assert session.get(quirell+'/profile/edit', data=login).status_code == 200
         profile_edit = {
             'description': random.choice([
-                'first',
-                'second',
-                'third',
-                'fourth',
+                'a kitten',
+                'queer trans computer femme',
+                'primary web developer for this website',
+                'programmer TWoC',
                 ])
         }
         assert session.post(quirell+'/profile/edit', data=profile_edit).status_code == 200
+        post = {
+            'content': 'something ipsum',
+        }
+        assert session.post(quirell+'/new_post', data=post).status_code == 200
+        assert session.get(quirell+'/profile', data=login).status_code == 200
         # purposeful 404
         assert session.get(quirell+'/cats?hi=hi&no=no').status_code == 404
         # create a post

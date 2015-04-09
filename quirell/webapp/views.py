@@ -61,9 +61,8 @@ def is_current(user):
 def format_time(time_string, time_zone=None):
     # eventually will need to do time zone stuff
     import arrow
-    try: time_string = arrow.get(time_string, 'US/Pacific').humanize()
-    except TypeError: pass
-    return time_string
+    if time_string == None: return None
+    else: return arrow.get(time_string).humanize()
 
 @app.context_processor
 def set_globals():

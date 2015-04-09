@@ -312,5 +312,20 @@ class Database (object):
             MATCH (:user {username:{user_req}})-[r:BLOCKS]->(:user {username:{user_self}})
             RETURN r''', parameters=parameters))
 
+    ###############
+    # refactoring #
+    ###############
+
+    def update_all_posts (self):
+        recordlist = self.db.cypher.execute('MATCH (post:post) RETURN post')
+        all_posts = [record['post'] for record in recordlist]
+        # print(all_posts[0]['datetime'])
+        # for post in all_posts:
+        #     if not post['datetime'][-6:] == '-07:00': #if post isn't timezoned
+        #         post['datetime'] += '-07:00' # added a timezone to all posts
+        #         post.push() # commit
+        # print(all_posts[0]['datetime'])
+
 if __name__ == "__main__":
-    db = Database().db
+    db = Database()
+    db.update_all_posts()
