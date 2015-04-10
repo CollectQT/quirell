@@ -262,6 +262,16 @@ class Database (object):
     # self functions #
     ##################
 
+    # def delete_post (self, owner, post_id):
+    #     parameters = {'username':owner, 'post_id':post_id}
+    #     recordlist = self.db.cypher.execute('''
+    #         MATCH (:user {username:{username}})-[CREATED]->(post:post {post_id:{post_id}})
+    #         RETURN post
+    #         ''', parameters=parameters)
+    #     post = recordlist[0]['post']
+    #     post['history'].append(post['content']) # swap content into history
+    #     post['content'] = '' # clear content
+
     def get_all_user_data (self, user):
         '''
         should return all user data as a CSV file, that user data being:
