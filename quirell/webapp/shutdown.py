@@ -1,5 +1,6 @@
 def shutdown_server():
     from flask import request
+    print('[NOTE] Shutting Down Web Server')
     func = request.environ.get('werkzeug.server.shutdown')
     if func is None:
         raise RuntimeError('Not running with the Werkzeug Server')

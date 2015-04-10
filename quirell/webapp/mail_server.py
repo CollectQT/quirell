@@ -16,8 +16,11 @@ class Mail_server (object):
             if self.mail_queue.empty():
                 time.sleep(1)
                 continue
-            print(self.mail_queue.get())
-            self.send_mail()
+            task = self.mail_queue.get()
+            if task == 'shutdown':
+                print('[NOTE] Shutting Down Mailer')
+                break
+            #self.send_mail()
 
     def send_mail(self):
         with self.app.app_context():
