@@ -8,8 +8,9 @@ class Test (object):
     def __init__ (self):
         import time
         import multiprocessing
-        from quirell.webapp import runserver
+        from quirell.webapp import runserver, app
         #
+        app.config['MAIL_SUPPRESS_SEND'] = True
         web_server = multiprocessing.Process(target=runserver.run)
         user_sim = multiprocessing.Process(target=user_simulation_requests)
         #
