@@ -8,9 +8,9 @@ class Test (object):
     def __init__ (self):
         import time
         import multiprocessing
-        from quirell.webapp import start as webserver
+        from quirell.webapp import runserver
         #
-        web_server = multiprocessing.Process(target=webserver.run)
+        web_server = multiprocessing.Process(target=runserver.run)
         user_sim = multiprocessing.Process(target=user_simulation_requests)
         #
         web_server.start()

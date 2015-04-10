@@ -14,6 +14,6 @@ class Mail_server (object):
     def mail_watcher (self):
         while True:
             if self.mail_queue.empty():
-                time.sleep(10)
+                time.sleep(1)
                 continue
             print(self.mail_queue.get())
