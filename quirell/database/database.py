@@ -152,14 +152,14 @@ class Database (object):
         # Set global database values, first the URL
         graphenedb_url = os.environ.get("GRAPHENEDB_URL", "http://localhost:7474/")
         self.db = py2neo.ServiceRoot(graphenedb_url).graph
-        # Then global attributes (currently just indexes)
-        # Users and searched by usernames, so they must be unique
-        # Making them unique also automatically indexes them
-        self.create_uniqueness_constraint('user', 'username')
-        self.create_uniqueness_constraint('user', 'email')
-        # Posts are searched by either post_id or datetime, so we index those
-        self.db.cypher.execute('CREATE INDEX ON :post(post_id)')
-        self.db.cypher.execute('CREATE INDEX ON :post(datetime)')
+        # # Then global attributes (currently just indexes)
+        # # Users and searched by usernames, so they must be unique
+        # # Making them unique also automatically indexes them
+        # self.create_uniqueness_constraint('user', 'username')
+        # self.create_uniqueness_constraint('user', 'email')
+        # # Posts are searched by either post_id or datetime, so we index those
+        # self.db.cypher.execute('CREATE INDEX ON :post(post_id)')
+        # self.db.cypher.execute('CREATE INDEX ON :post(datetime)')
 
     def create_uniqueness_constraint (self, label, constraint):
         try: self.db.schema.create_uniqueness_constraint(label, constraint)
