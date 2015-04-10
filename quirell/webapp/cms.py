@@ -2,6 +2,7 @@
 
 # builtin
 import hashlib
+import multiprocessing
 # external
 import markdown
 # custom
@@ -32,6 +33,7 @@ class Cms (object):
         self.login_manager =flask_login.LoginManager().init_app(app)
         self.user_container = dict()
         self.hash = hashlib.sha1()
+        self.start_mail_server(app)
 
     ###########
     # GENERAL #
@@ -134,3 +136,16 @@ class Cms (object):
             outfile.write(compiled_css)
         # log
         print("[NOTE] Building CSS")
+
+    ###########
+    # Mailing #
+    ###########
+
+    def start_mail_server(self, app):
+        from quirell.webapp.mail_server import Mail_server
+        # mails go into the queue
+        self.mail_queue = multiprocessing.SimpleQueue()
+        # the process handles all the mails
+        mail_process = multiprocessing.Process(target=Mail_server,
+           args=(app, self.mail_queue))
+        mail_process.start()

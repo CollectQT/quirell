@@ -1,15 +1,16 @@
 '''test.py'''
 
 import os
+import time
 from quirell.config import *
 
 class Test (object):
     def __init__ (self):
         import time
         import multiprocessing
-        from quirell.webapp import app, runserver
+        from quirell.webapp import start as webserver
         #
-        web_server = multiprocessing.Process(target=runserver.run)
+        web_server = multiprocessing.Process(target=webserver.run)
         user_sim = multiprocessing.Process(target=user_simulation_requests)
         #
         web_server.start()
@@ -22,7 +23,11 @@ def user_simulation_requests ():
     quirell = 'http://0.0.0.0:5000'
     # make sure you didn't break the basic pages
     assert session.get(quirell).status_code == 200
-    assert session.get(quirell+'/login').status_code == 200
+    assert session.get(quirell+'/test').status_code == 200
+    assert session.get(quirell+'/test').status_code == 200
+    assert session.get(quirell+'/test').status_code == 200
+    assert session.get(quirell+'/test').status_code == 200
+    assert session.get(quirell+'/test').status_code == 200
     assert session.get(quirell+'/signup').status_code == 200
     assert session.get(quirell+'/u/rawr').status_code == 200
     assert session.get(quirell+'/u/nobody_with_this_username').status_code == 200
