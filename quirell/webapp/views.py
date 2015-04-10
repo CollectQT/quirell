@@ -83,16 +83,6 @@ def set_globals():
 
 @app.route('/test')
 def testing():
-    import random
-    cms.mail_queue.put(random.choice([
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        ]))
     return flask.render_template('message.html', html_content='testing')
 
 @app.route('/')
