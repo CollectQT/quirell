@@ -24,7 +24,7 @@ class Cms (object):
         for k,v in CONFIG.items(): app.config[k] = v
         # content building
         misaka.Misaka(app) # markdown
-        self.build_css_automatic()
+        if app.config['DEBUG']: self.build_css_automatic()
         # user management
         try: self.db = Database()
         except: print('[ERROR] Cannot connect to database')
