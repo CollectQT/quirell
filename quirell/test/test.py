@@ -23,11 +23,7 @@ def user_simulation_requests ():
     quirell = 'http://0.0.0.0:5000'
     # make sure you didn't break the basic pages
     assert session.get(quirell).status_code == 200
-    assert session.get(quirell+'/test').status_code == 200
-    assert session.get(quirell+'/test').status_code == 200
-    assert session.get(quirell+'/test').status_code == 200
-    assert session.get(quirell+'/test').status_code == 200
-    assert session.get(quirell+'/test').status_code == 200
+    # assert session.get(quirell+'/test').status_code == 200
     assert session.get(quirell+'/signup').status_code == 200
     assert session.get(quirell+'/u/rawr').status_code == 200
     assert session.get(quirell+'/u/nobody_with_this_username').status_code == 200

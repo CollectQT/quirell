@@ -30,10 +30,9 @@ def set_env():
     try:
         with open(BASE_PATH+'/quirell/ENV.yaml', 'r') as yaml_file:
             for k, v in yaml.load(yaml_file).items():
-                # see if environment variables have already been added
-                try: os.environ[str(k)]
-                # if not, add them
-                except KeyError: os.environ[str(k)] = v
+                CONFIG[k]=v
+                try: os.environ[str(k)] = v
+                except TypeError: pass
     except FileNotFoundError: pass
 
 CONFIG ={
