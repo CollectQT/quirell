@@ -21,7 +21,7 @@ it to the html_content variable like so:
 #}
 {% extends "base.html" %}
 	{% block content %}
-		<main><article class='post'>
+		<main><article class=''>
                 {% autoescape false %}{% filter markdown %}{% block article -%}
                     {{ html_content|safe }}
                 {%- endblock %}{% endfilter %}{% endautoescape %}

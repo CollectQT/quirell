@@ -27,8 +27,7 @@ Organization:
 -----------------*/
 
 // Partials
-@import "quirell/webapp/static/scss/partials/_variables.scss";
-@import "quirell/webapp/static/scss/partials/_mixins.scss";
+@import "quirell/webapp/static/scss/variables.scss";
 
 /*---------------
     HELPER CLASSES
@@ -51,14 +50,15 @@ Organization:
 @-ms-viewport{ width: device-width; }
 
 html, body {
-    @extend %margin_padding_zero;
-    color: $color_body_text;
+    padding: 0;
+    margin: 0;
+    color: $filler_darkest;
     width: 100%;
     height: 100%;
 }
 
 body {
-    background-color: $color_body_bg;
+    background-color: $color_primary;
     overflow-x: hidden;
     font-family: $font_body;
 }
@@ -66,7 +66,7 @@ body {
 /* inline */
 
 h1, h2, h3, h4, h5, p {
-    color: $color_header_text;
+    color: $filler_darkest;
     font-family: $font_body;
     padding: 5px 15px;
 }
@@ -76,13 +76,17 @@ h1, h2 {
     padding: 15px inherit;
 }
 
-a {
+main a {
     cursor: inherit;
-    color: $color_link_text;
+    color: $color_accent;
     text-decoration: inherit;
     &:hover {
         text-decoration: underline;
     }
+}
+
+nav a {
+    text-decoration: none;
 }
 
 .icon {
@@ -98,8 +102,35 @@ a {
 nav {
     position: fixed;
     width: 100%;
-    background-color: $color_nav_bg;
-    box-shadow: 0 0 10px $color_nav_box_shadow;
+    background-color: $filler_light;
+    box-shadow: 0 0 10px $filler_darkest;
+}
+
+nav ul {
+    text-align: right;
+    background-color: $filler_light;
+    overflow: hidden;
+}
+
+nav ul li {
+    transition-property: color, background-color;
+    transition-duration: 0.25s;
+    background-color: $filler_light;
+    color: $filler_darkest;
+    list-style-type: none;
+}
+
+nav ul li:hover {
+    background-color: $color_primary;
+    color: $filler_lightest;
+}
+
+nav ul a > li {
+    display: none;
+}
+
+nav ul:hover a > li {
+    display: list-item;
 }
 
 .nav-block {
@@ -121,24 +152,25 @@ nav {
 }
 
 nav i {
-    color: $filler_light;
+    color: $color_primary;
 }
 
 nav .button {
-    @extend %margin_padding_zero;
+    padding: 0;
+    margin: 0;
     display: inline-block;
     background-color: transparent;
     border: none;
 }
 
 nav .button i, .nav-text, .quirell-icon {
-    color: $color_nav_foreground;
+    color: $color_primary;
 }
 
 /* main content */
 
 .banner {
-    background-color: $color_banner_bg;
+    background-color: $filler_light;
     padding: 10px 10px;
     margin-top: 10px;
 
@@ -152,21 +184,21 @@ nav .button i, .nav-text, .quirell-icon {
 }
 
 .banner-right {
-    background-color: $color_banner_right;
+    background-color: $filler_medium;
 }
 
 article {
-    background-color: $color_article_bg;
+    background-color: $filler_light;
 }
 
 pre {
-    color: $color_pre_text;
-    background-color: $color_pre_bg;
+    color: $filler_lightest;
+    background-color: $filler_darkest;
     font-family: $font_pre;
 }
 
 p code {
-    background-color: $color_code_bg;
+    background-color: $filler_medium;
 }
 
 ul {list-style-type: square;}
@@ -187,12 +219,12 @@ blockquote {
 }
 
 .display-name {
-    color: $color_display_name;
+    color: $filler_darkest;
     font-weight: bold;
 }
 
 .subtext {
-    color: $color_subtext;
+    color: $filler_dark;
     font-size: 0.9em;
 }
 
@@ -205,7 +237,7 @@ blockquote {
     font-size: 1.0em;
     margin-left: auto;
     margin-right: auto;
-    color: $color_post_meta_bottom;
+    color: $filler_dark;
 }
 
 .post-notes {
@@ -226,6 +258,22 @@ blockquote {
     html {
         font-size: 16px;
         line-height: 1.3em;
+    }
+
+    nav ul {
+        margin: 0;
+        padding: 0;
+        border-radius: 5%;
+    }
+
+    nav li {
+        padding-left: 5px;
+        padding-right: 5px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin-top: 2px;
+        margin-bottom: 2px;
+        outline: 1px outset rgba($filler_light, 0.3);
     }
 
     article.double-form {
@@ -294,11 +342,13 @@ blockquote {
     .img-small {
         height: 30px;
         width: 30px;
+        height: 10vw;
+        width: 10vw;
     }
 
     nav {
-        padding-top: 5px;
-        height: 50px;
+        padding-top: 2px;
+        height: 45px;
         height: 11vw;
 
         i {
@@ -325,7 +375,8 @@ blockquote {
     }
 
     article {
-        width: 90%;
+        overflow: hidden;
+        width: 97%;
         margin: 10px auto;
         padding: 10px;
         border-radius: 10px;
@@ -336,7 +387,18 @@ blockquote {
         padding-right: 15px;
     }
 
-    .post-author {
+    article.timeline {
+        padding: 0;
+    }
+
+    .post {
+        padding: 10px;
+        outline: 1px outset rgba($filler_light, 0.3);
+        transition: outline 0.25s;
+    }
+
+    .post:hover {
+        outline: 3px solid rgba($color_accent, 0.5);
     }
 
     .post-meta-top {
@@ -361,9 +423,9 @@ blockquote {
 
     .post-action-bar {
 
-        padding-right: 20px;
-        float: right;
-        text-align: right;
+        padding-right: 0;
+        width: 100%;
+        text-align: left;
     }
 
     .post-action-bar > * {
@@ -399,6 +461,15 @@ blockquote {
 
     nav i {
         font-size: 40px;
+    }
+
+    .nav-text {
+        vertical-align: top;
+        display: inline-block;
+        font-family: $font_body;
+        font-weight: 600;
+        font-size: 1.2em;
+        padding-top: 10px;
     }
 
     .banner-left {
@@ -440,6 +511,14 @@ blockquote {
         max-width: calc(95% - 60px);
     }
 
+    .post-action-bar {
+        padding-right: 20px;
+    }
+
+    .post-action-bar > * {
+        padding: 0 20px;
+    }
+
     article {
         width: 70%;
     }
@@ -473,15 +552,6 @@ blockquote {
         width: 90%;
         padding-left: 5%;
         padding-right: 5%;
-    }
-
-    .nav-text {
-        vertical-align: middle;
-        display: inline-block;
-        font-family: $font_body;
-        font-weight: 600;
-        font-size: 1.3em;
-        height: 40px;
     }
 
     article {

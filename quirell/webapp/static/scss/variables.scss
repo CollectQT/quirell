@@ -1,0 +1,40 @@
+/*---------------
+      COLORS
+-----------------*/
+
+// Literal
+
+$purple: #554488;
+$green: #397D02;
+$grey_dark: #808080;
+$grey_medium: #D0D0D0;
+$grey_light: #EFEFEF;
+$black: #000000;
+
+// General Purpose
+
+$color_primary: $purple;
+$color_accent: $green;
+
+$filler_darkest: $black;
+$filler_dark: $grey_dark;
+$filler_medium: $grey_medium;
+$filler_light: $grey_light;
+$filler_lightest: white;
+
+/*---------------
+      FONTS
+-----------------*/
+
+// Literal
+
+$font_sniglet: 'Sniglet', cursive;
+$font_monospaced: "Lucida Console", "Lucida Sans Typewriter", Monaco, "Bitstream Vera Sans Mono", monospace;
+$font_helvetica: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo, Helvetica, Arial, sans-serif;
+$font_quirell: "Quirell", Arial;
+
+// Specific Purpose
+
+$font_body: $font_sniglet;
+$font_quirell_icon: $font_quirell;
+$font_pre: $font_monospaced;
