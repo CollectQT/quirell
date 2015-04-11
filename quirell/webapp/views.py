@@ -151,7 +151,7 @@ def login_POST():
         password=form.password.data, remember=form.remember_me.data)
     if not success: # user credentials invalid in some way
         return flask.render_template('forms/login.html',
-            login_message=message, standalone=True)
+            login_message=message)
         #return flask.jsonify(messsage=message)
     # go somewhere
     if flask.request.args.get('next'):
