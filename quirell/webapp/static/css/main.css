@@ -198,20 +198,24 @@ nav a {
    padding-right: 0; }
    article.double-form .login-signup-box {
    margin: 0; }
-   .login-signup-box form {
+   .login-message {
+   text-align: center;
+   background-color: rgba(85, 68, 136, 0.25);
+   margin-bottom: 20px; }
+   .login-signup-box form, .form form {
    width: 70%;
    margin-left: auto;
    margin-right: auto; }
-   .login-signup-box label input {
+   .login-signup-box label input, .form label input {
    width: auto; }
    .login-signup-box .submit {
-   width: auto;
-   display: block;
-   margin-left: auto;
-   margin-right: auto;
-   margin-top: 10px;
-   margin-bottom: 10px; }
-   .login-signup-box input {
+    width: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px; }
+    .login-signup-box input, .form input {
     box-sizing: border-box;
     width: 100%;
     margin-top: 5px;
@@ -242,10 +246,10 @@ nav a {
     height: 45px;
     height: 11.5vw; }
     nav i {
-    font-size: 30px;
-    font-size: 10vw;
-    margin-left: 15px;
-    margin-right: 5px; }
+     font-size: 30px;
+     font-size: 10vw;
+     margin-left: 15px;
+     margin-right: 5px; }
   .quirell-icon {
    font-size: 50px;
    font-size: 10vw;
@@ -347,7 +351,7 @@ nav a {
   padding: 0 20px; }
   article {
   width: 70%; }
-  main.double-form {
+  main.double-form, main.form {
   width: 75%;
   text-align: center; }
   .double-form .login-signup-box {

@@ -286,18 +286,20 @@ blockquote {
         margin: 0;
     }
 
-    .login-signup-box form {
+    .login-message {
+        text-align: center;
+        background-color: rgba($color_primary, 0.25);
+        margin-bottom: 20px;
+    }
+
+    .login-signup-box form, .form form {
         width: 70%;
         margin-left: auto;
         margin-right: auto;
     }
 
-    .login-signup-box label input {
+    .login-signup-box label input, .form label input {
         width: auto;
-    }
-
-    article.double-form .login-signup-box.signup {
-
     }
 
     .login-signup-box .submit {
@@ -309,7 +311,7 @@ blockquote {
         margin-bottom: 10px;
     }
 
-    .login-signup-box input {
+    .login-signup-box input, .form input {
         box-sizing: border-box;
         width: 100%;
         margin-top: 5px;
@@ -529,7 +531,7 @@ blockquote {
         width: 70%;
     }
 
-    main.double-form {
+    main.double-form, main.form {
         width: 75%;
         text-align: center;
     }

@@ -1,18 +1,14 @@
 {% extends "base.html" %}
     {% block content %}
-        <main><article class='post form'>
+        <main class='form'><article>
             <h1>Login</h1>
-            {% autoescape false %}{{ login_message }}{% endautoescape %}
+            <div class='login-message'>{{ login_message }}</div>
             <form action="/login?next={{ next }}" method="POST">
                 {{ login.hidden_tag() }}
-                <p>
-                    Enter your username:<br>
-                    {{ login.username(size=40) }}<br>
-                    Enter your Password:<br>
-                    {{ login.password(size=40) }}<br>
-                </p>
-                <p>{{ login.remember_me }} Remember Me</p>
-                <p><input type="submit" value="Sign In"></p>
+                {{ login.username(id='combo-login-username', placeholder='username') }}
+                {{ login.password(id='combo-login-password', placeholder='password') }}
+                <label>{{ login.remember_me() }} Remember Me</label>
+                <input type="submit" value="Login" class='submit'>
             </form>
         </article></main>
     {% endblock %}
