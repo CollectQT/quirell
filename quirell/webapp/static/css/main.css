@@ -35,11 +35,11 @@
   h1, h2, h3, h4, h5, p {
   color: #000000;
   font-family: 'Sniglet', cursive;
-  padding: 5px 15px; }
+  padding: 5px 10px;
+  line-height: 1.5em; }
 
   h1, h2 {
-  text-align: center;
-  padding: 15px inherit; }
+  text-align: center; }
 
   main a {
   cursor: inherit;
@@ -126,7 +126,8 @@ nav a {
  background-color: #D0D0D0; }
 
  article {
- background-color: #EFEFEF; }
+ background-color: #EFEFEF;
+ box-sizing: border-box; }
 
  pre {
  color: white;
@@ -239,7 +240,7 @@ nav a {
     nav {
     padding-top: 2px;
     height: 45px;
-    height: 11vw; }
+    height: 11.5vw; }
     nav i {
     font-size: 30px;
     font-size: 10vw;
@@ -253,7 +254,8 @@ nav a {
    display: none; }
    main {
    margin: 0 auto;
-   padding-top: 60px; }
+   padding-top: 60px;
+   padding-top: 16vw; }
    article {
    overflow: hidden;
    width: 97%;
@@ -302,7 +304,9 @@ nav a {
 
 @media all and (min-width: 500px) {
  nav {
- height: 50px; }
+ height: 45px; }
+ main {
+ padding-top: 60px; }
  nav i {
  font-size: 40px; }
  .nav-text {
@@ -325,9 +329,9 @@ nav a {
  height: 100px;
  width: 100px; }
  .img-mid {
- height: 60px;
- width: 60px; }
- .img-small {
+  height: 60px;
+  width: 60px; }
+  .img-small {
   height: 40px;
   width: 40px; }
   .quirell-icon {
@@ -347,11 +351,11 @@ nav a {
   width: 75%;
   text-align: center; }
   .double-form .login-signup-box {
-  width: 100%;
-  display: inline-block;
-  margin-left: 10px;
-  margin-right: 10px; }
-  .banner {
+   width: 100%;
+   display: inline-block;
+   margin-left: 10px;
+   margin-right: 10px; }
+   .banner {
    padding-left: 5%;
    padding-right: 5%; }
 }

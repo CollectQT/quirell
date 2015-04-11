@@ -68,12 +68,12 @@ body {
 h1, h2, h3, h4, h5, p {
     color: $filler_darkest;
     font-family: $font_body;
-    padding: 5px 15px;
+    padding: 5px 10px;
+    line-height: 1.5em;
 }
 
 h1, h2 {
     text-align: center;
-    padding: 15px inherit;
 }
 
 main a {
@@ -189,6 +189,7 @@ nav .button i, .nav-text, .quirell-icon {
 
 article {
     background-color: $filler_light;
+    box-sizing: border-box;
 }
 
 pre {
@@ -349,7 +350,7 @@ blockquote {
     nav {
         padding-top: 2px;
         height: 45px;
-        height: 11vw;
+        height: 11.5vw;
 
         i {
                 font-size: 30px;
@@ -372,6 +373,7 @@ blockquote {
     main {
         margin: 0 auto;
         padding-top: 60px;
+        padding-top: 16vw;
     }
 
     article {
@@ -456,7 +458,11 @@ blockquote {
 @media all and (min-width: 500px){
 
     nav {
-        height: 50px;
+        height: 45px;
+    }
+
+    main {
+        padding-top: 60px;
     }
 
     nav i {
