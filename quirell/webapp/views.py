@@ -299,7 +299,7 @@ def load_user (username):
 def shutdown():
     from quirell.webapp.shutdown import shutdown_server
     if app.config['DEBUG'] == False: return 'Invalid shutdown request'
-    cms.mail_queue.put('shutdown')
+    cms.mail_queue.put({'task':'shutdown'})
     shutdown_server()
     return 'Server shutting down...'
 
