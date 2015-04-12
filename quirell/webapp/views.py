@@ -216,7 +216,7 @@ def user_request(username):
     user, timeline = cms.get_user_page(user_self=current_user, user_req=username)
     # user was not found, or blocked, who knows
     if not user:
-        return flask.render_template('paths/user_not_found.html')
+        return flask.render_template('paths/user_not_found.html'), 404
     else:
         return flask.render_template('profile.html', user=user,
             timeline=timeline)
