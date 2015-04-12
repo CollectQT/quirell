@@ -9,12 +9,15 @@ class login (flask_wtf.Form):
     remember_me = BooleanField('remember_me', default=False)
 
 class signup (flask_wtf.Form):
-    username = StringField('username')
-    email = StringField('email address')
+    username = StringField('username',
+        [validators.Required()])
+    email = StringField('email address',
+        [validators.Required()])
     password = PasswordField('password',
         [validators.EqualTo('confirm', message='passwords must match')])
     confirm = PasswordField('repeat password')
-    secret_password = StringField('secret_password')
+    secret_password = StringField('secret_password',
+        [validators.Required()])
 
 class new_post (flask_wtf.Form):
     content = TextField('content')
