@@ -91,10 +91,12 @@ def index ():
 
 @app.route('/login')
 def login():
+    if current_user.is_authenticated(): return flask.redirect('/')
     return flask.render_template('forms/login_signup.html')
 
 @app.route('/signup')
 def signup():
+    if current_user.is_authenticated(): return flask.redirect('/')
     return flask.render_template('forms/login_signup.html')
 
 @app.route('/user')
