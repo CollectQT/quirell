@@ -4,7 +4,7 @@
 <article>
     <div class='login-signup-box login'>
         <h2>Login</h2>
-        <div class='login-message'>{{ login_message }}</div>
+        <div class='login-message'>{% filter markdown %}{{ login_message }}{% endfilter %}</div>
         <form action="/login?next={{ next }}" method="POST">
             {{ login.hidden_tag() }}
             {{ login.username(id='combo-login-username', placeholder='username') }}

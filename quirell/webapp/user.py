@@ -63,6 +63,13 @@ class User (flask_login.UserMixin):
         # and if their password matches the db password
         if not cms.bcrypt.check_password_hash(node['password'], password):
             return False, 'Incorrect password'
+        # and if they are active
+        if not node['active']:
+            return False, '''
+Account not active.
+
+Click [this link](/send_confirmation/{}) to send an activation email
+                '''.format(username)
         # user considered successfully logged in at this point
         self.node = node # attrach node to instance
         cms.add_user(username, self) # add user instance to cms
