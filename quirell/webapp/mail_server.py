@@ -16,11 +16,13 @@ class Mail_server (object):
             if self.mail_queue.empty():
                 time.sleep(1)
                 continue
-            task = self.mail_queue.get()
-            if task == 'shutdown':
+            kwargs = self.mail_queue.get()
+            if kwargs['task'] == 'shutdown':
                 print('[NOTE] Shutting Down Mailer')
                 break
-            #self.send_mail()
+            elif kwargs['task'] == 'account confirmation':
+                print('[NOTE] Sending account confirmation email')
+                self.send_account_confirmation_email(kwargs['inputs'])
 
     def send_mail(self):
         with self.app.app_context():
