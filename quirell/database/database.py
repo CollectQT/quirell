@@ -219,9 +219,9 @@ class Database (object):
         recordlist = self.db.cypher.execute('''
             MATCH (user:user {username:{username}})
             OPTIONAL MATCH (user)-[created:CREATED]->(post:post {post_id:{post_id}})
-            RETURN user, post, created
+            RETURN user, created, post
             ''', parameters=parameters)
-        return recordlist[0]['user'], recordlist[0]['post'], recordlist[0]['created']
+        return recordlist[0]['user'], recordlist[0]['created'], recordlist[0]['post']
 
     def load_timeline (self, owner):
         parameters = {'username': owner}
