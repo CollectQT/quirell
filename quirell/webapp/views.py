@@ -262,6 +262,12 @@ def logout():
 def timeline():
     pass
 
+@app.route('/delete_account' methods=['POST'])
+def delete_account_POST():
+    password = request.args.get('password')
+    message, status = current_user.delete_account(password)
+    return flask.render_template('message.html', html_content=message), status
+
 ########
 # TECH #
 ########

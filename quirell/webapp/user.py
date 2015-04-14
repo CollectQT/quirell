@@ -124,8 +124,13 @@ Click [this link](/send_confirmation/{}) to send an activation email
 
     def is_authenticated (self): return True
 
-    def delete_account (self):
+    def delete_account (self, password):
+        # confirm password
+        if not cms.bcrypt.check_password_hash(self['password'], password):
+            return 'Incorrect Password', 401
+        # do deletion
         cms.db.delete_account(self.node)
+        return 'Account deleted', 200
 
     def get_all_data (self):
         cms.db.get_all_data(self.node)
