@@ -182,11 +182,14 @@ class Database (object):
     def create_user (self, properties):
         # create a new user
         user_node = py2neo.Node('user', **properties)
-        try: self.db.create(user_node)
-        except CypherExecutionException:
-            # something here about duplicate usernames and passwords
-            pass
-        print('[NOTE] Creating new user')
+        try:
+            self.db.create(user_node)
+            print('[NOTE] Creating new user')
+            return True, ''
+        except Exception as e:
+            # do some stuff here with parsing e
+            print('[ERROR] Tried to create a duplicate username or email address. Details: \n'+str(e))
+            return False, str(e)
 
     def create_post (self, user, post_properties, relationship_properties):
         # create new post, and a relationship for the poster
