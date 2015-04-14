@@ -11,9 +11,10 @@ There are 4 labels, which define the primary types of content in the database
 * notes
 * timeline
 
-For (user)-->(user), theres two types of relationships:
+For (user)-->(user), theres three types of relationships:
 * BLOCKS
 * RELATES
+* FOLLOWS
 
 Other (user)-->() relationships are:
 * [CREATED]->(post)
