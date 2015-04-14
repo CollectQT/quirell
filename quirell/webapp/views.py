@@ -266,6 +266,7 @@ def timeline():
 def delete_account_POST():
     password = request.args.get('password')
     message, status = current_user.delete_account(password)
+    flask_login.logout_user() # account deletion should definitely log you out
     return flask.render_template('message.html', html_content=message), status
 
 ########
