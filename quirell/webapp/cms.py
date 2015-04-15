@@ -5,6 +5,7 @@ import hashlib
 import multiprocessing
 # external
 import markdown
+import itsdangerous
 # custom
 from quirell.config import *
 from quirell.database import Database
@@ -33,6 +34,7 @@ class Cms (object):
         self.login_manager =flask_login.LoginManager().init_app(app)
         self.user_container = dict()
         self.hash = hashlib.sha1()
+        self.serialize = itsdangerous.URLSafeSerializer(app.config['SECRET_KEY'])
         self.start_mail_server(app)
 
     ###########
@@ -95,6 +97,40 @@ class Cms (object):
         try: user = self.user_container[username]
         except KeyError: user = None
         return user
+
+    def send_confirmation_email (self, username, url_root):
+        user = self.db.load_user(username)
+        if not user['active']:
+            self.mail_queue.put(
+                {'task': 'account confirmation',
+                'inputs': {
+                    'url_root': url_root,
+                    'email': user['email'],
+                    'display_name': user['display_name'],
+                    'username': user['username'],
+                    'confirmation_code': user['confirmation_code'],
+                    },
+                })
+            return 'Sending confirmation email to {}'.format(user['email']), 200
+        else:
+            return 'Could not send confirmation email', 401
+
+    def activate_account (self, confirmation_code='', username=''):
+        # set user
+        if confirmation_code:
+            user = self.db.load_user_from_confirmation_code(confirmation_code)
+        elif username:
+            user = self.db.load_user(username)
+        # do work on user
+        if not user['active']:
+            user['active'] = True
+            user['confirmation_code'] = ''
+            user.push()
+            return 'Account actived!', 200
+        elif user['active']:
+            return 'Account already active', 401
+        else:
+            return 'Could not confirm account', 401
 
     ################
     # CSS BUILDING #

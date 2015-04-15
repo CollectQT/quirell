@@ -175,8 +175,9 @@ def signup_POST():
     if not form.secret_password.data == THE_PASSWORD: flask.abort(401)
     user = User()
     user.create(username=form.username.data, password=form.password.data,
-        email=form.email.data)
-    return flask.render_template('message.html', html_content='signup successful')
+        email=form.email.data, url_root=flask.request.url_root)
+    return flask.render_template('message.html',
+        html_content='Almost there! An email was sent to you to confirm your sigup')
 
 @app.route('/new_post', methods=['POST'])
 @flask_login.login_required
@@ -241,6 +242,17 @@ def new_post():
 def post_request(username, post_id):
     pass
 
+@app.route('/send_confirmation/<username>')
+def send_account_confirmation_email(username):
+    if not username[0] == '@': username = '@'+username
+    message, status = cms.send_confirmation_email(username, flask.request.url_root)
+    return flask.render_template('message.html', html_content=message), status
+
+@app.route('/confirm_account/<confirmation_code>')
+def confirm_user_account(confirmation_code):
+    message, status = cms.activate_account(confirmation_code=confirmation_code)
+    return flask.render_template('message.html', html_content=message), status
+
 @app.route('/settings')
 @flask_login.login_required
 def settings():
@@ -262,7 +274,7 @@ def logout():
 def timeline():
     pass
 
-@app.route('/delete_account' methods=['POST'])
+@app.route('/delete_account', methods=['POST'])
 def delete_account_POST():
     password = request.args.get('password')
     message, status = current_user.delete_account(password)

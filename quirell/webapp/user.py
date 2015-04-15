@@ -76,7 +76,7 @@ Click [this link](/send_confirmation/{}) to send an activation email
         flask_login.login_user(self, remember=remember) # add to login manager
         return True, self
 
-    def create (self, username, password, email):
+    def create (self, username, password, email, url_root):
         '''
         create a new user
 
@@ -86,6 +86,8 @@ Click [this link](/send_confirmation/{}) to send an activation email
         username: a URL safe string. which probably means UTF8 at the
             very least, but also excluding certain special symbols
         password: a string hashable by bcrypt
+        active: boolean, defaults to false, disallows logins while false
+        confirmation_code: an int. needed to become active
         email: a string containing a valid email address
         description: a string containing markdown
         display_name: a string
@@ -99,9 +101,13 @@ Click [this link](/send_confirmation/{}) to send an activation email
         pictures_amount: an int
         '''
         # initalize a node
+        import os
+        import codecs
         properties = {
             'username': '@'+username,
             'password': cms.bcrypt.generate_password_hash(password),
+            'active': False,
+            'confirmation_code': cms.serialize.dumps(email),
             'email': email,
             'description': '',
             'display_name': username,
@@ -113,6 +119,8 @@ Click [this link](/send_confirmation/{}) to send an activation email
             }
         # then send it to the database
         cms.db.create_user(properties)
+        # and send the account confirmation email
+        cms.send_confirmation_email(properties['username'], url_root)
 
     ###############
     # general use #

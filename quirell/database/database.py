@@ -190,6 +190,9 @@ class Database (object):
             ''', parameters=parameters)
         return recordlist[0]['user'], recordlist[0]['created'], recordlist[0]['post']
 
+    def load_user_from_confirmation_code (self, confirmation_code):
+        return self.db.find_one('user', 'confirmation_code', confirmation_code)
+
     def load_timeline (self, owner):
         parameters = {'username': owner}
         recordlist = self.db.cypher.execute('''

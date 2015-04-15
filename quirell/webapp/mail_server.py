@@ -32,3 +32,21 @@ class Mail_server (object):
             msg.body = 'rawr'
             msg.html = '<h1>rawr</h1>'
             self.mail.send(msg)
+
+    def send_account_confirmation_email(self, inputs):
+        with self.app.app_context():
+            msg = flask_mail.Message()
+            msg.subject = 'Confirm Your Quirell Account'
+            msg.recipients = [inputs['email']]
+            # msg.html = ''
+            msg.body = '''
+Hey {display_name}!
+
+Confirm you account on Quirell by going to the link below:
+
+{url_root}confirm_account/{confirmation_code}
+                '''.format(display_name=inputs['display_name'],
+                    username=inputs['username'],
+                    confirmation_code=inputs['confirmation_code'],
+                    url_root=inputs['url_root'])
+            self.mail.send(msg)
