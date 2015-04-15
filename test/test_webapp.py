@@ -12,28 +12,21 @@ import itsdangerous
 from quirell.config import *
 from quirell.webapp import runserver, app
 
-def test_user_simulation_requests ():
-
-    ###########
-    # startup #
-    ###########
+def test_setup_webserver():
     web_server = multiprocessing.Process(target=runserver.run)
     web_server.start()
-    session = requests.Session()
 
-    ###############
-    # basic pages #
-    ###############
-    time.sleep(3) # give the server a few to start up
+def test_basic_pages():
+    time.sleep(1) # give the server a few to start up
+    session = requests.Session()
     assert session.get('http://0.0.0.0:5000'+'/').status_code == 200
     assert session.get('http://0.0.0.0:5000'+'/signup').status_code == 200
     assert session.get('http://0.0.0.0:5000'+'/u/@cyrin').status_code == 200
     assert session.get('http://0.0.0.0:5000'+'/profile').status_code == 401
     assert session.get('http://0.0.0.0:5000'+'/u/nobody_with_this_username').status_code == 404
 
-    ##################
-    # user functions #
-    ##################
+def test_user_functions():
+    session = requests.Session()
     login = {
         'username': 'cyrin',
         'password': os.environ.get('CYRIN'),
@@ -59,9 +52,8 @@ def test_user_simulation_requests ():
     # assert... something
     # assert create post
 
-    ###########################
-    # account create / delete #
-    ###########################
+def test_account_create_and_delete():
+    session = requests.Session()
     username = 'test_kitten_quirell_account'
     password = 'test_kitten_access_code'
     email = 'firemagelynn+quirelltesting@gmail.com'
@@ -102,8 +94,5 @@ def test_user_simulation_requests ():
     assert session.post('http://0.0.0.0:5000'+'/delete_account', data=password).status_code == 200 # actually delete account
     assert session.get('http://0.0.0.0:5000'+'/u/'+username).status_code == 404 # shouldnt exist
 
-    # don't leave the server on forever
-    session.post('http://0.0.0.0:5000/shutdown')
-
-if __name__ == "__main__":
-    test_user_simulation_requests()
+def test_shutdown_server():
+    requests.post('http://0.0.0.0:5000/shutdown')
