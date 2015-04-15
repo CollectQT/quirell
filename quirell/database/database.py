@@ -51,14 +51,7 @@ CREATE
 
 // test every individual reader. each one needs their own query that needs to be inspected
 
-// basic query, with reader parameter
-
-MATCH (owner:user {name:"owner"}), (reader:user {name:"{reader_name}"})
-MERGE (owner)-[relates:RELATES]->(reader) ON CREATE SET relates.access=[] WITH *
-MATCH (owner)-[created:CREATED]->(content:post)
-WHERE NOT (owner)-[:BLOCKS]->(reader) AND
-    length(filter(permission IN relates.access WHERE permission in created.access))>=length(created.access)
-RETURN content
+(see the `view_timeline` function to see what the query looks like)
 
 // Testing format is... parameter : assert(len(content)
 
@@ -116,32 +109,6 @@ import yaml
 import py2neo
 # custom
 from quirell.config import *
-
-####################
-# helper functions #
-####################
-
-# these are formatted as functions mainly because it is easier to read
-# them in that format. They shouldn't actually be called, instead copy
-# their return into the appropriate place in the code.
-
-def access_posts ():
-    # filters for access between two users. inputs:
-    # * owner:user
-    # * reader:user
-    # * relates:RELATES
-    # * created:CREATED
-    return '''WHERE NOT (owner)-[:BLOCKS]->(reader) AND
-        length(filter(permission IN relates.access WHERE permission in created.access))>=length(created.access)'''
-
-def access_posts_public ():
-    # filters for public access. inputs:
-    # * created:CREATED
-    return 'WHERE length(created.access)=0'
-
-def create_timeline ():
-    # used to create a timeline from a record list
-    return [{'post':post, 'user':user} for user, post in recordlist]
 
 #######################
 # main database class #
@@ -260,7 +227,20 @@ class Database (object):
         return user, timeline
 
     def view_timeline (self, owner, reader):
-        pass
+        parameters = {'owner':owner, 'reader':reader}
+        recordlist = self.db.cypher.execute('''
+            MATCH (owner:user {username:{owner}})
+            MATCH (reader:user {username:{reader}})
+            MERGE (owner)-[relates:RELATES]->(reader) ON CREATE SET relates.access=[] WITH *
+            OPTIONAL MATCH (owner)-[created:CREATED]->(post:post)
+            WHERE NOT (owner)-[:BLOCKS]->(reader) AND
+            length(filter(permission IN relates.access WHERE permission in created.access))>=length(created.access)
+            RETURN owner, post ORDER BY post.datetime desc LIMIT 50
+            ''', parameters=parameters)
+        timeline = [{'post':post, 'user':user} for user, post in recordlist]
+        try: user = recordlist[0]['owner']
+        except IndexError: user = None
+        return user, timeline
 
     ##################
     # self functions #
