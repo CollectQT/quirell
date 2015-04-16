@@ -20,7 +20,7 @@ Then there are project requirements. They are the following:
 
 Then getting the source code for Quirell itself...
 
-    $ git clone git@gitlab.com:collectqt/quirell.git -b develop
+    $ git clone git@gitlab.com:collectqt/quirell.git
 
 ...and activating it.
 
@@ -29,7 +29,7 @@ Then getting the source code for Quirell itself...
     $ source venv/bin/activate
     $ pip install -r requirements.txt
 
-Note that you'll have to source the virtual environment everytime you open a new terminal window to work on Quirell code. This is the `$ source venv/bin/activate` line. Because of this, you should probaly alias that command to something shorter (I have it as `$ sv`). 
+Note that you'll have to source the virtual environment everytime you open a new terminal window to work on Quirell code. This is the `$ source venv/bin/activate` line. Because of this, you should probaly alias that command to something shorter (I have it as `$ sv`).
 
 The last 'installation' step is to set the access keys for remote resources (the neo4j database and the AWS server). Unfortunately there's only one set of keys at the moment (that is, there are no keys specifically for testing), so you'll have to ask someone on CollectQT to get you the environment keys. Or even better, create some resources on your own to test with! When you do get some keys, you should put them into an `ENV.yaml` file inside of of the quirell folder, beside `config.py`. The contents of the folder would look like this:
 
