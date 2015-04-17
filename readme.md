@@ -1,7 +1,5 @@
 # Quirell Project Readme
 
-**Important! You have to make sure to clone the develop branch! Gitlab doesn't allow setting remote heads, so the default is master (which doesn't exist)**
-
 ## Setting up Quirell Locally
 
 This section assumes you are running a Linux distrubution, specifically Ubuntu. The code will probably run on something other than that, but no promises! Beyond that requirement, you also need to have basic familiarity with:
@@ -12,22 +10,19 @@ This section assumes you are running a Linux distrubution, specifically Ubuntu. 
 Then there are project requirements. They are the following:
 
 	# python, 2 python developer packages, and other systemwide dependencies
-    $ sudo add-apt-repository ppa:fkrull/deadsnakes
-    $ sudo apt-get update
-    $ sudo apt-get install python3.4 python3.4-dev python-dev
-    $ sudo apt-get install git python-pip python-virtualenv
-    $ wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
+    $ sudo add-apt-repository ppa:fkrull/deadsnakes \
+        && sudo apt-get update \
+        && sudo apt-get install -y python3.4 python3.4-dev python-dev \
+        && sudo apt-get install -y git python-pip python-virtualenv \
+        && wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
 
-Then getting the source code for Quirell itself...
+    # get the quirell source code
+    $ git clone git@gitlab.com:collectqt/quirell.git && cd quirell
 
-    $ git clone git@gitlab.com:collectqt/quirell.git
-
-...and activating it.
-
-    $ cd quirell
-    $ virtualenv -p python3.4 venv
-    $ source venv/bin/activate
-    $ pip install -r requirements.txt
+    # active the environment
+    $ virtualenv -p python3.4 venv \
+        && source venv/bin/activate \
+        && pip install -r requirements.txt
 
 Note that you'll have to source the virtual environment everytime you open a new terminal window to work on Quirell code. This is the `$ source venv/bin/activate` line. Because of this, you should probaly alias that command to something shorter (I have it as `$ sv`).
 
@@ -44,9 +39,9 @@ You can probably run the code without using remote resources, but it'll be borin
 
 After everything has installed you should try to start a test run with
 
-    $ python -m quirell.test
+    $ py.test
 
-A successful run will, amoung other things, not print any lines that start with `[ERROR]`, and will print a bunch of GET and POST requests. If something is super wrong you'll get a traceback with an `AssertionError`. If everything is fine then try and run the application outside of a testing context with
+You'll get a message about whether or not all the tests have passed. If everything is fine (i.e. no assertion errors) then try and run the application outside of a testing context with
 
     $ python -m quirell.webapp
 
@@ -64,12 +59,14 @@ Figure out what sort of changes you are going to make, and how comfortable you a
 
 Setting up a new branch and submitting a merge request is a... process. It goes like so. Starting from inside of a currently existing git repo (which can be empty):
 
-    git checkout -b add-smiley-support # <- create a new branch
+    $ git checkout -b add-smiley-support # <- create a new branch
+
     # set a link to our quirell remote via ssh...
-    git config remote.quirell.url git@gitlab.com:collectqt/quirell.git
+    $ git config remote.quirell.url git@gitlab.com:collectqt/quirell.git
+
     # ...or https, your choice.
-    git config remote.quirell.url https://gitlab.com/collectqt/quirell.git
-    git pull quirell develop
+    $ git config remote.quirell.url https://gitlab.com/collectqt/quirell.git
+    $ git pull quirell develop
 
 This should pull our develop branch onto your "add-smiley-support" branch (or wahtever its called). If this doesn't work, go find someone to ask for help!
 
@@ -85,9 +82,9 @@ If you added packages, add them to the requirements via
 
     $ pip freeze > requirements.txt
 
-If you added new features, try to figure out a way to test them via adding to them `quirell/test/test.py` and running
+If you added new features, try to figure out a way to test them via adding to them `/test/test_webapp.py` and running
 
-    $ python -m quirell.test
+    $ py.test
 
 **If you are a core maintainer** you will be expected to pull changes from **'develop'** into **'production'**, then push them to heroku. The do that, run:
 
