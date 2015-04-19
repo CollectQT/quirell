@@ -328,20 +328,14 @@ def favicon():
         'webapp', 'static'), 'favicon.png')
 
 # sign an upload request before if goes up to the s3 server
-@app.route('/sign_s3/')
+@app.route('/sign_upload/')
 @flask_login.login_required
-def sign_s3():
+def sign_upload():
     import base64
     import hmac
     import mimetypes
-    #
-    AWS_ACCESS_KEY = os.environ.get('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-    S3_BUCKET = os.environ.get('S3_BUCKET')
-    # no huge pictues
-    if int(flask.request.args.get('file_size')) > 5000000:
-        flask.abort(401)
-    # object naming
+
+    # naming
     # if its a profile picture, name it with a hash of username
     if bool(flask.request.args.get('is_profile_picture')):
         cms.hash.update((current_user['username']).encode(encoding='utf-8'))
@@ -350,19 +344,7 @@ def sign_s3():
         name = current_user['username'] + current_user['pictures_amount']
         cms.hash.update((name).encode(encoding='utf-8'))
     object_name = cms.hash.hexdigest() + '.' + flask.request.args.get('file_ext')
-    mime_type = flask.request.args.get('s3_object_type')
-    if not mime_type.split('/')[0] == 'image':
-        # do some sort of thing where we tell ppl to only upload images
-        pass
-    # security things
-    expires = int(time.time()+10)
-    amz_headers = "x-amz-acl:public-read"
-    put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, S3_BUCKET, object_name)
-    signature = base64.encodestring(hmac.new(AWS_SECRET_KEY.encode(encoding='utf-8'), put_request.encode(encoding='utf-8'), hashlib.sha1).digest())
-    signature = urllib.parse.quote_plus(signature.strip())
-    url = 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, object_name)
-    #
-    return json.dumps({
-        'signed_request': '%s?AWSAccessKeyId=%s&Expires=%d&Signature=%s' % (url, AWS_ACCESS_KEY, expires, signature),
-         'url': url
-      })
+
+    # signing
+
+    # return
