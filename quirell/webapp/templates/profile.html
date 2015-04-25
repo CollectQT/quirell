@@ -4,16 +4,16 @@
     {% block user_account_start %}{% endblock %}
 
     <div class='banner'>
-        <div class='middle'>
+        <div class='middle h-card'>
             <div class='middle banner-left' href='/u/{{ user.username }}'>
-                <div class='avatar'><img class='img_preview profile_picture avatar img-large' src="{{ user.profile_picture }}" alt='{{ user.username}} Avatar'></div>
+                <div class='avatar'><img class='img_preview profile_picture avatar img-large u-photo' src="{{ user.profile_picture }}" alt='{{ user.username}} Avatar'></div>
                 <div>
-                    <span class='display-name'>{% block user_display_name %}{{ user.display_name }}{% endblock %}</span>
-                    <span class='pronouns subtext'>({% block user_pronouns %}{{ user.pronouns }}{% endblock %})</span>
-                    <span class='username subtext'>{{ user.username }}</span>
+                    <span class='display-name p-name'>{% block user_display_name %}{{ user.display_name }}{% endblock %}</span>
+                    <span class='pronouns subtext'>(<span class="p-x-pronoun-nominative">{% block user_pronouns %}{{ user.pronouns }}{% endblock %}</span>)</span>
+                    <a class='username subtext p-nickname u-url' rel='me' href='/u/{{ user.username }}'>{{ user.username }}</a>
                 </div>
             </div>
-            <div class='banner-right'>
+            <div class='banner-right p-note'>
                 {% block user_description %}{{ user.description }}{% endblock %}
             </div>
         </div>
