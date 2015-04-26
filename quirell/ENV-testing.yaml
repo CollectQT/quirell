@@ -1,0 +1,16 @@
+GRAPHENEDB_URL: ''
+S3_KEY: ''
+S3_SECRET: ''
+S3_BUCKET: ''
+#
+MAIL_SERVER: 'smtp.gmail.com'
+MAIL_PORT: 465
+MAIL_USE_TLS: True
+MAIL_USE_SSL: True
+MAIL_USERNAME: ''
+MAIL_PASSWORD: ''
+MAIL_DEFAULT_SENDER: ''
+#
+THE_PASSWORD: 'likefivehundredthousandkittens'
+CYRIN: 'cyrin'
+DEBUG: True

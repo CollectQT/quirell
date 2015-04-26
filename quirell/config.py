@@ -23,17 +23,19 @@ BASE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..',))
 # and forget to update it in another
 MAX_POSTS = 300
 
-# where files go
-UPLOAD_SERVER = 'https://quirell.s3.amazonaws.com/'
+def to_environ(items):
+    for k, v in items:
+        CONFIG[k]=v
+        try: os.environ[str(k)] = v
+        except TypeError: pass
 
 def set_env():
     try:
         with open(BASE_PATH+'/quirell/ENV.yaml', 'r') as yaml_file:
-            for k, v in yaml.load(yaml_file).items():
-                CONFIG[k]=v
-                try: os.environ[str(k)] = v
-                except TypeError: pass
-    except FileNotFoundError: pass
+            to_environ(yaml.load(yaml_file).items())
+    except FileNotFoundError:
+        with open(BASE_PATH+'/quirell/ENV-testing.yaml', 'r') as yaml_file:
+            to_environ(yaml.load(yaml_file).items())
 
 CONFIG ={
     'WTF_CSRF_ENABLED': True,

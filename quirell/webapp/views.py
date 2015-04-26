@@ -335,8 +335,8 @@ def sign_s3():
     import hmac
     import mimetypes
     #
-    AWS_ACCESS_KEY = os.environ.get('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    AWS_ACCESS_KEY = os.environ.get('S3_KEY')
+    AWS_SECRET_KEY = os.environ.get('S3_SECRET')
     S3_BUCKET = os.environ.get('S3_BUCKET')
     # no huge pictues
     if int(flask.request.args.get('file_size')) > 5000000:
