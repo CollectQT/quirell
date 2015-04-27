@@ -1,3 +1,14 @@
+# code defaults to using this when ENV.yaml is not present, but really
+# this file is only in source control as an ---EXAMPLE---, which means:
+#
+# * dont actually use these values
+# * dont put your email and password in here
+# * dont put your secret key in here
+# * be constantly aware of the fact that this file is kept in source control
+# * make an ENV.yaml file that looks like this, and put your info there
+#
+# CollectQT won't be responsible for you not following the directions above ;p
+
 GRAPHENEDB_URL: ''
 S3_KEY: ''
 S3_SECRET: ''
@@ -11,6 +22,7 @@ MAIL_USERNAME: ''
 MAIL_PASSWORD: ''
 MAIL_DEFAULT_SENDER: ''
 #
+SECRET_KEY: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 THE_PASSWORD: 'likefivehundredthousandkittens'
 CYRIN: 'cyrin'
-DEBUG: True
+DEBUG: 'True'
