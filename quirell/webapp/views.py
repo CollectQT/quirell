@@ -11,7 +11,6 @@ import flask
 import flask.ext.login as flask_login
 # custom
 from quirell.config import *
-from quirell.webapp import forms
 from quirell.webapp import app
 from quirell.webapp import cms
 
@@ -66,12 +65,11 @@ def format_time(time_string, time_zone=None):
 
 @app.context_processor
 def set_globals():
-    # forms
-    login = forms.login()
-    new_post = forms.new_post()
-    signup = forms.signup()
-    return dict(flask=flask, current_user=current_user, is_current=is_current,
-        login=login, signup=signup, new_post=new_post, format_time=format_time)
+    return dict(
+        flask=flask,
+        current_user=current_user,
+        is_current=is_current,
+        format_time=format_time)
 
 #@app.before_first_request
 #@app.before_request
@@ -147,10 +145,11 @@ def render_file(filename):
 @app.route('/login', methods=['POST'])
 def login_POST():
     from quirell.webapp.user import User
-    form = forms.login()
     user = User()
-    success, message = user.login(username=form.username.data,
-        password=form.password.data, remember=form.remember_me.data)
+    success, message = user.login(
+        username=flask.request.form['username'],
+        password=flask.request.form['password'],
+        remember=flask.request.form['remember_me'],)
     if not success: # user credentials invalid in some way
         return flask.render_template('forms/login.html',
             login_message=message), 401
@@ -168,22 +167,24 @@ def login_POST():
 @app.route('/signup', methods=['POST'])
 def signup_POST():
     from quirell.webapp.user import User
-    form = forms.signup()
-    # temporary signup blocker thing
-    # this should probably go inside the code for forms, but whatever, its temp
+    # will eventually be moved to cms.validate_signup
     THE_PASSWORD = os.environ.get('THE_PASSWORD')
-    if not form.secret_password.data == THE_PASSWORD: flask.abort(401)
+    if not flask.request.form['secret_password'] == THE_PASSWORD: flask.abort(401)
+    if not flask.request.form['password'] == flask.request.form['confirm']: flask.abort(401)
     user = User()
-    user.create(username=form.username.data, password=form.password.data,
-        email=form.email.data, url_root=flask.request.url_root)
+    user.create(
+        username=flask.request.form['username'],
+        password=flask.request.form['password'],
+        email=flask.request.form['email'],
+        url_root=flask.request.url_root)
     return flask.render_template('message.html',
         html_content='Almost there! An email was sent to you to confirm your sigup')
 
 @app.route('/new_post', methods=['POST'])
 @flask_login.login_required
 def new_post_POST():
-    form = forms.new_post()
-    current_user.create_post(content=form.content.data)
+    current_user.create_post(
+        content=flask.request.form['content'],)
     return flask.render_template('message.html', html_content='post created')
 
 @app.route("/profile/edit", methods=["POST"])

@@ -6,22 +6,22 @@
         <h2>Login</h2>
         <div class='login-message'>{% filter markdown %}{{ login_message }}{% endfilter %}</div>
         <form action="/login?next={{ next }}" method="POST">
-            {{ login.hidden_tag() }}
-            {{ login.username(id='combo-login-username', placeholder='username') }}
-            {{ login.password(id='combo-login-password', placeholder='password') }}
-            <label>{{ login.remember_me() }} Remember Me</label>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <input type='text' name='username' id='form-login-username' placeholder='username' autofocus='autofocus' required>
+            <input type='password' name='password' id='form-login-password' placeholder='password' required>
+            <label><input id="form-login-remember_me" name="remember_me" type="checkbox"> Remember Me</label>
             <input type="submit" value="Login" class='submit'>
         </form>
     </div>
     <div class='login-signup-box signup'>
         <h2>Signup</h2>
         <form action="/signup" method="POST" name="signup">
-            {{ signup.hidden_tag() }}
-            {{ signup.username(id='combo-signup-username', placeholder='username') }}
-            {{ signup.email(placeholder='email') }}
-            {{ signup.password(id='combo-signup-password', placeholder='password') }}
-            {{ signup.confirm(placeholder='verify password') }}
-            {{ signup.secret_password(placeholder='how many kittens?') }}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <input type='text' name='username' id='form-signup-username' placeholder='username' required>
+            <input type='password' name='password' id='form-signup-password' placeholder='password' required>
+            <input type='password' name='confirm' id='form-signup-confirm' placeholder='confirm password' required>
+            <input type='email' name='email' id='form-signup-email' placeholder='email address' required>
+            <input type='text' name='secret_password' placeholder='how many kittens?'>
             <input type="submit" value="Sign Up" class='submit'>
         </form>
     </div>

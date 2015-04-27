@@ -3,21 +3,15 @@
         <main><article class='post form'>
             <h1>Sign Up</h1>
             <form action="/signup" method="POST" name="signup">
-                {{ signup.hidden_tag() }}
-                <p>
-                    <span class='username-prepend'>@</span>
-                    Enter your username:<br>
-                    {{ signup.username(size=40) }}<br>
-                    Enter your email:<br>
-                    {{ signup.email(size=40) }}<br>
-                    Enter your password:<br>
-                    {{ signup.password(size=40) }}<br>
-                    Confirm password:<br>
-                    {{ signup.confirm(size=40) }}<br>
-                    What's the password???:<br>
-                    {{ signup.secret_password(size=40) }}<br>
-                </p>
-                <p><input type="submit" value="Sign Up"></p>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                    <input type='text' name='username' id='form-signup-username' placeholder='username' required>
+                    <input type='password' name='password' id='form-signup-password' placeholder='password' required>
+                    <input type='password' name='confirm' id='form-signup-confirm' placeholder='confirm password' required>
+                    <input type='email' name='email' id='form-signup-email' placeholder='email address' required>
+                    <input type='text' name='secret_password' placeholder='how many kittens?'>
+                    <input type="submit" value="Sign Up" class='submit'>
+                    <input type="submit" value="Sign Up">
             </form>
         </article></main>
     {% endblock %}

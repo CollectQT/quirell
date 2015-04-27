@@ -22,19 +22,24 @@ class Cms (object):
         import flask.ext.bcrypt as bcrypt
         import flask.ext.login as flask_login
         import flask.ext.misaka as misaka
+        import flask.ext.wtf.csrf as csrf
         # configs
         for k,v in CONFIG.items(): app.config[k] = v
+        # database
+        try: self.db = Database()
+        except: print('[ERROR] Cannot connect to database')
         # content building
         misaka.Misaka(app) # markdown
         if app.config['DEBUG']: self.build_css_automatic()
-        # user management
-        try: self.db = Database()
-        except: print('[ERROR] Cannot connect to database')
-        self.bcrypt = bcrypt.Bcrypt(app) # encryption
+        # users
         self.login_manager =flask_login.LoginManager().init_app(app)
         self.user_container = dict()
+        # security
         self.hash = hashlib.sha1()
+        self.bcrypt = bcrypt.Bcrypt(app)
+        self.csrf = csrf.CsrfProtect(app)
         self.serialize = itsdangerous.URLSafeSerializer(app.config['SECRET_KEY'])
+        # mails
         self.start_mail_server(app)
 
     ###########

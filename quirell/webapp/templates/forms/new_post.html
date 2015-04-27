@@ -2,9 +2,7 @@
     {% block article %}
 <h1>Create New Post</h1>
 <form action="/new_post" method="POST" name="new_post">
-    {{ new_post.hidden_tag() }}
-    <p>
-        {{ new_post.content(size=40) }}<br>
-    </p>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    <textarea name='content'></textarea>
 </form>
     {% endblock %}
