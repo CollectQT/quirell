@@ -1,23 +1,24 @@
 {% for line in timeline %}
 {% if line.post.content %}
-<div class='post'>
+<div class='post h-entry'>
     <div class='middle'>
-        <a class='middle' href='/u/{{ line.user.username }}'><img class='avatar img-mid' src="{{ line.user.profile_picture }}" alt='{{ line.user.username}}s Avatar'></a>
+        <a class='middle' href='/u/{{ line.user.username }}'><img class='avatar img-mid ' src="{{ line.user.profile_picture }}" alt='{{ line.user.username}}s Avatar'></a>
         <div class='post-meta-top'>
-            <a class='middle' href='/u/{{ line.user.username }}'>
-                <span class='display-name'>{{ line.user.display_name }}</span>
-                <span class='pronouns subtext'>({{ line.user.pronouns }})</span>
+            <span class="p-author h-card"><a class='middle u-url' href='/u/{{ line.user.username }}'>
+                <span class='display-name p-name'>{{ line.user.display_name }}</span>
+                <span class='pronouns subtext '>(<span class='x-pronoun-nominative'>{{ line.user.pronouns }}</span>)</span>
             </a>
+            </span>
             <br>
-            <a class='subtext' href='/u/{{ line.user.username }}/post/{{ line.post.post_id }}'>{{ format_time(line.post.datetime) }}</a>
+            <a class='subtext u-url' href='/u/{{ line.user.username }}/post/{{ line.post.post_id }}'><time class="dt-published" datetime="{{line.post.datetime}}">{{ format_time(line.post.datetime) }}</time></a>
             <!-- <span class='subtext'>{{ line.post.visibility }}<i class="fa fa-globe"></i></span> -->
         </div>
     </div>
-    <div class='content'>{{ line.post.content }}</div>
+    <div class='content p-name e-content'>{{ line.post.content }}</div>
     <div class='post-meta-bottom'>
         <div class='post-tags'>
             {# for tag in line.post.tags #}
-                <span></span>
+                <span class="p-category">{{tag}}</span>
             {# endfor #}
         </div>
         {% if line.post.notes %}
