@@ -10,7 +10,7 @@ import requests
 import itsdangerous
 # custom
 from quirell.config import *
-from quirell.webapp import runserver, app
+from quirell.webapp import runserver, app, cms
 
 def test_setup_webserver():
     web_server = multiprocessing.Process(target=runserver.run)
@@ -53,12 +53,12 @@ def test_user_functions():
     # assert create post
 
 def test_account_create_and_delete():
+    # variables
     session = requests.Session()
     username = 'test_kitten_quirell_account'
     password = 'test_kitten_access_code'
     email = 'firemagelynn+quirelltesting@gmail.com'
-    serializer = itsdangerous.URLSafeSerializer(app.config['SECRET_KEY'])
-    confirmation_code = serializer.dumps(email)
+    confirmation_code = cms.serialize.dumps(email)
     signup = {
         'username': username,
         'password': password,
@@ -76,7 +76,12 @@ def test_account_create_and_delete():
     password = {
         'password': password,
     }
-    assert session.get('http://0.0.0.0:5000'+'/u/'+username).status_code == 404 # shouldnt exist
+
+    # if the account exists already, we delete it from the database
+    # we -could- login and delete it via a request, but we are gonna do that later
+    if session.get('http://0.0.0.0:5000'+'/u/'+username).status_code == 200:
+        cms.db.delete_account('@'+username)
+
     # assert signup bad data
     # assert signup already exists
     assert session.post('http://0.0.0.0:5000'+'/signup', data=signup).status_code == 200 # signup
