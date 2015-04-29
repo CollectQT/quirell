@@ -145,11 +145,12 @@ def render_file(filename):
 @app.route('/login', methods=['POST'])
 def login_POST():
     from quirell.webapp.user import User
+    print(flask.request.values)
     user = User()
     success, message = user.login(
-        username=flask.request.form['username'],
-        password=flask.request.form['password'],
-        remember=flask.request.form['remember_me'],)
+        username=flask.request.form.get('username'),
+        password=flask.request.form.get('password'),
+        remember=flask.request.form.get('remember_me', False),)
     if not success: # user credentials invalid in some way
         return flask.render_template('forms/login.html',
             login_message=message), 401
@@ -169,13 +170,13 @@ def signup_POST():
     from quirell.webapp.user import User
     # will eventually be moved to cms.validate_signup
     THE_PASSWORD = os.environ.get('THE_PASSWORD')
-    if not flask.request.form['secret_password'] == THE_PASSWORD: flask.abort(401)
-    if not flask.request.form['password'] == flask.request.form['confirm']: flask.abort(401)
+    if not flask.request.form.get('secret_password') == THE_PASSWORD: flask.abort(401)
+    if not flask.request.form.get('password') == flask.request.form.get('confirm'): flask.abort(401)
     user = User()
     user.create(
-        username=flask.request.form['username'],
-        password=flask.request.form['password'],
-        email=flask.request.form['email'],
+        username=flask.request.form.get('username'),
+        password=flask.request.form.get('password'),
+        email=flask.request.form.get('email'),
         url_root=flask.request.url_root)
     return flask.render_template('message.html',
         html_content='Almost there! An email was sent to you to confirm your sigup')
@@ -184,7 +185,7 @@ def signup_POST():
 @flask_login.login_required
 def new_post_POST():
     current_user.create_post(
-        content=flask.request.form['content'],)
+        content=flask.request.form.get('content'),)
     return flask.render_template('message.html', html_content='post created')
 
 @app.route("/profile/edit", methods=["POST"])
@@ -292,6 +293,10 @@ def delete_account_POST():
 def robots():
     return flask.send_from_directory(app.root_path, 'robots.txt')
 
+@app.errorhandler(400)
+def unathorized(e):
+    return flask.render_template('paths/400.html', e=e), 400
+
 @app.errorhandler(401)
 def unathorized(e):
     return flask.render_template('paths/401.html'), 401
@@ -315,6 +320,7 @@ def load_user (username):
     return cms.get_logged_in_user(username=username)
 
 # shutdown the server
+@cms.csrf.exempt
 @app.route('/shutdown', methods=['POST'])
 def shutdown():
     from quirell.webapp.shutdown import shutdown_server

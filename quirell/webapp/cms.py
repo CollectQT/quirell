@@ -9,7 +9,7 @@ import flask_misaka
 import itsdangerous
 import flask_bcrypt
 import flask_login
-import flask_wtf.csrf as csrf
+import flask_seasurf
 # custom
 from quirell.config import *
 from quirell.database import Database
@@ -37,7 +37,7 @@ class Cms (object):
         # security
         self.hash = hashlib.sha1()
         self.bcrypt = flask_bcrypt.Bcrypt(app)
-        self.csrf = csrf.CsrfProtect(app)
+        self.csrf = flask_seasurf.SeaSurf(app)
         self.serialize = itsdangerous.URLSafeSerializer(app.config['SECRET_KEY'])
         # mails
         self.start_mail_server(app)
