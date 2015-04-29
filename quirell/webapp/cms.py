@@ -5,7 +5,11 @@ import hashlib
 import multiprocessing
 # external
 import markdown
+import flask_misaka
 import itsdangerous
+import flask_bcrypt
+import flask_login
+import flask_wtf.csrf as csrf
 # custom
 from quirell.config import *
 from quirell.database import Database
@@ -19,24 +23,20 @@ class Cms (object):
     '''
 
     def __init__ (self, app):
-        import flask.ext.bcrypt as bcrypt
-        import flask.ext.login as flask_login
-        import flask.ext.misaka as misaka
-        import flask.ext.wtf.csrf as csrf
         # configs
         for k,v in CONFIG.items(): app.config[k] = v
         # database
         try: self.db = Database()
         except: print('[ERROR] Cannot connect to database')
         # content building
-        misaka.Misaka(app) # markdown
+        flask_misaka.Misaka(app) # markdown
         if app.config['DEBUG']: self.build_css_automatic()
         # users
         self.login_manager =flask_login.LoginManager().init_app(app)
         self.user_container = dict()
         # security
         self.hash = hashlib.sha1()
-        self.bcrypt = bcrypt.Bcrypt(app)
+        self.bcrypt = flask_bcrypt.Bcrypt(app)
         self.csrf = csrf.CsrfProtect(app)
         self.serialize = itsdangerous.URLSafeSerializer(app.config['SECRET_KEY'])
         # mails

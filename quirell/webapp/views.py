@@ -8,7 +8,7 @@ import urllib
 import hashlib
 # external
 import flask
-import flask.ext.login as flask_login
+import flask_login
 # custom
 from quirell.config import *
 from quirell.webapp import app
