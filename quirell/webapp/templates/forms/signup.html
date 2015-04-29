@@ -4,7 +4,7 @@
             <h1>Sign Up</h1>
             <form action="/signup" method="POST" name="signup">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}" />
                     <input type='text' name='username' id='form-signup-username' placeholder='username' required>
                     <input type='password' name='password' id='form-signup-password' placeholder='password' required>
                     <input type='password' name='confirm' id='form-signup-confirm' placeholder='confirm password' required>
