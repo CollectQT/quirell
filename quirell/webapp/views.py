@@ -276,10 +276,11 @@ def timeline():
     pass
 
 @app.route('/delete_account', methods=['POST'])
+@flask_login.login_required
 def delete_account_POST():
-    password = request.args.get('password')
+    password = flask.request.form.get('password')
     message, status = current_user.delete_account(password)
-    flask_login.logout_user() # account deletion should definitely log you out
+    if status == 200: flask_login.logout_user() # successful account deletion logs you out
     return flask.render_template('message.html', html_content=message), status
 
 ########

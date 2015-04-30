@@ -127,12 +127,12 @@ class Cms (object):
         elif username:
             user = self.db.load_user(username)
         # do work on user
-        if not user['active']:
+        if (user) and (not user['active']):
             user['active'] = True
             user['confirmation_code'] = ''
             user.push()
             return 'Account actived!', 200
-        elif user['active']:
+        elif (user) and (user['active']):
             return 'Account already active', 401
         else:
             return 'Could not confirm account', 401
