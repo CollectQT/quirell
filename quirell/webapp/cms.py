@@ -26,8 +26,10 @@ class Cms (object):
         # configs
         for k,v in CONFIG.items(): app.config[k] = v
         # database
-        try: self.db = Database()
-        except: print('[ERROR] Cannot connect to database')
+        try:
+            self.db = Database()
+        except:
+            raise Exception('Could not Connect to Database')
         # content building
         flask_misaka.Misaka(app) # markdown
         if app.config['DEBUG']: self.build_css_automatic()

@@ -118,7 +118,7 @@ class Database (object):
 
     def __init__ (self):
         # Set global database values, first the URL
-        graphenedb_url = os.environ.get("GRAPHENEDB_URL", "http://localhost:7474/")
+        graphenedb_url = os.environ['GRAPHENEDB_URL']
         self.db = py2neo.ServiceRoot(graphenedb_url).graph
         # # Then global attributes (currently just indexes)
         # # Users and searched by usernames, so they must be unique
