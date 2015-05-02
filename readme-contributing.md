@@ -27,7 +27,7 @@ This section describes how to add a new capability to users, using the ability t
 1. Added a line to the testing file (`quirell.test.test.webapp_test`) and run tests (`$ python -m quirell.test`). At this point we'll probably notice a bunch of broken things that have to be fixed (I know I did Q_Q). I used this code to help fix my legions of errors:
 
         new_post = {'content': 'rawr rawr candy'}
-        print(session.post(quirell+'/new_post', data=new_post).status_code)
+        assert session.post(quirell+'/new_post', data=new_post).status_code == 200
 
 1. Eventually I stopped getting error code 500 and instead got code 200 and could verify that the code was working as intended! So the testing line was changed to this:
 

@@ -120,7 +120,6 @@ class Database (object):
         # Set global database values, first the URL
         graphenedb_url = os.environ['GRAPHENEDB_URL']
         self.db = py2neo.ServiceRoot(graphenedb_url).graph
-        # # Then global attributes (currently just indexes)
         # # Users and searched by usernames, so they must be unique
         # # Making them unique also automatically indexes them
         # self.create_uniqueness_constraint('user', 'username')
@@ -151,11 +150,12 @@ class Database (object):
         user_node = py2neo.Node('user', **properties)
         try:
             self.db.create(user_node)
-            print('[NOTE] Creating new user')
+            LOG.info('[NOTE] Creating new user '+properties['username'])
             return True, ''
         except Exception as e:
-            # do some stuff here with parsing e
-            print('[ERROR] Tried to create a duplicate username or email address. Details: \n'+str(e))
+            LOG.error('''
+                [ERROR] Tried to create a duplicate username ({}) or email address ({}). Details:
+                {}'''.format(properties['username'], properties['email'], e))
             return False, str(e)
 
     def create_post (self, user, post_properties, relationship_properties):
@@ -163,13 +163,13 @@ class Database (object):
         post = py2neo.Node('post', **post_properties)
         user_created_post = py2neo.Relationship(user, 'CREATED', post, **relationship_properties)
         self.db.create(post, user_created_post)
-        print('[NOTE] Creating new post for user '+user['username'])
+        LOG.info('[NOTE] Creating new post for user '+user['username'])
 
     def create_timeline (self, properties, user):
         timeline = py2neo.Node('timeline', **properties)
         user_owns_timeline = py2neo.Relationship(user, 'OWNS', timeline)
         self.db.create(timeline, user_owns_timeline)
-        print('[NOTE] New timeline created')
+        LOG.info('[NOTE] New timeline created')
 
     ##################
     # load functions #
@@ -293,6 +293,7 @@ class Database (object):
             ''', parameters=parameters)
         # go !
         tx.commit()
+        LOG.info('Deleting account for user '+user)
 
     #################
     # access checks #

@@ -4,11 +4,12 @@
 import hashlib
 import multiprocessing
 # external
+import flask
 import markdown
+import flask_login
 import flask_misaka
 import itsdangerous
 import flask_bcrypt
-import flask_login
 import flask_seasurf
 # custom
 from quirell.config import *
@@ -28,8 +29,9 @@ class Cms (object):
         # database
         try:
             self.db = Database()
+            LOG.info('Conneced to database')
         except:
-            raise Exception('Could not Connect to Database')
+            raise Exception('Fatal error, could not connect to database')
         # content building
         flask_misaka.Misaka(app) # markdown
         if app.config['DEBUG']: self.build_css_automatic()
@@ -43,6 +45,8 @@ class Cms (object):
         self.serialize = itsdangerous.URLSafeSerializer(app.config['SECRET_KEY'])
         # mails
         self.start_mail_server(app)
+        # logging
+        app.before_request(self._request_logger)
 
     ###########
     # GENERAL #
@@ -60,6 +64,14 @@ class Cms (object):
             for attribute in ["class", "id", "name", "style", "data"]:
                 del tag[attribute]
         return str(html)
+
+    def _request_logger(self):
+        if flask_login.current_user.is_authenticated():
+            user = flask_login.current_user['username']
+        else:
+            user = 'Anonymous_User'
+        url = flask.request.url
+        LOG.info('('+user+') requested '+url)
 
     #########
     # USERS #
@@ -98,7 +110,7 @@ class Cms (object):
 
     def add_user (self, username, user):
         self.user_container[username] = user
-        print('[NOTE] Logging in user '+username)
+        log.INFO('[NOTE] Logging in user '+username)
 
     def get_logged_in_user (self, username):
         try: user = self.user_container[username]
@@ -133,6 +145,7 @@ class Cms (object):
             user['active'] = True
             user['confirmation_code'] = ''
             user.push()
+            LOG.info('Activating account '+user['username'])
             return 'Account actived!', 200
         elif (user) and (user['active']):
             return 'Account already active', 401
@@ -144,7 +157,7 @@ class Cms (object):
     ################
 
     from watchdog.events import FileSystemEventHandler
-    class Change_monitor (FileSystemEventHandler):
+    class _Change_monitor (FileSystemEventHandler):
         ''' build_css() on scss file change'''
         def __init__ (self, cms_inst): self.css_builder = cms_inst.build_css
         def on_modified (self, event): self.css_builder()
@@ -155,7 +168,7 @@ class Cms (object):
         # start up the monitor
         from watchdog import observers
         from watchdog.events import LoggingEventHandler
-        change_monitor = Cms.Change_monitor(self)
+        change_monitor = Cms._Change_monitor(self)
         observer = observers.Observer()
         observer.schedule(change_monitor, BASE_PATH+'/quirell/webapp/static/scss/')
         observer.start()
@@ -178,7 +191,7 @@ class Cms (object):
         with open(BASE_PATH+'/quirell/webapp/static/css/main.css', 'w') as outfile:
             outfile.write(compiled_css)
         # log
-        print("[NOTE] Building CSS")
+        LOG.info('Building CSS')
 
     ###########
     # Mailing #
@@ -192,3 +205,4 @@ class Cms (object):
         mail_process = multiprocessing.Process(target=Mail_server,
            args=(app, self.mail_queue))
         mail_process.start()
+        LOG.info('Starting Mail Server')
