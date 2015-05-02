@@ -8,18 +8,15 @@ import multiprocessing
 # external
 import requests
 import itsdangerous
-# custom
-from quirell.config import *
 
-# the configs need to be set before the app / cms import, since the configs
-# are set on import. There definitely needs to be a better solution for this,
-# but I can't really think it of at the moment
-def test_set_configs():
-    CONFIG['CSRF_DISABLE'] = True
-    CONFIG['MAIL_SUPPRESS_SEND'] = True
+# Set testing specific configs, which needs to happen before importing
+# anything from quirell.webapp
+from quirell.config import *
+CONFIG['CSRF_DISABLE'] = True
+CONFIG['MAIL_SUPPRESS_SEND'] = True
+from quirell.webapp import runserver, app, cms
 
 def test_webserver_start():
-    from quirell.webapp import runserver
     web_server = multiprocessing.Process(target=runserver.run)
     web_server.start()
 
@@ -62,7 +59,6 @@ def test_user_functions():
     # assert create post
 
 def test_account_create_and_delete():
-    from quirell.webapp import cms
     # variables
     session = requests.Session()
     username = 'test_kitten_quirell_account'
