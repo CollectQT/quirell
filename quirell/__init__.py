@@ -1,4 +1,4 @@
-# package marker
-from quirell.config import set_env
+from quirell.config import *
 from quirell.database.database import Database
-set_env()
+
+SET_ENV()

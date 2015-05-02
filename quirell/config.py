@@ -11,7 +11,9 @@ create variable names IN_ALL_CAPS
 '''
 
 import os
+import sys
 import yaml
+import logging
 
 # global variables
 
@@ -24,35 +26,28 @@ BASE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..',))
 MAX_POSTS = 300
 
 CONFIG={}
+logging.basicConfig(stream=sys.stdout)
+LOG = logging.getLogger('quirell')
 
-def to_environ(items):
+def _to_environ(items):
     for k, v in items:
         CONFIG[k]=v
         try: os.environ[str(k)] = v
         except TypeError: pass
 
-def set_env():
+def SET_ENV():
     # setup the environment
     try:
         with open(BASE_PATH+'/quirell/ENV.yaml', 'r') as yaml_file:
-            to_environ(yaml.load(yaml_file).items())
+            items = yaml.load(yaml_file)
+            if items['DEBUG'] == True:
+                LOG.setLevel(logging.DEBUG)
+            elif items['DEBUG'] == False:
+                LOG.setLevel(logging.INFO)
+            else:
+                LOG.warning('DEBUG parameter not properly set')
+            _to_environ(items.items())
     except FileNotFoundError: pass
 
-    # run in debug mode, which uses a less secure (ie. not random) secret key
-    if os.environ.get('DEBUG') == 'True':
-        to_environ({
-            'DEBUG': True,
-            'SECRET_KEY': os.environ.get('SECRET_KEY'),
-        }.items())
-    # not debug mode
-    elif os.environ.get('DEBUG') == 'False':
-        to_environ({
-            'DEBUG': False,
-            'SECRET_KEY': os.urandom(24),
-        }.items())
-    # probably you made a typo
-    else:
-        raise ValueError('DEBUG should be either \'True\' or \'False\'')
-
 if __name__ == '__main__':
-    set_env()
+    SET_ENV()
