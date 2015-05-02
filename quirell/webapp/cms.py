@@ -70,8 +70,7 @@ class Cms (object):
             user = flask_login.current_user['username']
         else:
             user = 'Anonymous_User'
-        url = flask.request.url
-        LOG.info('('+user+') requested '+url)
+        LOG.info('('+user+') requested '+flask.request.url+' handled by '+flask.request.endpoint+'()')
 
     #########
     # USERS #
@@ -110,7 +109,7 @@ class Cms (object):
 
     def add_user (self, username, user):
         self.user_container[username] = user
-        LOG.info('[NOTE] Logging in user '+username)
+        LOG.info('Logging in user '+username)
 
     def get_logged_in_user (self, username):
         try: user = self.user_container[username]

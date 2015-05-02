@@ -2,7 +2,7 @@ from quirell.config import *
 
 def shutdown_server():
     from flask import request
-    LOG.info('Shutting Down Web Server')
+    LOG.warning('Shutting Down Web Server')
     func = request.environ.get('werkzeug.server.shutdown')
     if func is None:
         raise RuntimeError('Not running with the Werkzeug Server')

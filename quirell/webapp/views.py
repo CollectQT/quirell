@@ -267,6 +267,7 @@ def notes():
 @app.route('/logout', methods=['GET', 'POST'])
 @flask_login.login_required
 def logout():
+    LOG.info('Logging out '+current_user['username'])
     flask_login.logout_user()
     return flask.redirect('/')
 

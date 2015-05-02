@@ -18,7 +18,7 @@ class Mail_server (object):
                 continue
             kwargs = self.mail_queue.get()
             if kwargs['task'] == 'shutdown':
-                LOG.info('[NOTE] Shutting Down Mailer')
+                LOG.warning('Shutting Down Mailer')
                 break
             elif kwargs['task'] == 'account confirmation':
                 LOG.info('Sending account confirmation email')
