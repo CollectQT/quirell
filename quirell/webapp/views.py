@@ -145,7 +145,6 @@ def render_file(filename):
 @app.route('/login', methods=['POST'])
 def login_POST():
     from quirell.webapp.user import User
-    print(flask.request.values)
     user = User()
     success, message = user.login(
         username=flask.request.form.get('username'),
