@@ -10,20 +10,29 @@ import requests
 import itsdangerous
 # custom
 from quirell.config import *
-from quirell.webapp import runserver, app, cms
 
-def test_setup_webserver():
+# the configs need to be set before the app / cms import, since the configs
+# are set on import. There definitely needs to be a better solution for this,
+# but I can't really think it of at the moment
+def test_set_configs():
+    CONFIG['CSRF_DISABLE'] = True
+    CONFIG['MAIL_SUPPRESS_SEND'] = True
+
+def test_webserver_start():
+    from quirell.webapp import runserver
     web_server = multiprocessing.Process(target=runserver.run)
     web_server.start()
 
-def test_basic_pages():
+def test_index_page():
     time.sleep(1) # give the server a few to start up
-    session = requests.Session()
-    assert session.get('http://0.0.0.0:5000'+'/').status_code == 200
-    assert session.get('http://0.0.0.0:5000'+'/signup').status_code == 200
-    assert session.get('http://0.0.0.0:5000'+'/u/@cyrin').status_code == 200
-    assert session.get('http://0.0.0.0:5000'+'/profile').status_code == 401
-    assert session.get('http://0.0.0.0:5000'+'/u/nobody_with_this_username').status_code == 404
+    assert requests.get('http://0.0.0.0:5000'+'/').status_code == 200
+
+def test_basic_pages():
+    assert requests.get('http://0.0.0.0:5000'+'/').status_code == 200
+    assert requests.get('http://0.0.0.0:5000'+'/signup').status_code == 200
+    assert requests.get('http://0.0.0.0:5000'+'/u/@cyrin').status_code == 200
+    assert requests.get('http://0.0.0.0:5000'+'/profile').status_code == 401
+    assert requests.get('http://0.0.0.0:5000'+'/u/nobody_with_this_username').status_code == 404
 
 def test_user_functions():
     session = requests.Session()
@@ -53,6 +62,7 @@ def test_user_functions():
     # assert create post
 
 def test_account_create_and_delete():
+    from quirell.webapp import cms
     # variables
     session = requests.Session()
     username = 'test_kitten_quirell_account'
