@@ -110,7 +110,7 @@ class Cms (object):
 
     def add_user (self, username, user):
         self.user_container[username] = user
-        log.INFO('[NOTE] Logging in user '+username)
+        LOG.info('[NOTE] Logging in user '+username)
 
     def get_logged_in_user (self, username):
         try: user = self.user_container[username]
