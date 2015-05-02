@@ -137,7 +137,7 @@ Click [this link](/send_confirmation/{}) to send an activation email
         if not cms.bcrypt.check_password_hash(self['password'], password):
             return 'Incorrect Password', 401
         # do deletion
-        cms.db.delete_account(self.node)
+        cms.db.delete_account(self['username'])
         return 'Account deleted', 200
 
     def get_all_data (self):
