@@ -32,13 +32,11 @@ def to_environ(items):
         except TypeError: pass
 
 def set_env():
-    # determine environment file
+    # setup the environment
     try:
         with open(BASE_PATH+'/quirell/ENV.yaml', 'r') as yaml_file:
             to_environ(yaml.load(yaml_file).items())
-    except FileNotFoundError:
-        with open(BASE_PATH+'/quirell/ENV-testing.yaml', 'r') as yaml_file:
-            to_environ(yaml.load(yaml_file).items())
+    except FileNotFoundError: pass
 
     # run in debug mode, which uses a less secure (ie. not random) secret key
     if os.environ.get('DEBUG') == 'True':
