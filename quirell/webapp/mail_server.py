@@ -1,5 +1,5 @@
 import time
-import flask.ext.mail as flask_mail
+import flask_mail as flask_mail
 from quirell.config import *
 
 class Mail_server (object):
