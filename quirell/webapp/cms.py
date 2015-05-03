@@ -26,6 +26,7 @@ class Cms (object):
     def __init__ (self, app):
         # configs
         for k,v in CONFIG.items(): app.config[k] = v
+        app.config['SECRET_KEY'] = os.urandom(24)
         # database
         try:
             self.db = Database()

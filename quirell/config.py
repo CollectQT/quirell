@@ -37,21 +37,27 @@ def _to_environ(items):
 
 def SET_ENV():
     # setup the environment
+    # this is all very poorly written, idk why I'm so bad at this
     try:
         with open(BASE_PATH+'/quirell/ENV.yaml', 'r') as yaml_file:
             items = yaml.load(yaml_file)
             #
-            if items['DEBUG'] == True:
-                LOG.setLevel(logging.DEBUG)
-            elif items['DEBUG'] == False:
-                LOG.setLevel(logging.INFO)
-            else:
-                LOG.warning('DEBUG parameter not properly set')
-            #
-            items['SECRET_KEY'] = os.urandom(24)
+            if items['DEBUG'] == True: LOG.setLevel(logging.DEBUG)
+            elif items['DEBUG'] == False: LOG.setLevel(logging.INFO)
+            else: LOG.warning('DEBUG parameter not properly set')
             #
             _to_environ(items.items())
-    except FileNotFoundError: pass
+    # runs if there's no ENV.yaml
+    # which is the case when we're running up at heroku, so we replace all
+    # the empty environment variables in ENV.yaml.example with the values
+    # in the heroku environment
+    except FileNotFoundError:
+        with open(BASE_PATH+'/quirell/ENV.yaml.example', 'r') as yaml_file:
+            items = yaml.load(yaml_file)
+            for k, v in items.items():
+                if v == '':
+                    items[k] = os.environ.get(k)
+            _to_environ(items.items())
 
 if __name__ == '__main__':
     SET_ENV()
