@@ -150,7 +150,7 @@ class Database (object):
         user_node = py2neo.Node('user', **properties)
         try:
             self.db.create(user_node)
-            LOG.info('[NOTE] Creating new user '+properties['username'])
+            LOG.info('Creating new user '+properties['username'])
             return True, ''
         except Exception as e:
             LOG.error('''
@@ -163,13 +163,13 @@ class Database (object):
         post = py2neo.Node('post', **post_properties)
         user_created_post = py2neo.Relationship(user, 'CREATED', post, **relationship_properties)
         self.db.create(post, user_created_post)
-        LOG.info('[NOTE] Creating new post for user '+user['username'])
+        LOG.info('Creating new post for user '+user['username'])
 
     def create_timeline (self, properties, user):
         timeline = py2neo.Node('timeline', **properties)
         user_owns_timeline = py2neo.Relationship(user, 'OWNS', timeline)
         self.db.create(timeline, user_owns_timeline)
-        LOG.info('[NOTE] New timeline created')
+        LOG.info('New timeline created')
 
     ##################
     # load functions #
