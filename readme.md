@@ -13,7 +13,7 @@ Then there are project requirements. They are the following:
     $ sudo add-apt-repository ppa:fkrull/deadsnakes \
         && sudo apt-get update \
         && sudo apt-get install -y python3.4 python3.4-dev python-dev \
-        && sudo apt-get install -y git python-pip python-virtualenv \
+        && sudo apt-get install -y git python-pip python-virtualenv PhantomJs \
         && wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
 
     # get the quirell source code
