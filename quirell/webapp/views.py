@@ -328,11 +328,13 @@ def load_user (username):
 @cms.csrf.exempt
 @app.route('/shutdown', methods=['POST'])
 def shutdown():
-    from quirell.webapp.shutdown import shutdown_server
-    if app.config['DEBUG'] == False: return 'Invalid shutdown request'
-    cms.mail_queue.put({'task':'shutdown'})
-    shutdown_server()
-    return 'Server shutting down...'
+    if app.config['DEBUG'] == False:
+        return flask.abort(401)
+    else:
+        from quirell.webapp.shutdown import shutdown_server
+        cms.mail_queue.put({'task':'shutdown'})
+        shutdown_server()
+        return 'Server shutting down...'
 
 @app.route('/favicon.ico')
 def favicon():
