@@ -47,7 +47,8 @@ class Cms (object):
         # mails
         self.start_mail_server(app)
         # logging
-        app.before_request(self._request_logger)
+        app.before_request(self._before_request)
+        app.after_request(self._after_request)
 
     ###########
     # GENERAL #
@@ -66,12 +67,19 @@ class Cms (object):
                 del tag[attribute]
         return str(html)
 
-    def _request_logger(self):
+    def _before_request(self):
         if flask_login.current_user.is_authenticated():
             user = flask_login.current_user['username']
         else:
             user = 'Anonymous_User'
-        LOG.info('('+user+') requested '+flask.request.url+' handled by '+flask.request.endpoint+'()')
+        LOG.info('('+user+') '+flask.request.method+' '+flask.request.url+' handled by '+flask.request.endpoint+'()')
+        LOG.debug(flask.session)
+        LOG.debug(flask.request.form)
+
+    def _after_request(self, response):
+        LOG.debug(flask.session)
+        LOG.debug(response)
+        return response
 
     #########
     # USERS #
