@@ -295,12 +295,12 @@ def robots():
     return flask.send_from_directory(app.root_path, 'robots.txt')
 
 @app.errorhandler(400)
-def unathorized(e):
+def bad_request(e):
     return flask.render_template('paths/400.html', e=e), 400
 
 @app.errorhandler(401)
 def unathorized(e):
-    return flask.render_template('paths/401.html'), 401
+    return flask.render_template('paths/401.html', e=e), 401
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -314,7 +314,11 @@ def page_not_found(e):
     if cms.user_exists(user):
         return flask.redirect('/u'+flask.request.path+
             '?'+flask.request.query_string.decode("utf-8"))
-    return flask.render_template('paths/404.html'), 404
+    return flask.render_template('paths/404.html', e=e), 404
+
+@app.errorhandler(500)
+def unathorized(e):
+    return flask.render_template('paths/500.html', e=e), 500
 
 @app.login_manager.user_loader
 def load_user (username):
