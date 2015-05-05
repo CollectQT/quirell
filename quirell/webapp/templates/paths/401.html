@@ -1,11 +1,17 @@
 {% extends "message.html" %}
+
+{% head_title %}ERROR 401{% endblock %}
+{% head_desc %}Access not Authorized{% endblock %}
+
 {% block article %}
 
 ### ERROR 401
 
 #### Access not Authorized
 
-Our servers tell us that you aren't allowed to view this page. Maybe you need to [login](/login) or [signup](/signup)? Or maybe you were trying to access terrible hidden secrets? Who knows, either way, there's nothing for you on this page.
+Our servers tell us that you aren't allowed to view this page. Maybe you need to [login](/login) or [signup](/signup)? Or maybe you were trying to access terrible hidden secrets? Who knows, either way, there's nothing for you on this page. The details of the error are below:
+
+{{ e }}
 
 {% endblock %}
 

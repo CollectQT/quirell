@@ -1,0 +1,16 @@
+{% extends "message.html" %}
+
+{% head_title %}ERROR 500{% endblock %}
+{% head_desc %}Server Error{% endblock %}
+
+{% block article %}
+
+### ERROR 500
+
+#### Server Error
+
+Something went wrong with the web server! You should probably report it on gitlab so that it can get fixed. The details of the error are below, you should include it, the URL of this page, and whatever else seems relevant as a [gitlab issue](http://gitlab.com/collectqt/quirell/issues)
+
+{{ e }}
+
+{% endblock %}
