@@ -317,7 +317,7 @@ def page_not_found(e):
     return flask.render_template('paths/404.html', e=e), 404
 
 @app.errorhandler(500)
-def unathorized(e):
+def server_error(e):
     return flask.render_template('paths/500.html', e=e), 500
 
 @app.login_manager.user_loader
