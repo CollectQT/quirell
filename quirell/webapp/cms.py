@@ -73,12 +73,12 @@ class Cms (object):
         else:
             user = 'Anonymous_User'
         LOG.info('('+user+') '+flask.request.method+' '+flask.request.url+' handled by '+flask.request.endpoint+'()')
-        LOG.debug(flask.session)
-        LOG.debug(flask.request.form)
+        LOG.debug('SESSION REQUEST '+str(flask.session))
+        LOG.debug('REQUEST.FORM '+str(flask.request.form))
 
     def _after_request(self, response):
-        LOG.debug(flask.session)
-        LOG.debug(response)
+        LOG.debug('SESSION RESPONSE '+str(flask.session))
+        LOG.debug('RESPONSE '+str(response))
         return response
 
     #########

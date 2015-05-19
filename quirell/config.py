@@ -36,13 +36,13 @@ def _to_environ(items):
         except TypeError: pass
 
 def SET_ENV():
+    LOG.setLevel(logging.DEBUG)
     # setup the environment
     # this is all very poorly written, idk why I'm so bad at this
     try:
         with open(BASE_PATH+'/quirell/ENV.yaml', 'r') as yaml_file:
             items = yaml.load(yaml_file)
             _to_environ(items.items())
-            LOG.setLevel(logging.DEBUG)
     # runs if there's no ENV.yaml
     # which is the case when we're running up at heroku, so we replace all
     # the empty environment variables in ENV.yaml.example with the values
