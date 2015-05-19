@@ -41,12 +41,8 @@ def SET_ENV():
     try:
         with open(BASE_PATH+'/quirell/ENV.yaml', 'r') as yaml_file:
             items = yaml.load(yaml_file)
-            #
-            if items['DEBUG'] == True: LOG.setLevel(logging.DEBUG)
-            elif items['DEBUG'] == False: LOG.setLevel(logging.INFO)
-            else: LOG.warning('DEBUG parameter not properly set')
-            #
             _to_environ(items.items())
+            LOG.setLevel(logging.DEBUG)
     # runs if there's no ENV.yaml
     # which is the case when we're running up at heroku, so we replace all
     # the empty environment variables in ENV.yaml.example with the values
