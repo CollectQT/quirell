@@ -1,1 +1,1 @@
-web: waitress-serve --port 5000 quirell.webapp:app
+web: waitress-serve quirell.webapp:app
