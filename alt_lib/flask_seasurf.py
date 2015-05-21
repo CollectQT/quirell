@@ -214,10 +214,11 @@ class SeaSurf(object):
         if self._csrf_disable:
             return  # don't validate for testing
 
+        LOG.debug('Current session {}'.format(session))
+
         csrf_token = session.get(self._csrf_name, None)
         if not csrf_token:
             token = self._generate_token()
-            LOG.debug('Current session {}'.format(session))
             LOG.debug('CSRF token not present, generated {}'.format(token))
             setattr(_app_ctx_stack.top,
                     self._csrf_name,
