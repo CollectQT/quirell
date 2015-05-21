@@ -1,1 +1,1 @@
-web: waitress-serve quirell.webapp:app
+web: gunicorn quirell.webapp:app
