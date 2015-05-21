@@ -217,7 +217,8 @@ class SeaSurf(object):
         csrf_token = session.get(self._csrf_name, None)
         if not csrf_token:
             token = self._generate_token()
-            LOG.debug('Generating new CSRF token {}'.format(token))
+            LOG.debug('Current session {}'.format(session))
+            LOG.debug('CSRF token not present, generated {}'.format(token))
             setattr(_app_ctx_stack.top,
                     self._csrf_name,
                     token)
@@ -318,5 +319,4 @@ class SeaSurf(object):
         Generates a token with randomly salted SHA1. Returns a string.
         '''
         salt = str(randrange(0, _MAX_CSRF_KEY)).encode('utf-8')
-        LOG.debug('Generating from {} possible CSRF keys'.format(_MAX_CSRF_KEY))
         return hashlib.sha1(salt).hexdigest()
