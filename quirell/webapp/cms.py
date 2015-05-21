@@ -6,11 +6,11 @@ import multiprocessing
 # external
 import flask
 import markdown
-import flask_login
 import flask_misaka
 import itsdangerous
 import flask_bcrypt
-import flask_seasurf
+from alt_lib import flask_login
+from alt_lib import flask_seasurf
 # custom
 from quirell.config import *
 from quirell.database import Database
