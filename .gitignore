@@ -3,6 +3,4 @@ ENV.yaml
 venv/
 *.pyc
 *.pyo
-
-# PyCharm project folder
-.idea/
+*egg-info/
