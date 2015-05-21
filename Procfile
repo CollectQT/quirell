@@ -1,1 +1,1 @@
-web: gunicorn quirell.webapp:app
+web: gunicorn --debug quirell.webapp:app
