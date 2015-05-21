@@ -216,9 +216,11 @@ class SeaSurf(object):
 
         csrf_token = session.get(self._csrf_name, None)
         if not csrf_token:
+            token = self._generate_token()
+            LOG.debug('Generating new CSRF token {}'.format(token))
             setattr(_app_ctx_stack.top,
                     self._csrf_name,
-                    self._generate_token())
+                    token)
         else:
             setattr(_app_ctx_stack.top, self._csrf_name, csrf_token)
 
@@ -287,12 +289,15 @@ class SeaSurf(object):
         :param response: A Flask Response object.
         '''
         if getattr(_app_ctx_stack.top, self._csrf_name, None) is None:
+            LOG.debug('No CSRF token on app')
             return response
 
         _view_func = getattr(_app_ctx_stack.top, '_view_func', False)
         if not (_view_func and self._should_use_token(_view_func)):
+            LOG.debug('view is CSRF exempt')
             return response
 
+        LOG.debug('adding CSRF token {} to session'.format(getattr(_app_ctx_stack.top, self._csrf_name)))
         session[self._csrf_name] = getattr(_app_ctx_stack.top, self._csrf_name)
         response.set_cookie(self._csrf_name,
                             getattr(_app_ctx_stack.top, self._csrf_name),
@@ -313,4 +318,5 @@ class SeaSurf(object):
         Generates a token with randomly salted SHA1. Returns a string.
         '''
         salt = str(randrange(0, _MAX_CSRF_KEY)).encode('utf-8')
+        LOG.debug('Generating from {} possible CSRF keys'.format(_MAX_CSRF_KEY))
         return hashlib.sha1(salt).hexdigest()

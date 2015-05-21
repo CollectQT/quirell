@@ -108,6 +108,7 @@ def profile_page():
 
 # render static files
 @app.route('/static/<path:filename>')
+@cms.csrf.exempt
 def base_static(filename):
     return flask.send_from_directory(app.root_path + '/static/', filename)
 
@@ -336,6 +337,7 @@ def shutdown():
         shutdown_server()
         return 'Server shutting down...'
 
+@cms.csrf.exempt
 @app.route('/favicon.ico')
 def favicon():
     return flask.send_from_directory(os.path.join(BASE_PATH, 'quirell',

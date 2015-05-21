@@ -74,7 +74,8 @@ class Cms (object):
             user = 'Anonymous_User'
         LOG.info('('+user+') '+flask.request.method+' '+flask.request.url+' handled by '+flask.request.endpoint+'()')
         LOG.debug('SESSION REQUEST '+str(flask.session))
-        LOG.debug('REQUEST.FORM '+str(flask.request.form))
+        if flask.request.form:
+            LOG.debug('REQUEST.FORM '+str(flask.request.form))
 
     def _after_request(self, response):
         LOG.debug('SESSION RESPONSE '+str(flask.session))
