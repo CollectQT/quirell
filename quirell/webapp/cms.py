@@ -5,10 +5,12 @@ import hashlib
 import multiprocessing
 # external
 import flask
+import redis
 import markdown
 import flask_misaka
 import itsdangerous
 import flask_bcrypt
+import flask_session
 from alt_lib import flask_login
 from alt_lib import flask_seasurf
 # custom
@@ -24,14 +26,20 @@ class Cms (object):
     '''
 
     def __init__ (self, app):
-        # configs
-        for k,v in CONFIG.items(): app.config[k] = v
+        app.config.update(CONFIG)
         # database
         try:
             self.db = Database()
-            LOG.info('Conneced to database')
+            LOG.info('Connected to neo4j database')
         except:
-            raise Exception('Fatal error, could not connect to database')
+            raise Exception('Could not connect to neo4j database')
+        # sessions
+        try:
+            app.config['SESSION_REDIS'] = redis.from_url(os.environ['REDISTOGO_URL'])
+            LOG.info('Connected to redis database')
+            flask_session.Session(app)
+        except KeyError:
+            raise Exception('Could not get REDISTOGO_URL')
         # content building
         flask_misaka.Misaka(app) # markdown
         if app.config['DEBUG']: self.build_css_automatic()
