@@ -27,15 +27,37 @@ CONFIG={
     'DEBUG': False,
 }
 
-# write the contents of ENV.yaml onto CONFIG
+# these are the values that would be on the config object
+# except they're secret so they can't go there
+# but we have to remember that they exist, so here they are
+SECRETS={
+    'GRAPHENEDB_URL': '',
+    'REDISTOGO_URL': '',
+    'S3_KEY': '',
+    'S3_SECRET': '',
+    'S3_BUCKET': '',
+    #
+    'MAIL_USERNAME': '',
+    'MAIL_PASSWORD': '',
+    'MAIL_DEFAULT_SENDER': '',
+    #
+    'SECRET_KEY': '',
+    'CYRIN': '',
+}
+
+# write the contents of ENV.yaml onto CONFIG and the environment
 try:
     with open(BASE_PATH+'/quirell/ENV.yaml', 'r') as yaml_file:
         CONFIG.update(yaml.load(yaml_file))
 except FileNotFoundError: pass
 
-# write the contents of CONFIG onto environment
+# write CONFIG defaults onto environment
 for k, v in CONFIG.items():
     os.environ[k] = str(v)
+
+# read SECRETS from environment, and write to CONFIG
+for k in SECRETS.keys():
+    CONFIG[k] = os.environ[k]
 
 # logging
 logging.basicConfig(stream=sys.stdout)
