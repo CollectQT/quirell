@@ -66,6 +66,7 @@ class User (flask_login.UserMixin):
         if user is None:
             return None
         else:
+            self.node = user
             return self
 
     def login (self, username, password, remember):
@@ -87,7 +88,7 @@ Account not active.
 Click [this link](/send_confirmation/{}) to send an activation email
                 '''.format(username)
         # user considered successfully logged in at this point
-        self.node = node # attrach node to instance
+        self.node = node # attach node to instance
         flask_login.login_user(self, remember=remember) # add to login manager
         return True, self
 
