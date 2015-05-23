@@ -462,7 +462,7 @@ class LoginManager(object):
         if self.token_callback:
             data = current_user.get_auth_token()
         else:
-            LOG.debug('[IMPORTANT] user_id used for encoding'+str(session['user_id']))
+            LOG.debug('[IMPORTANT] user_id used for encoding: '+str(session['user_id']))
             data = encode_cookie(str(session['user_id']))
         expires = datetime.utcnow() + duration
 
@@ -800,9 +800,9 @@ def _get_user():
 
 
 def _cookie_digest(payload, key=None):
-    LOG.debug('[IMPORTANT] key sent to _secret_key: '+str(key))
+    LOG.debug('[IMPORTANT] payload sent to _secret_key: '+str(key))
     key = _secret_key(key)
-    LOG.debug('[IMPORTANT] key sent to hmac.new: '+str(key))
+    LOG.debug('[IMPORTANT] payload sent to hmac.new: '+str(key))
     return hmac.new(key, payload.encode('utf-8'), sha1).hexdigest()
 
 
@@ -835,8 +835,12 @@ def _secret_key(key=None):
     if key is None:
         key = current_app.config['SECRET_KEY']
 
+    LOG.debug('[IMPORTANT] current application secret key : '+current_app.config['SECRET_KEY'])
+
     if isinstance(key, unicode):  # pragma: no cover
         key = key.encode('latin1')  # ensure bytes
+
+    LOG.debug('[IMPORTANT] secret key after encoding : '+key)
 
     return key
 
