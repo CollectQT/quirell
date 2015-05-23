@@ -6,15 +6,18 @@ import time
 import random
 import multiprocessing
 # external
+import py.test
 import requests
 import itsdangerous
 
 # Set testing specific configs, which needs to happen before importing
 # anything from quirell.webapp
 from quirell.config import *
+CONFIG['DEBUG'] = True
 CONFIG['CSRF_DISABLE'] = True
 CONFIG['MAIL_SUPPRESS_SEND'] = True
-from quirell.webapp import runserver, app, cms
+from quirell.webapp import runserver
+from quirell.webapp.main import cms
 
 def test_webserver_start():
     web_server = multiprocessing.Process(target=runserver.run)
@@ -107,3 +110,5 @@ def test_account_create_and_delete():
 
 def test_shutdown_server():
     requests.post('http://0.0.0.0:5000/shutdown')
+    # server should be down, and so we should get a connection error
+    py.test.raises(requests.exceptions.ConnectionError, requests.post, 'http://0.0.0.0:5000/')
