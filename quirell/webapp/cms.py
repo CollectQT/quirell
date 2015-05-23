@@ -7,12 +7,12 @@ import multiprocessing
 import flask
 import redis
 import markdown
+import flask_login
 import flask_misaka
 import itsdangerous
 import flask_bcrypt
 import flask_session
-from alt_lib import flask_login
-from alt_lib import flask_seasurf
+import flask_seasurf
 # custom
 from quirell.config import *
 from quirell.database import Database
@@ -54,8 +54,8 @@ class Cms (object):
         # mails
         self.start_mail_server(app)
         # logging
-        app.before_request(self._before_request)
-        app.after_request(self._after_request)
+        # app.before_request(self._before_request)
+        # app.after_request(self._after_request)
 
     ###########
     # GENERAL #
@@ -74,12 +74,11 @@ class Cms (object):
                 del tag[attribute]
         return str(html)
 
-    def _before_request(self):
-        LOG.debug('REQUEST SESSION: '+str(flask.session))
+    # def _before_request(self):
+    #     pass
 
-    def _after_request(self, r):
-        LOG.debug('RESPONSE SESSION: '+str(flask.session))
-        return r
+    # def _after_request(self, r):
+    #     return r
 
     #########
     # USERS #
@@ -115,12 +114,6 @@ class Cms (object):
         result = self.db.load_user(username)
         if result == None: return False
         else: return True
-
-    def get_logged_in_user (self, username):
-        try: user = self.user_container[username]
-        except KeyError: user = None
-        LOG.debug('asking for {} from {}, with response {}'.format(username, self.user_container, user))
-        return user
 
     def send_confirmation_email (self, username, url_root):
         user = self.db.load_user(username)

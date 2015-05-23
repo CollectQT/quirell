@@ -61,4 +61,4 @@ for k in SECRETS.keys():
 # logging
 logging.basicConfig(stream=sys.stdout)
 LOG = logging.getLogger('quirell')
-LOG.setLevel(logging.DEBUG)
+LOG.setLevel(logging.INFO)
