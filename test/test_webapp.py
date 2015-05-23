@@ -35,7 +35,7 @@ def test_user_functions():
     session = requests.Session()
     login = {
         'username': 'cyrin',
-        'password': os.environ.get('CYRIN'),
+        'password': 'cyrin',
     }
     # assert incorrect login
     assert session.post('http://0.0.0.0:5000'+'/login', data=login).status_code == 200

@@ -42,7 +42,6 @@ SECRETS={
     'MAIL_DEFAULT_SENDER': '',
     #
     'SECRET_KEY': '',
-    'CYRIN': '',
 }
 
 # write the contents of ENV.yaml onto CONFIG and the environment
