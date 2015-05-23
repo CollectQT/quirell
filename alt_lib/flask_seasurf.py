@@ -214,9 +214,6 @@ class SeaSurf(object):
         if self._csrf_disable:
             return  # don't validate for testing
 
-        LOG.debug('[IMPORTANT] config: '+str(current_app.config))
-        LOG.debug('[IMPORTANT] secret key: '+current_app.config['SECRET_KEY'])
-
         csrf_token = session.get(self._csrf_name, None)
         if not csrf_token:
             token = self._generate_token()
@@ -272,8 +269,6 @@ class SeaSurf(object):
                     request.headers.get(self._csrf_header_name, '')
 
             some_none = None in (request_csrf_token, csrf_token)
-            LOG.debug('request csrf '+str(request_csrf_token))
-            LOG.debug('internal csrf '+str(csrf_token))
             if some_none or not safe_str_cmp(request_csrf_token, csrf_token):
                 error = (REASON_BAD_TOKEN, request.path)
                 error = 'Forbidden ({}): {}'.format(*error)
@@ -291,15 +286,12 @@ class SeaSurf(object):
         :param response: A Flask Response object.
         '''
         if getattr(_app_ctx_stack.top, self._csrf_name, None) is None:
-            LOG.debug('No CSRF token on app')
             return response
 
         _view_func = getattr(_app_ctx_stack.top, '_view_func', False)
         if not (_view_func and self._should_use_token(_view_func)):
-            LOG.debug('view is CSRF exempt')
             return response
 
-        LOG.debug('adding CSRF token {} to session'.format(getattr(_app_ctx_stack.top, self._csrf_name)))
         session[self._csrf_name] = getattr(_app_ctx_stack.top, self._csrf_name)
         response.set_cookie(self._csrf_name,
                             getattr(_app_ctx_stack.top, self._csrf_name),

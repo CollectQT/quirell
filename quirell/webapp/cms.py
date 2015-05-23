@@ -55,8 +55,7 @@ class Cms (object):
         self.start_mail_server(app)
         # logging
         app.before_request(self._before_request)
-        # app.after_request(self._after_request)
-        LOG.debug('[IMPORTANT] secret key: '+app.config['SECRET_KEY'])
+        app.after_request(self._after_request)
 
     ###########
     # GENERAL #
@@ -76,7 +75,11 @@ class Cms (object):
         return str(html)
 
     def _before_request(self):
-        LOG.debug('[IMPORTANT] secret key: '+flask.current_app.config['SECRET_KEY'])
+        LOG.debug('REQUEST SESSION: '+str(flask.session))
+
+    def _after_request(self, r):
+        LOG.debug('RESPONSE SESSION: '+str(flask.session))
+        return r
 
     #########
     # USERS #
