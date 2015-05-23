@@ -56,6 +56,7 @@ class Cms (object):
         # logging
         app.before_request(self._before_request)
         # app.after_request(self._after_request)
+        LOG.debug('[IMPORTANT] secret key: '+app.config['SECRET_KEY'])
 
     ###########
     # GENERAL #

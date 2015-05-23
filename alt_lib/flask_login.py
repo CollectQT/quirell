@@ -831,6 +831,7 @@ def _secret_key(key=None):
     if key is None:
         key = current_app.config['SECRET_KEY']
 
+    LOG.debug('[IMPORTANT] current application config : '+str(current_app.config))
     LOG.debug('[IMPORTANT] current application secret key : '+current_app.config['SECRET_KEY'])
 
     if isinstance(key, unicode):  # pragma: no cover

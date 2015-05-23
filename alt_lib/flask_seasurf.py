@@ -214,6 +214,7 @@ class SeaSurf(object):
         if self._csrf_disable:
             return  # don't validate for testing
 
+        LOG.debug('[IMPORTANT] config: '+str(current_app.config))
         LOG.debug('[IMPORTANT] secret key: '+current_app.config['SECRET_KEY'])
 
         csrf_token = session.get(self._csrf_name, None)
