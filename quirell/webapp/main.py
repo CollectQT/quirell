@@ -12,11 +12,13 @@ import flask_login
 # custom
 from quirell.config import *
 from quirell.webapp import app
-from quirell.webapp import cms
+from quirell.webapp.cms import Cms
 
 ###########
 # GLOBALS #
 ###########
+
+cms = Cms(app)
 
 # So, the use of the 'user' namespace within templates:
 #
@@ -71,10 +73,6 @@ def set_globals():
         is_current=is_current,
         format_time=format_time)
 
-#@app.before_first_request
-#@app.before_request
-#@app.after_request
-
 ###############
 # BASIC PATHS #
 ###############
@@ -108,7 +106,6 @@ def profile_page():
 
 # render static files
 @app.route('/static/<path:filename>')
-@cms.csrf.exempt
 def base_static(filename):
     return flask.send_from_directory(app.root_path + '/static/', filename)
 
@@ -321,14 +318,9 @@ def page_not_found(e):
 def server_error(e):
     return flask.render_template('paths/500.html', e=e), 500
 
-@app.login_manager.user_loader
-def load_user (username):
-    from quirell.webapp.user import User
-    return User().get(username)
-
 # shutdown the server
-@cms.csrf.exempt
 @app.route('/shutdown', methods=['POST'])
+@cms.csrf.exempt
 def shutdown():
     if app.config['DEBUG'] == False:
         return flask.abort(401)
@@ -338,7 +330,6 @@ def shutdown():
         shutdown_server()
         return 'Server shutting down...'
 
-@cms.csrf.exempt
 @app.route('/favicon.ico')
 def favicon():
     return flask.send_from_directory(os.path.join(BASE_PATH, 'quirell',

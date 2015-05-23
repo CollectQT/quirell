@@ -42,7 +42,7 @@ I'll explain those things in order.
 '''
 
 import flask.ext.login as flask_login
-from quirell.webapp import cms # this is the cms instance, not the class
+from quirell.webapp.main import cms
 
 class User (flask_login.UserMixin):
     '''the user class represents an individual user in the database'''

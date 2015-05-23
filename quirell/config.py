@@ -54,9 +54,9 @@ except FileNotFoundError: pass
 for k, v in CONFIG.items():
     os.environ[k] = str(v)
 
-# read SECRETS from environment, and write to CONFIG
-for k in SECRETS.keys():
-    CONFIG[k] = os.environ[k]
+# # read SECRETS from environment, and write to CONFIG
+# for k in SECRETS.keys():
+#     CONFIG[k] = os.environ[k]
 
 # logging
 logging.basicConfig(stream=sys.stdout)

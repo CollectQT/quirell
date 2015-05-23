@@ -17,12 +17,22 @@ import flask_seasurf
 from quirell.config import *
 from quirell.database import Database
 
-class Cms (object):
+def load_user(username):
+    from quirell.webapp.user import User
+    return User().get(username)
+
+class Anon(flask_login.AnonymousUserMixin):
+    '''functions for people not logged in'''
+
+    def __getitem__ (self, key):
+        if key == 'username':
+            return 'anonymous'
+        else:
+            return ''
+
+class Cms(object):
     '''
     manages content and scripts for the webapp layer or the applications
-
-    import with:
-        from quirell.webapp import cms
     '''
 
     def __init__ (self, app):
@@ -44,8 +54,10 @@ class Cms (object):
         flask_misaka.Misaka(app) # markdown
         if app.config['DEBUG']: self.build_css_automatic()
         # users
-        self.login_manager =flask_login.LoginManager().init_app(app)
-        self.user_container = dict()
+        self.login_manager = flask_login.LoginManager()
+        self.login_manager.init_app(app)
+        self.login_manager.anonymous_user = Anon
+        self.login_manager.user_loader(load_user)
         # security
         self.hash = hashlib.sha1()
         self.bcrypt = flask_bcrypt.Bcrypt(app)
@@ -54,28 +66,16 @@ class Cms (object):
         # mails
         self.start_mail_server(app)
         # logging
-        # app.before_request(self._before_request)
+        app.before_request(self._before_request)
         # app.after_request(self._after_request)
 
     ###########
     # GENERAL #
     ###########
 
-    def clean_html (self, html):
-        # cleans html to prevent people doing evil things with it like
-        # like... idk. things with evil scripts and inline css
-        from bs4 import BeautifulSoup
-        html = BeautifulSoup(html)
-        # destroy evil tags
-        for tag in html(['iframe', 'script']): tag.decompose()
-        # remove evil attributes
-        for tag in html():
-            for attribute in ["class", "id", "name", "style", "data"]:
-                del tag[attribute]
-        return str(html)
-
-    # def _before_request(self):
-    #     pass
+    def _before_request(self):
+        if flask.request.endpoint != 'base_static':
+            LOG.info('('+flask_login.current_user['username']+') '+flask.request.method+' '+flask.request.path+' endpoint '+flask.request.endpoint+'()')
 
     # def _after_request(self, r):
     #     return r

@@ -43,7 +43,7 @@ After everything has installed you should try to start a test run with
 
 You'll get a message about whether or not all the tests have passed. If everything is fine (i.e. no assertion errors) then try and run the application outside of a testing context with
 
-    $ python -m quirell.webapp
+    $ python quirell
 
 This will start up a local flask debug server. After a few seconds the terminal should display `* Running on http://0.0.0.0:5000/`, and you'll be able to open quirell on your browser by visiting [http://0.0.0.0:5000/](http://0.0.0.0:5000/)
 
