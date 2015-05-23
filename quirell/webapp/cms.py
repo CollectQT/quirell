@@ -123,6 +123,7 @@ class Cms (object):
     def get_logged_in_user (self, username):
         try: user = self.user_container[username]
         except KeyError: user = None
+        LOG.debug('asking for {} from {}, with response {}'.format(username, self.user_container, user))
         return user
 
     def send_confirmation_email (self, username, url_root):

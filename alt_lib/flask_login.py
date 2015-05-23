@@ -323,6 +323,7 @@ class LoginManager(object):
         if user is None:
             user_id = session.get('user_id')
             if user_id is None:
+                LOG.debug('session.get(\'user_id\') is '+str(session.get('user_id')))
                 ctx.user = self.anonymous_user()
             else:
                 user = self.user_callback(user_id)
@@ -336,8 +337,6 @@ class LoginManager(object):
     def _load_user(self):
         '''Loads user from session or remember_me cookie as applicable'''
         user_accessed.send(current_app._get_current_object())
-
-        LOG.debug('call to _load_user')
 
         # first check SESSION_PROTECTION
         config = current_app.config
@@ -800,6 +799,7 @@ def fresh_login_required(func):
 
 
 def _get_user():
+    LOG.debug('_get_user')
     if has_request_context() and not hasattr(_request_ctx_stack.top, 'user'):
         current_app.login_manager._load_user()
 
