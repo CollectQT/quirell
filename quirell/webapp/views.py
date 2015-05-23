@@ -323,7 +323,8 @@ def server_error(e):
 
 @app.login_manager.user_loader
 def load_user (username):
-    return cms.db.load_user(username)
+    from quirell.webapp.user import User
+    return User().get(username)
 
 # shutdown the server
 @cms.csrf.exempt

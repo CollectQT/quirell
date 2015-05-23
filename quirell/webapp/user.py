@@ -1,13 +1,12 @@
 '''
 The user class
 --------------
-The user class is a subclass of flask login's user mixin, although at this point
-we've probably overridden all of it's functions. The user class, in general,
-handles functions that run on individual users, and an instance of the user
-class is primary way that any change that happens via a view function can
-affect user data. The only other way that a view function can affect user data
-is via the cms (quirell.webapp.cms), but in that case it should be an admin who
-is calling that function, not an individual user.
+The user class, in general, handles functions that run on individual users,
+and an instance of the user class is primary way that any change that happens
+via a view function can affect user data. The only other way that a view
+function can affect user data is via the cms (quirell.webapp.cms), but in that
+case it should be an admin who is causing the function call, not an
+individual user.
 
 Creating a user instance
 ------------------------
@@ -16,8 +15,8 @@ with, the user class has to be instanced before changes can start happening to
 it. Also, the only time when you should be instancing a user class instead of
 reading data directly from the node is when the view function is being called by
 a human who has access to edit the user data for the node. To be less technical,
-you instance the user class only a login or signup. If you need a user instance
-outside of either of those contexts, you user `user=flask_login.current_user`
+you instance the user class only for a login or signup. If you need a user
+instance outside of either of those contexts use `user=flask_login.current_user`
 (that is, you assume the user is logged in already)
 
 The user class and flask login
@@ -34,7 +33,7 @@ I'll explain those things in order.
     out of the user_container.
 
     Basic view permissions work via adding the flask_login.login_required
-    decorated. Which just checks to see if there is a user instance attached
+    decorator. Which just checks to see if there is a user instance attached
     to the browser session of the user making the request.
 
     Remembering logged in users: I haven't actually tested how this works >_>
@@ -51,6 +50,23 @@ class User (flask_login.UserMixin):
     #########
     # inits #
     #########
+
+    def get(self, username):
+        '''
+        get a user object straight from the database
+
+        Note that this has no access control checks, so the access control check
+        needs to be made outside of this function
+
+        At the time I'm writing this, the only use of this function is with
+        flask_login's user loader, which itself checks that the use being loaded
+        is logged in.
+        '''
+        user = cms.db.load_user(username)
+        if user is None:
+            return None
+        else:
+            return self
 
     def login (self, username, password, remember):
         '''logs in a user'''
@@ -130,6 +146,8 @@ Click [this link](/send_confirmation/{}) to send an activation email
     def get_id (self): return self['username']
 
     def is_authenticated (self): return True
+
+    def is_active (self): return self['active']
 
     def delete_account (self, password):
         # confirm password
