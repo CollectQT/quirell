@@ -815,6 +815,7 @@ def _create_identifier():
     if user_agent is not None:
         user_agent = user_agent.encode('utf-8')
     base = '{0}|{1}'.format(_get_remote_addr(), user_agent)
+    LOG.debug('[IMPORTANT] _id base: '+base)
     if str is bytes:
         base = unicode(base, 'utf-8', errors='replace')  # pragma: no cover
     h = md5()
