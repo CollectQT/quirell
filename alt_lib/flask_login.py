@@ -365,6 +365,7 @@ class LoginManager(object):
         return self.reload_user()
 
     def _session_protection(self):
+        LOG.debug('call to _session_protection')
         sess = session._get_current_object()
         ident = _create_identifier()
 
@@ -386,6 +387,7 @@ class LoginManager(object):
                 session_protected.send(app)
                 return False
             elif mode == 'strong':
+                LOG.debug('running under strong session protection')
                 sess.clear()
                 sess['remember'] = 'clear'
                 session_protected.send(app)
@@ -444,6 +446,7 @@ class LoginManager(object):
             if operation == 'set' and 'user_id' in session:
                 self._set_cookie(response)
             elif operation == 'clear':
+                LOG.debug('call to _update_remember_cookie with operation \'clear\'')
                 self._clear_cookie(response)
 
         return response
@@ -695,6 +698,7 @@ def logout_user():
     Logs a user out. (You do not need to pass the actual user.) This will
     also clean up the remember me cookie if it exists.
     '''
+    LOG.debug('call to logout_user')
     if 'user_id' in session:
         session.pop('user_id')
 
