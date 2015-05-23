@@ -17,7 +17,6 @@ BASE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..',))
 CONFIG={
     'SESSION_COOKIE_NAME': 'quirell',
     'SESSION_TYPE': 'redis',
-    'SESSION_REDIS': '',
     #
     'MAIL_SERVER': 'smtp.gmail.com',
     'MAIL_PORT': 465,
@@ -35,7 +34,8 @@ try:
 except FileNotFoundError: pass
 
 # write the contents of CONFIG onto environment
-os.environ.update(CONFIG)
+for k, v in CONFIG.items():
+    os.environ[k] = str(v)
 
 # logging
 logging.basicConfig(stream=sys.stdout)
