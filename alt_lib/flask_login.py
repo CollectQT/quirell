@@ -317,6 +317,7 @@ class LoginManager(object):
         return redirect(login_url(self.refresh_view, request.url))
 
     def reload_user(self, user=None):
+        LOG.debug('call to reload_user')
         ctx = _request_ctx_stack.top
 
         if user is None:
@@ -335,6 +336,8 @@ class LoginManager(object):
     def _load_user(self):
         '''Loads user from session or remember_me cookie as applicable'''
         user_accessed.send(current_app._get_current_object())
+
+        LOG.debug('call to _load_user')
 
         # first check SESSION_PROTECTION
         config = current_app.config
@@ -365,7 +368,6 @@ class LoginManager(object):
         return self.reload_user()
 
     def _session_protection(self):
-        LOG.debug('call to _session_protection')
         sess = session._get_current_object()
         ident = _create_identifier()
 
@@ -387,7 +389,6 @@ class LoginManager(object):
                 session_protected.send(app)
                 return False
             elif mode == 'strong':
-                LOG.debug('running under strong session protection')
                 sess.clear()
                 sess['remember'] = 'clear'
                 session_protected.send(app)
@@ -396,6 +397,7 @@ class LoginManager(object):
         return False
 
     def _load_from_cookie(self, cookie):
+        LOG.debug('call to _load_from_cookie')
         if self.token_callback:
             user = self.token_callback(cookie)
             if user is not None:
@@ -417,6 +419,7 @@ class LoginManager(object):
             user_loaded_from_cookie.send(app, user=_get_user())
 
     def _load_from_header(self, header):
+        LOG.debug('call to _load_from_header')
         user = None
         if self.header_callback:
             user = self.header_callback(header)
@@ -428,6 +431,7 @@ class LoginManager(object):
             self.reload_user()
 
     def _load_from_request(self, request):
+        LOG.debug('call to _load_from_request')
         user = None
         if self.request_callback:
             user = self.request_callback(request)
@@ -819,7 +823,6 @@ def _create_identifier():
     if user_agent is not None:
         user_agent = user_agent.encode('utf-8')
     base = '{0}|{1}'.format(_get_remote_addr(), user_agent)
-    LOG.debug('[IMPORTANT] _id base: '+base)
     if str is bytes:
         base = unicode(base, 'utf-8', errors='replace')  # pragma: no cover
     h = md5()
