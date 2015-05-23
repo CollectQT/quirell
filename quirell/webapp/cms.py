@@ -55,7 +55,7 @@ class Cms (object):
         self.start_mail_server(app)
         # logging
         app.before_request(self._before_request)
-        app.after_request(self._after_request)
+        # app.after_request(self._after_request)
 
     ###########
     # GENERAL #
@@ -75,19 +75,7 @@ class Cms (object):
         return str(html)
 
     def _before_request(self):
-        if flask_login.current_user.is_authenticated():
-            user = flask_login.current_user['username']
-        else:
-            user = 'Anonymous_User'
-        LOG.info('('+user+') '+flask.request.method+' '+flask.request.url+' handled by '+flask.request.endpoint+'()')
-        LOG.debug('SESSION REQUEST '+str(flask.session))
-        if flask.request.form:
-            LOG.debug('REQUEST.FORM '+str(flask.request.form))
-
-    def _after_request(self, response):
-        LOG.debug('SESSION RESPONSE '+str(flask.session))
-        LOG.debug('RESPONSE '+str(response))
-        return response
+        LOG.debug('[IMPORTANT] secret key: '+flask.current_app.config['SECRET_KEY'])
 
     #########
     # USERS #

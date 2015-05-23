@@ -800,9 +800,7 @@ def _get_user():
 
 
 def _cookie_digest(payload, key=None):
-    LOG.debug('[IMPORTANT] payload sent to _secret_key: '+str(key))
     key = _secret_key(key)
-    LOG.debug('[IMPORTANT] payload sent to hmac.new: '+str(key))
     return hmac.new(key, payload.encode('utf-8'), sha1).hexdigest()
 
 
@@ -810,7 +808,6 @@ def _get_remote_addr():
     address = request.headers.get('X-Forwarded-For', request.remote_addr)
     if address is not None:
         address = address.encode('utf-8')
-    LOG.debug('_ID request address '+str(address))
     return address
 
 
@@ -819,7 +816,6 @@ def _create_identifier():
     if user_agent is not None:
         user_agent = user_agent.encode('utf-8')
     base = '{0}|{1}'.format(_get_remote_addr(), user_agent)
-    LOG.debug('_ID request agent '+str(user_agent))
     if str is bytes:
         base = unicode(base, 'utf-8', errors='replace')  # pragma: no cover
     h = md5()
@@ -839,8 +835,6 @@ def _secret_key(key=None):
 
     if isinstance(key, unicode):  # pragma: no cover
         key = key.encode('latin1')  # ensure bytes
-
-    LOG.debug('[IMPORTANT] secret key after encoding : '+key)
 
     return key
 
