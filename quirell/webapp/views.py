@@ -323,7 +323,7 @@ def server_error(e):
 
 @app.login_manager.user_loader
 def load_user (username):
-    return cms.get_logged_in_user(username=username)
+    return cms.db.load_user(username)
 
 # shutdown the server
 @cms.csrf.exempt

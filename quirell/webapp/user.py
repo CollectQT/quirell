@@ -72,7 +72,6 @@ Click [this link](/send_confirmation/{}) to send an activation email
                 '''.format(username)
         # user considered successfully logged in at this point
         self.node = node # attrach node to instance
-        cms.add_user(username, self) # add user instance to cms
         flask_login.login_user(self, remember=remember) # add to login manager
         return True, self
 

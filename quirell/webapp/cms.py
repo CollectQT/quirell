@@ -116,10 +116,6 @@ class Cms (object):
         if result == None: return False
         else: return True
 
-    def add_user (self, username, user):
-        self.user_container[username] = user
-        LOG.info('Logging in user '+username)
-
     def get_logged_in_user (self, username):
         try: user = self.user_container[username]
         except KeyError: user = None
