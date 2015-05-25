@@ -69,10 +69,6 @@ class Cms(object):
         app.before_request(self._before_request)
         # app.after_request(self._after_request)
 
-    ###########
-    # GENERAL #
-    ###########
-
     def _before_request(self):
         if flask.request.endpoint != 'base_static':
             LOG.info('('+flask_login.current_user['username']+') '+flask.request.method+' '+flask.request.path+' endpoint '+flask.request.endpoint+'()')
