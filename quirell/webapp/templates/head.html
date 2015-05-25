@@ -14,6 +14,9 @@
     <link rel="shortcut icon" href="/static/favicon.png">
     <link href="/static/css/main.css" rel="stylesheet">
     <!-- local javascript files here: -->
-    {% assets filters='jsmin', output='generated/packed.js', 'js/jquery.ui.widget.js', 'js/jquery.fileupload.js', 'js/jquery.fileupload-image.js', 'js/jquery.iframe-transport.js', 'js/jquery.cloudinary.js', 'js/main.js' %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-    {% endassets %}
+    <script type="text/javascript" src='/js/jquery.ui.widget.js'></script>
+    <script type="text/javascript" src='/js/jquery.fileupload.js'></script>
+    <script type="text/javascript" src='/js/jquery.fileupload-image.js'></script>
+    <script type="text/javascript" src='/js/jquery.iframe-transport.js'></script>
+    <script type="text/javascript" src='/js/jquery.cloudinary.js'></script>
+    <script type="text/javascript" src="/js/main.js"></script>

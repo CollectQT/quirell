@@ -74,6 +74,7 @@ def create_signature(params):
     hasher = sha1()
     hasher.update(unsigned_string.encode(encoding='utf-8'))
     signature = hasher.hexdigest()
+    return signature
 
 def profile_picture_form_data():
     params = {
@@ -87,6 +88,7 @@ def profile_picture_form_data():
         "signature": '',
     }
     params['signature'] = create_signature(params)
+    LOG.info(params)
     return params
 
 @app.context_processor

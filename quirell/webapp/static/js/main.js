@@ -5,6 +5,5 @@ $(document).ready(function(){
     });
     $('.cloudinary-fileupload').bind('fileuploadfail', function(e, data) {
         $('.upload_status').html(data);
-        console.log('mew?');
     });
-})
+});
