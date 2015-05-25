@@ -13,5 +13,7 @@
     <link href='http://fonts.googleapis.com/css?family=Sniglet' rel='stylesheet' type='text/css'>
     <link rel="shortcut icon" href="/static/favicon.png">
     <link href="/static/css/main.css" rel="stylesheet">
-    <script type="text/javascript" src="/static/js/s3upload.js"></script>
-    <script src="/static/js/main.js"></script>
+    <!-- local javascript files here: -->
+    {% assets filters='jsmin', output='generated/packed.js', 'js/jquery.ui.widget.js', 'js/jquery.fileupload.js', 'js/jquery.fileupload-image.js', 'js/jquery.iframe-transport.js', 'js/jquery.cloudinary.js', 'js/main.js' %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}

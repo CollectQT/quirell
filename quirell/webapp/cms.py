@@ -11,6 +11,7 @@ import flask_login
 import flask_misaka
 import itsdangerous
 import flask_bcrypt
+import flask_assets
 import flask_session
 import flask_seasurf
 # custom
@@ -53,6 +54,7 @@ class Cms(object):
         # content building
         flask_misaka.Misaka(app) # markdown
         if app.config['DEBUG']: self.build_css_automatic()
+        assets = flask_assets.Environment(app)
         # users
         self.login_manager = flask_login.LoginManager()
         self.login_manager.init_app(app)
@@ -70,7 +72,7 @@ class Cms(object):
         # app.after_request(self._after_request)
 
     def _before_request(self):
-        if flask.request.endpoint != 'base_static':
+        if not flask.request.endpoint in ['static', 'base_static']:
             LOG.info('('+flask_login.current_user['username']+') '+flask.request.method+' '+flask.request.path+' endpoint '+flask.request.endpoint+'()')
 
     # def _after_request(self, r):

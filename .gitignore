@@ -1,7 +1,10 @@
 ENV.yaml
 
 venv/
+generated/
+
 *.pyc
 *.pyo
 *egg-info/
 *.db
+*.webassets-cache
