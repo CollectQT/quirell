@@ -4,8 +4,6 @@ import os
 import glob
 import json
 import time
-import urllib
-import hashlib
 # external
 import flask
 import flask_login
@@ -65,13 +63,40 @@ def format_time(time_string, time_zone=None):
     if time_string == None: return None
     else: return arrow.get(time_string).humanize()
 
+def create_signature(params):
+    from hashlib import sha1
+    unsigned_string = ''
+    for key in sorted(params.keys()):
+        if key is 'api_key': continue
+        unsigned_string += '&{}={}'.format(key, params[key])
+    unsigned_string = unsigned_string[1:]  #clip leading &
+    unsigned_string += app.config['CLOUDINARY'].api_secret
+    hasher = sha1()
+    hasher.update(unsigned_string.encode(encoding='utf-8'))
+    signature = hasher.hexdigest()
+
+def profile_picture_form_data():
+    params = {
+        "public_id": current_user['username'],
+        "timestamp": time.time(),
+        "api_key": app.config['CLOUDINARY'].api_key,
+        "callback": "/static/html/cloudinary_cors.html",
+        "width": 200,
+        "height": 200,
+        "format": "jpg",
+        "signature": '',
+    }
+    params['signature'] = create_signature(params)
+    return params
+
 @app.context_processor
 def set_globals():
     return dict(
         flask=flask,
         current_user=current_user,
         is_current=is_current,
-        format_time=format_time)
+        format_time=format_time,
+        profile_picture_form_data=profile_picture_form_data,)
 
 ###############
 # BASIC PATHS #
