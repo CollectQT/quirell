@@ -71,6 +71,7 @@ def create_signature(params):
         unsigned_string += '&{}={}'.format(key, params[key])
     unsigned_string = unsigned_string[1:]  #clip leading &
     unsigned_string += app.config['CLOUDINARY'].api_secret
+    LOG.info(unsigned_string)
     hasher = sha1()
     hasher.update(unsigned_string.encode(encoding='utf-8'))
     signature = hasher.hexdigest()
@@ -78,14 +79,13 @@ def create_signature(params):
 
 def profile_picture_form_data():
     params = {
-        "public_id": current_user['username'],
+        # "public_id": current_user['username'],
         "timestamp": time.time(),
         "api_key": app.config['CLOUDINARY'].api_key,
         "callback": "/static/html/cloudinary_cors.html",
-        "width": 200,
-        "height": 200,
-        "format": "jpg",
-        "signature": '',
+        # "width": 200,
+        # "height": 200,
+        # "format": "jpg",
     }
     params['signature'] = create_signature(params)
     LOG.info(params)
@@ -98,7 +98,8 @@ def set_globals():
         current_user=current_user,
         is_current=is_current,
         format_time=format_time,
-        profile_picture_form_data=profile_picture_form_data,)
+        profile_picture_form_data=profile_picture_form_data,
+        cloudinary=app.config['CLOUDINARY'],)
 
 ###############
 # BASIC PATHS #

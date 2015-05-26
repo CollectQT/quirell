@@ -23,7 +23,7 @@
             <div class="progress-bar progress-bar-success"></div>
         </div>
         <div id="files-holder" class="files-holder"></div>
-        <input id="profile_picture_upload_input" type="file" name="upload_input" class="img_upload profile_picture cloudinary-fileupload" data-cloudinary-field="upload_reference" data-form-data='{{ profile_picture_form_data()|tojson }}'/>
+        <input id="profile_picture_upload_input" type="file" name="file" class="img_upload profile_picture cloudinary-fileupload" data-cloudinary-field="upload_reference" data-form-data='{{ profile_picture_form_data()|tojson }}'/>
         <input type="hidden" name="upload_reference">
         <p class="upload_status">Please select a file</p>
     </article>
