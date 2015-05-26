@@ -71,7 +71,6 @@ def create_signature(params):
         unsigned_string += '&{}={}'.format(key, params[key])
     unsigned_string = unsigned_string[1:]  #clip leading &
     unsigned_string += app.config['CLOUDINARY'].api_secret
-    LOG.info(unsigned_string)
     hasher = sha1()
     hasher.update(unsigned_string.encode(encoding='utf-8'))
     signature = hasher.hexdigest()
@@ -79,16 +78,25 @@ def create_signature(params):
 
 def profile_picture_form_data():
     params = {
-        # "public_id": current_user['username'],
+        "public_id": current_user['username'],
         "timestamp": time.time(),
         "api_key": app.config['CLOUDINARY'].api_key,
         "callback": "/static/html/cloudinary_cors.html",
-        # "width": 200,
-        # "height": 200,
-        # "format": "jpg",
+        "format": "jpg",
+        "eager": "w_200,h_200,c_scale"
     }
     params['signature'] = create_signature(params)
-    LOG.info(params)
+    return params
+
+def normal_picture_form_data():
+    params = {
+        "user_filename": True,
+        "timestamp": time.time(),
+        "api_key": app.config['CLOUDINARY'].api_key,
+        "callback": "/static/html/cloudinary_cors.html",
+        "format": "jpg",
+    }
+    params['signature'] = create_signature(params)
     return params
 
 @app.context_processor
@@ -99,6 +107,7 @@ def set_globals():
         is_current=is_current,
         format_time=format_time,
         profile_picture_form_data=profile_picture_form_data,
+        normal_picture_form_data=normal_picture_form_data,
         cloudinary=app.config['CLOUDINARY'],)
 
 ###############
@@ -218,21 +227,19 @@ def new_post_POST():
 def update_profile():
     # DANGEROUS!!!!! CONTENTS HAVE TO BE PARSED FIRST!!!!!!!!!!!!!
     # gonna leave it here for a bit though
-    for item in flask.request.form:
-        current_user[item] = flask.request.form[item]
+    for k in flask.request.form:
+        v = flask.request.form[k]
+        # prepend profile picture url
+        if k == 'profile_picture':
+            v = app.config['CLOUDINARY_CDN']+app.config['CLOUDINARY'].cloud_name+'/'+v
+        current_user[k] = v
+        # clean html
+        #
     # / DANGER
-    current_user.commit()
-    # throw them back to the profile page with a message of some sort
-    # on the relevant profile field if on of the things they tried to
-    # edit turned out wrong somehow
-    #
-    # probably attach a class to the incorrect field so that it glows
-    # red of something. Also make sure to have a place where a
-    # "message" can be displayed
-    if flask.request.args.get('next'):
-        return flask.redirect(flask.request.args.get('next'))
-    else:
-        return flask.redirect('/')
+    LOG.info('form request: '+str(flask.request.form))
+    LOG.info('current user: '+str(current_user))
+    # current_user.commit()
+    return flask.jsonify(msg='mew?')
 
 #########
 # USERS #
