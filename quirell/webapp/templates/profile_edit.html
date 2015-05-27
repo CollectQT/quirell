@@ -22,7 +22,9 @@
         <input id="profile_picture_upload_input" type="file" name="file" class="img_upload profile_picture cloudinary-fileupload" data-cloudinary-field="profile_picture" data-form-data='{{ profile_picture_form_data()|tojson }}'/>
         <input type="hidden" name="profile_picture">
         <p class="upload_status"></p>
-        <div class="progress-bar progress-bar-success"></div>
+        <div class="progress-bar holder">
+            <div class="progress-bar bar"></div>
+        </div>
     </article>
 {% endblock %}
 

@@ -231,15 +231,14 @@ def update_profile():
         v = flask.request.form[k]
         # prepend profile picture url
         if k == 'profile_picture':
+            if not v: continue
             v = app.config['CLOUDINARY_CDN']+app.config['CLOUDINARY'].cloud_name+'/'+v
         current_user[k] = v
         # clean html
         #
     # / DANGER
-    LOG.info('form request: '+str(flask.request.form))
-    LOG.info('current user: '+str(current_user))
-    # current_user.commit()
-    return flask.jsonify(msg='mew?')
+    current_user.commit()
+    return flask.jsonify({'status':200})
 
 #########
 # USERS #

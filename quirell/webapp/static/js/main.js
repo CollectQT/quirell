@@ -6,22 +6,29 @@ $(document).ready(function(){
     $('.cloudinary-fileupload').bind('fileuploadfail', function(e, data) {
         $('.upload_status').text(data)
     })
-    $('.cloudinary-fileupload').bind('cloudinarydone', function(e, data)
-    {
+    $('.cloudinary-fileupload').bind('cloudinarydone', function(e, data) {
         $('.img_preview').attr("src", data.result.url)
         $('.upload_status').text('Upload Complete!')
+        ajax_post($('#profile_edit_form'))
         // hide progress bar
     })
 
     // form AJAX section
-    $('#profile_edit_form').on("change", function() {
+    var ajax_post = function($form) {
         $.ajax({
-            url: $(this).attr("action"),
-            data: $(this).serialize(),
-            type: $(this).attr("method"),
-            success: function(response) {
-                console.log(response)
-            }
+            url: $form.attr("action"),
+            data: $form.serialize(),
+            type: $form.attr("method"),
         })
+    }
+    // do an AJAX post request if any of the profile edit fields besides
+    // file inputs change
+    $('#profile_edit_form input[type!="file"]').on("change", function() {
+        ajax_post($('#profile_edit_form'))
+    })
+    // overide profile edit submission to use AJAX
+    $('#profile_edit_form').on("submit", function(event) {
+        ajax_post($(this))
+        event.preventDefault()
     })
 })
