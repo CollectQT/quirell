@@ -1,7 +1,7 @@
-class User (flask_login.UserMixin):
-    import flask.ext.login as flask_login
-    from quirell.webapp.main import cms
+import flask_login
+from quirell.webapp.main import cms
 
+class User (object):
     '''
     the user class represents an individual user in the database
 
@@ -145,6 +145,8 @@ class User (flask_login.UserMixin):
     def is_authenticated (self): return True
 
     def is_active (self): return self['active']
+
+    def is_anonymous(self): return False
 
     def delete_account (self, password):
         # confirm password
