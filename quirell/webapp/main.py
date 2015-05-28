@@ -179,7 +179,7 @@ def render_file(filename):
 
 @app.route('/login', methods=['POST'])
 def login_POST():
-    from quirell.webapp.user import User
+    from quirell.webapp.models import User
     user = User()
     success, message = user.login(
         username=flask.request.form.get('username'),
@@ -201,7 +201,8 @@ def login_POST():
 
 @app.route('/signup', methods=['POST'])
 def signup_POST():
-    from quirell.webapp.user import User
+
+    from quirell.webapp.models import User
     # will eventually be moved to cms.validate_signup
     THE_PASSWORD = os.environ.get('THE_PASSWORD')
     if not flask.request.form.get('secret_password') == THE_PASSWORD: flask.abort(401)

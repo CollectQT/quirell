@@ -19,7 +19,7 @@ from quirell.config import *
 from quirell.database import Database
 
 def load_user(username):
-    from quirell.webapp.user import User
+    from quirell.webapp.models import User
     return User().get(username)
 
 class Anon(flask_login.AnonymousUserMixin):

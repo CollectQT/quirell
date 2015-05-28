@@ -1,51 +1,51 @@
-'''
-The user class
---------------
-The user class, in general, handles functions that run on individual users,
-and an instance of the user class is primary way that any change that happens
-via a view function can affect user data. The only other way that a view
-function can affect user data is via the cms (quirell.webapp.cms), but in that
-case it should be an admin who is causing the function call, not an
-individual user.
-
-Creating a user instance
-------------------------
-Given that its a user instance that a view function is generally interacting
-with, the user class has to be instanced before changes can start happening to
-it. Also, the only time when you should be instancing a user class instead of
-reading data directly from the node is when the view function is being called by
-a human who has access to edit the user data for the node. To be less technical,
-you instance the user class only for a login or signup. If you need a user
-instance outside of either of those contexts use `user=flask_login.current_user`
-(that is, you assume the user is logged in already)
-
-The user class and flask login
-------------------------------
-Flask login handles some of the more technical aspects of user logins. those
-being: user sessions, basic view permissions, and remembering logged in users.
-I'll explain those things in order.
-
-    When a user logs in (via `user.login`) an instance of the user class is
-    created. That instance is passed to `flask_login.login_user` and also the
-    `cms.user_container` dictionary. flask_login.login_user is a black box, but
-    cms.user_container is used to hold the user instance of all the currently
-    logged in users. When flask login wants to load a user instance, it reads it
-    out of the user_container.
-
-    Basic view permissions work via adding the flask_login.login_required
-    decorator. Which just checks to see if there is a user instance attached
-    to the browser session of the user making the request.
-
-    Remembering logged in users: I haven't actually tested how this works >_>
-    But a functionality I would like that may not be written into flask login,
-    is the ability to remember logged in users across server restarts.
-'''
-
-import flask.ext.login as flask_login
-from quirell.webapp.main import cms
-
 class User (flask_login.UserMixin):
-    '''the user class represents an individual user in the database'''
+    import flask.ext.login as flask_login
+    from quirell.webapp.main import cms
+
+    '''
+    the user class represents an individual user in the database
+
+    The user class
+    --------------
+    The user class, in general, handles functions that run on individual users,
+    and an instance of the user class is primary way that any change that happens
+    via a view function can affect user data. The only other way that a view
+    function can affect user data is via the cms (quirell.webapp.cms), but in that
+    case it should be an admin who is causing the function call, not an
+    individual user.
+
+    Creating a user instance
+    ------------------------
+    Given that its a user instance that a view function is generally interacting
+    with, the user class has to be instanced before changes can start happening to
+    it. Also, the only time when you should be instancing a user class instead of
+    reading data directly from the node is when the view function is being called by
+    a human who has access to edit the user data for the node. To be less technical,
+    you instance the user class only for a login or signup. If you need a user
+    instance outside of either of those contexts use `user=flask_login.current_user`
+    (that is, you assume the user is logged in already)
+
+    The user class and flask login
+    ------------------------------
+    Flask login handles some of the more technical aspects of user logins. those
+    being: user sessions, basic view permissions, and remembering logged in users.
+    I'll explain those things in order.
+
+        When a user logs in (via `user.login`) an instance of the user class is
+        created. That instance is passed to `flask_login.login_user` and also the
+        `cms.user_container` dictionary. flask_login.login_user is a black box, but
+        cms.user_container is used to hold the user instance of all the currently
+        logged in users. When flask login wants to load a user instance, it reads it
+        out of the user_container.
+
+        Basic view permissions work via adding the flask_login.login_required
+        decorator. Which just checks to see if there is a user instance attached
+        to the browser session of the user making the request.
+
+        Remembering logged in users: I haven't actually tested how this works >_>
+        But a functionality I would like that may not be written into flask login,
+        is the ability to remember logged in users across server restarts.
+    '''
 
     #########
     # inits #
@@ -82,11 +82,7 @@ class User (flask_login.UserMixin):
             return False, 'Incorrect password'
         # and if they are active
         if not node['active']:
-            return False, '''
-Account not active.
-
-Click [this link](/send_confirmation/{}) to send an activation email
-                '''.format(username)
+            return False, 'Account not active, [go to /send_confirmation](/send_confirmation/{}) to send an activation email'.format(username)
         # user considered successfully logged in at this point
         self.node = node # attach node to instance
         flask_login.login_user(self, remember=remember) # add to login manager
