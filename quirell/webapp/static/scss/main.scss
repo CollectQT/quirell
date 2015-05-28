@@ -93,10 +93,6 @@ nav a {
     display: inline-block;
 }
 
-.quirell-icon {
-    font-family: $font_quirell_icon;
-}
-
 /* nav */
 
 nav {
@@ -179,7 +175,7 @@ nav .button {
     border: none;
 }
 
-nav .button i, .nav-text, .quirell-icon {
+nav .button i, .nav-text {
     color: $color_primary;
 }
 
@@ -368,17 +364,18 @@ blockquote {
         height: 11.5vw;
 
         i {
-                font-size: 30px;
-                font-size: 10vw;
-                margin-left: 15px;
-                margin-right: 5px;
+            font-size: 30px;
+            font-size: 10vw;
+            margin-left: 15px;
+            margin-right: 5px;
         }
-    }
 
-    .quirell-icon {
-        font-size: 50px;
-        font-size: 10vw;
-        display: none;
+        img {
+            width: 30px;
+            width: 10vw;
+            margin-left: 15px;
+            margin-right: 5px;
+        }
     }
 
     .nav-text {
@@ -484,6 +481,10 @@ blockquote {
         font-size: 40px;
     }
 
+    nav img {
+        width: 40px;
+    }
+
     .nav-text {
         vertical-align: top;
         display: inline-block;
@@ -524,12 +525,6 @@ blockquote {
     .img-small {
         height: 40px;
         width: 40px;
-    }
-
-    .quirell-icon {
-        padding-top: 15px;
-        font-size: 50px;
-        display: inline-block;
     }
 
     .post-meta-top {

@@ -54,9 +54,6 @@ nav a {
  .icon {
  display: inline-block; }
 
- .quirell-icon {
- font-family: "Quirell", Arial; }
-
  nav {
  position: fixed;
  width: 100%;
@@ -88,10 +85,10 @@ nav a {
  display: none; }
 
  nav li a:hover, nav li a:focus {
-  background-color: #554488;
-  color: white; }
+ background-color: #554488;
+ color: white; }
 
-  nav ul li a {
+ nav ul li a {
   display: block; }
 
   .nav-menu-top {
@@ -117,13 +114,13 @@ nav a {
   color: #554488; }
 
   nav .button {
-   padding: 0;
-   margin: 0;
-   display: inline-block;
-   background-color: transparent;
-   border: none; }
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+  background-color: transparent;
+  border: none; }
 
-   nav .button i, .nav-text, .quirell-icon {
+  nav .button i, .nav-text {
    color: #554488; }
 
    .banner {
@@ -261,11 +258,12 @@ nav a {
      font-size: 10vw;
      margin-left: 15px;
      margin-right: 5px; }
-  .quirell-icon {
-   font-size: 50px;
-   font-size: 10vw;
-   display: none; }
-   .nav-text {
+     nav img {
+     width: 30px;
+     width: 10vw;
+     margin-left: 15px;
+     margin-right: 5px; }
+  .nav-text {
    display: none; }
    main {
    margin: 0 auto;
@@ -289,11 +287,11 @@ nav a {
    .post:hover, .post:focus {
    outline: 3px solid rgba(57, 125, 2, 0.5); }
    .post-meta-top {
-    max-width: 230px;
-    max-width: calc(95% - 60px);
-    margin-left: 5px;
-    line-height: 1.4em; }
-    .post-meta-bottom {
+   max-width: 230px;
+   max-width: calc(95% - 60px);
+   margin-left: 5px;
+   line-height: 1.4em; }
+   .post-meta-bottom {
     height: 15px;
     width: 100%; }
     .post-notes {
@@ -314,7 +312,7 @@ nav a {
     p {
     padding: 0 10px; }
     pre {
-     padding: 5px; }
+    padding: 5px; }
 }
 
 @media all and (min-width: 500px) {
@@ -324,6 +322,8 @@ nav a {
  padding-top: 60px; }
  nav i {
  font-size: 40px; }
+ nav img {
+ width: 40px; }
  .nav-text {
  vertical-align: top;
  display: inline-block;
@@ -339,11 +339,11 @@ nav a {
  display: inline-block;
  width: 20%; }
  .banner-right {
- margin-left: 40px;
- padding: 15px 30px;
- display: inline-block;
- width: 50%; }
- .img-large {
+  margin-left: 40px;
+  padding: 15px 30px;
+  display: inline-block;
+  width: 50%; }
+  .img-large {
   height: 100px;
   width: 100px; }
   .img-mid {
@@ -352,10 +352,6 @@ nav a {
   .img-small {
   height: 40px;
   width: 40px; }
-  .quirell-icon {
-  padding-top: 15px;
-  font-size: 50px;
-  display: inline-block; }
   .post-meta-top {
   max-width: 400px;
   max-width: calc(95% - 60px); }
