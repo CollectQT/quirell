@@ -66,24 +66,37 @@ nav a {
  nav ul {
  text-align: right;
  background-color: #EFEFEF;
- overflow: hidden; }
+ overflow: hidden;
+ border-radius: 5%; }
 
- nav ul li {
+ nav ul:hover {
+ box-shadow: 3px 3px 15px 0 rgba(128, 128, 128, 0.5); }
+
+ nav li a {
  transition-property: color, background-color;
- transition-duration: 0.25s;
  background-color: #EFEFEF;
  color: #000000;
- list-style-type: none; }
+ list-style-type: none;
+ padding-top: 3px;
+ padding-bottom: 3px;
+ padding-left: 5px;
+ padding-right: 5px;
+ border-radius: 5%;
+ overflow: hidden; }
 
- nav ul li:hover {
- background-color: #554488;
- color: white; }
-
- nav ul a > li {
+ nav ul > li {
  display: none; }
 
- nav ul:hover a > li {
-  display: list-item; }
+ nav li a:hover, nav li a:focus {
+  background-color: #554488;
+  color: white; }
+
+  nav ul li a {
+  display: block; }
+
+  .nav-menu-top {
+  padding-left: 5px;
+  padding-right: 5px; }
 
   .nav-block {
   float: left; }
@@ -97,22 +110,23 @@ nav a {
   margin: 0 auto; }
 
   .nav-right {
-  float: right; }
+  float: right;
+  margin-right: 2px; }
 
   nav i {
   color: #554488; }
 
   nav .button {
-  padding: 0;
-  margin: 0;
-  display: inline-block;
-  background-color: transparent;
-  border: none; }
+   padding: 0;
+   margin: 0;
+   display: inline-block;
+   background-color: transparent;
+   border: none; }
 
-  nav .button i, .nav-text, .quirell-icon {
-  color: #554488; }
+   nav .button i, .nav-text, .quirell-icon {
+   color: #554488; }
 
-  .banner {
+   .banner {
    background-color: #EFEFEF;
    padding: 10px 10px;
    margin-top: 10px; }
@@ -182,17 +196,14 @@ nav a {
    font-size: 16px;
    line-height: 1.3em; }
    nav ul {
-   margin: 0;
-   padding: 0;
-   border-radius: 5%; }
-   nav li {
-   padding-left: 5px;
-   padding-right: 5px;
-   padding-top: 5px;
-   padding-bottom: 5px;
-   margin-top: 2px;
+   margin-top: 0;
    margin-bottom: 2px;
-   outline: 1px outset rgba(239, 239, 239, 0.3); }
+   margin-left: 0;
+   margin-right: 0;
+   padding: 0; }
+   nav li {
+   margin-left: 2px;
+   margin-right: 2px; }
    article.double-form {
    padding-left: 0;
    padding-right: 0; }
@@ -275,7 +286,7 @@ nav a {
    padding: 10px;
    outline: 1px outset rgba(239, 239, 239, 0.3);
    transition: outline 0.25s; }
-   .post:hover {
+   .post:hover, .post:focus {
    outline: 3px solid rgba(57, 125, 2, 0.5); }
    .post-meta-top {
     max-width: 230px;
@@ -320,6 +331,9 @@ nav a {
  font-weight: 600;
  font-size: 1.2em;
  padding-top: 10px; }
+ .nav-menu-top {
+ padding-left: 10px;
+ padding-right: 10px; }
  .banner-left {
  margin-left: 30px;
  display: inline-block;
@@ -330,9 +344,9 @@ nav a {
  display: inline-block;
  width: 50%; }
  .img-large {
- height: 100px;
- width: 100px; }
- .img-mid {
+  height: 100px;
+  width: 100px; }
+  .img-mid {
   height: 60px;
   width: 60px; }
   .img-small {
@@ -352,9 +366,9 @@ nav a {
   article {
   width: 70%; }
   main.double-form, main.form {
-  width: 75%;
-  text-align: center; }
-  .double-form .login-signup-box {
+   width: 75%;
+   text-align: center; }
+   .double-form .login-signup-box {
    width: 100%;
    display: inline-block;
    margin-left: 10px;
