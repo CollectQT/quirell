@@ -1,3 +1,4 @@
+import json
 import flask_login
 from quirell.webapp.main import cms
 
@@ -128,6 +129,7 @@ class User (object):
             'profile_picture': '/static/img/default.png',
             'pictures': [],
             'pictures_amount': 0,
+            'relationships': [],
             }
         # then send it to the database
         cms.db.create_user(properties)
@@ -211,3 +213,121 @@ class User (object):
 
     def __delitem__ (self, key):
         del self.node[key]
+
+class Relationships(object):
+    '''
+    Used as the intermediate between the relationships backend and frontend.
+    Relationships are represented in the database on user nodes as:
+
+        user
+            relationships: {
+                name: {
+                    key: value,
+                    key: value,
+                    key: value,
+                }
+            }
+
+    user.relationships containts a dictionary of relationships, where the key
+    is the relationship name and the value is another dictionary containing
+    the attributes for an individual relationship. The attributes are:
+
+        * relationship name (a string)
+        * relationship description (a string)
+        * relationship value (an int)
+        * relationship icon (string, a url for an image)
+        * follow state (True or False)
+        * access - a list of access keywords for this relationship
+            * tagged-private (can see posts tagged private)
+            * no-mentions (their mentions of you don't show up in notes)
+            * etc... (there can be potentially dozens of these keywords)
+
+    These attributes are used to define how a specific user implements their
+    relationships. So when a user (userA) applies a relationship creates a
+    relationship with another user (userB) these are the attributes that are
+    applied to that relationship. An example relationship definition for userA
+    would be:
+
+        {
+            name: friend
+            desc: a person I'm friendly with
+            icon: /static/img/friend
+            follow: True
+            access: [life, selfies]
+        }
+
+    When userA creates the relationship with userB, those values an pulled off
+    of user.relationships['friend'] and applied to a set database relationships
+    between userA and userB. Those relationships would be:
+
+        (userA)-[RELATES]->(userB)
+            RELATES {
+                name: friend
+                desc: a person I'm friendly with
+                icon: /static/img/friend
+                access: [life, selfies]
+            }
+        (userA)-[FOLLOWS]->(userB)
+
+    Most of the values go onto RELATES, except for the follow state which gets
+    its own relationship for optimization purposes.
+    '''
+
+    defaults = {
+        'follow': {
+            'name': 'follow',
+            'desc': '',
+            'icon': '',
+            'follow': True,
+            'access': [],
+        },
+        'friend': {
+            'name': 'friend',
+            'desc': '',
+            'icon': '',
+            'follow': True,
+            'access': ['friends'],
+        },
+    }
+
+    def __init__(self, user_self, relationship_definition):
+        self.user_self = user_self
+        self.parse_definitions(relationship_definition)
+
+    def parse_definitions(self,):
+        '''
+        parse the relationship definition list into a dictionary on of
+        relationship names, and an ordered list of relationships
+        '''
+        self.ordered = []
+        self.mapped = {}
+
+    def change_definition(self, changes):
+        pass
+
+    def apply_relationship_with_user(self, user_other):
+        pass
+
+    def change_relationship_with_user(self, user_other, changes):
+        pass
+
+    ############
+    # builtins #
+    ############
+
+    def __str__ (self):
+        return str(self.node)
+
+    def __repr__ (self):
+        return str(self.node)
+
+    def __getitem__ (self, key):
+        try: return self.node[key]
+        except KeyError: return None
+
+    def __setitem__ (self, key, value):
+        self.node[key] = value
+
+    def __delitem__ (self, key):
+        del self.node[key]
+
