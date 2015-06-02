@@ -52,9 +52,9 @@ class User (object):
     # inits #
     #########
 
-    def format(self):
+    def format(self, node):
         self.node = node
-        self.relationships = Relationships(self.node['relationships'])
+        self.relationships = Relationships(self, node['relationships'])
 
     def get(self, username):
         '''
@@ -67,11 +67,11 @@ class User (object):
         flask_login's user loader, which itself checks that the use being loaded
         is logged in.
         '''
-        user = cms.db.load_user(username)
-        if user is None:
+        node = cms.db.load_user(username)
+        if node is None:
             return None
         else:
-            self.node = user
+            self.format(node)
             return self
 
     def login (self, username, password, remember):
@@ -89,7 +89,7 @@ class User (object):
         if not node['active']:
             return False, 'Account not active, [go to /send_confirmation](/send_confirmation/{}) to send an activation email'.format(username)
         # user considered successfully logged in at this point
-        self.format()
+        self.format(node)
         flask_login.login_user(self, remember=remember) # add to login manager
         return True, self
 
