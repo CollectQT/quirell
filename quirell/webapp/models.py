@@ -52,6 +52,10 @@ class User (object):
     # inits #
     #########
 
+    def format(self):
+        self.node = node
+        self.relationships = Relationships(self.node['relationships'])
+
     def get(self, username):
         '''
         get a user object straight from the database
@@ -85,7 +89,7 @@ class User (object):
         if not node['active']:
             return False, 'Account not active, [go to /send_confirmation](/send_confirmation/{}) to send an activation email'.format(username)
         # user considered successfully logged in at this point
-        self.node = node # attach node to instance
+        self.format()
         flask_login.login_user(self, remember=remember) # add to login manager
         return True, self
 
@@ -129,7 +133,7 @@ class User (object):
             'profile_picture': '/static/img/default.png',
             'pictures': [],
             'pictures_amount': 0,
-            'relationships': [],
+            'relationships': json.dumps(Relationships.defaults),
             }
         # then send it to the database
         cms.db.create_user(properties)
@@ -205,8 +209,11 @@ class User (object):
         return str(self.node)
 
     def __getitem__ (self, key):
-        try: return self.node[key]
-        except KeyError: return None
+        if key == 'relationships':
+            return self.relationships
+        else:
+            try: return self.node[key]
+            except KeyError: return None
 
     def __setitem__ (self, key, value):
         self.node[key] = value
@@ -234,7 +241,7 @@ class Relationships(object):
 
         * relationship name (a string)
         * relationship description (a string)
-        * relationship value (an int)
+        * relationship order (an int, used to order relationships)
         * relationship icon (string, a url for an image)
         * follow state (True or False)
         * access - a list of access keywords for this relationship
@@ -248,12 +255,12 @@ class Relationships(object):
     applied to that relationship. An example relationship definition for userA
     would be:
 
-        {
-            name: friend
+        friend: {
             desc: a person I'm friendly with
             icon: /static/img/friend
             follow: True
             access: [life, selfies]
+            order: 1
         }
 
     When userA creates the relationship with userB, those values an pulled off
@@ -266,6 +273,7 @@ class Relationships(object):
                 desc: a person I'm friendly with
                 icon: /static/img/friend
                 access: [life, selfies]
+                order: 1
             }
         (userA)-[FOLLOWS]->(userB)
 
@@ -275,34 +283,38 @@ class Relationships(object):
 
     defaults = {
         'follow': {
-            'name': 'follow',
             'desc': '',
             'icon': '',
+            'order': 1,
             'follow': True,
             'access': [],
         },
         'friend': {
-            'name': 'friend',
             'desc': '',
             'icon': '',
+            'order': 2,
             'follow': True,
             'access': ['friends'],
         },
     }
 
-    def __init__(self, user_self, relationship_definition):
-        self.user_self = user_self
-        self.parse_definitions(relationship_definition)
+    def __init__(self, user, definitions):
+        self.user = user
+        self.parse_definitions(definitions)
 
-    def parse_definitions(self,):
+    def parse_definitions(self, definitions):
         '''
-        parse the relationship definition list into a dictionary on of
-        relationship names, and an ordered list of relationships
+        write the relationships definition string onto a dictionary of
+        relationship names, and an ordered list of relationship values
         '''
+        self.mapped = json.loads(definitions)
         self.ordered = []
-        self.mapped = {}
+        for name, values in self.mapped.items():
+            values['name'] = name
+            self.ordered.append(values)
+        self.ordered.sort(key=lambda item: item['order'])
 
-    def change_definition(self, changes):
+    def change_definition(self, name, definition):
         pass
 
     def apply_relationship_with_user(self, user_other):
@@ -311,23 +323,15 @@ class Relationships(object):
     def change_relationship_with_user(self, user_other, changes):
         pass
 
-    ############
-    # builtins #
-    ############
-
     def __str__ (self):
-        return str(self.node)
+        return json.dumps(self.mapped)
 
     def __repr__ (self):
-        return str(self.node)
+        return json.dumps(self.mapped)
 
     def __getitem__ (self, key):
-        try: return self.node[key]
-        except KeyError: return None
-
-    def __setitem__ (self, key, value):
-        self.node[key] = value
-
-    def __delitem__ (self, key):
-        del self.node[key]
-
+        if type(key) is str:
+            try: return self.mapped[key]
+            except KeyError: return None
+        elif type(key) is int:
+            return self.ordered[key]
