@@ -306,21 +306,6 @@ class Database (object):
             MATCH (:user {username:{user_req}})-[r:BLOCKS]->(:user {username:{user_self}})
             RETURN r''', parameters=parameters))
 
-    ###############
-    # refactoring #
-    ###############
-
-    def update_all_posts (self):
-        recordlist = self.db.cypher.execute('MATCH (post:post) RETURN post')
-        all_posts = [record['post'] for record in recordlist]
-        for post in all_posts:
-            continue
-
-    def update_all_users (self):
-        recordlist = self.db.cypher.execute('MATCH (user:user) RETURN user')
-        all_users = [record['user'] for record in recordlist]
-        for user in all_users:
-            continue
-
 if __name__ == "__main__":
     db = Database()
+    db.update_all_users()
