@@ -61,12 +61,12 @@ def test_user_functions():
     # assert... something
     # assert create post
 
-def test_account_create_and_delete():
+def test_account_create_verbose():
     # variables
     session = requests.Session()
     username = 'test_kitten_quirell_account'
     password = 'test_kitten_access_code'
-    email = 'firemagelynn+quirelltesting@gmail.com'
+    email = 'firemagelynn+quirelltestingkitten@gmail.com'
     confirmation_code = cms.serialize.dumps(email)
     signup = {
         'username': username,
@@ -79,15 +79,6 @@ def test_account_create_and_delete():
         'username': username,
         'password': password,
     }
-    bad_password = {
-        'password': 'XXXXXXX_WRONG_PASS_XXXXXXXX',
-    }
-    password = {
-        'password': password,
-    }
-
-    # if the account exists already, we delete it from the database
-    # we -could- login and delete it via a request, but we are gonna do that later
     if session.get('http://0.0.0.0:5000'+'/u/'+username).status_code == 200:
         cms.db.delete_account('@'+username)
 
@@ -103,10 +94,59 @@ def test_account_create_and_delete():
     assert session.get('http://0.0.0.0:5000'+'/u/'+username).status_code == 200 # should exist now
     # assert can view profile
     # assert can view /u/@tesk_kitten
+
+def test_account_create_basic():
+    session = requests.Session()
+    username = 'test_doge_quirell_account'
+    password = 'test_doge_access_code'
+    email = 'firemagelynn+quirelltestingdoge@gmail.com'
+    confirmation_code = cms.serialize.dumps(email)
+    signup = {
+        'username': username,
+        'password': password,
+        'confirm': password,
+        'email': email,
+        'secret_password': os.environ.get('THE_PASSWORD'),
+    }
+    login = {
+        'username': username,
+        'password': password,
+    }
+    password = {
+        'password': password,
+    }
+    if session.get('http://0.0.0.0:5000'+'/u/'+username).status_code == 200:
+        cms.db.delete_account('@'+username)
+    assert session.post('http://0.0.0.0:5000'+'/signup', data=signup).status_code == 200
+    assert session.get('http://0.0.0.0:5000'+'/confirm_account/'+confirmation_code).status_code == 200
+
+def test_delete_account_verbose():
+    session = requests.Session()
+    username = 'test_kitten_quirell_account'
+    password = 'test_kitten_access_code'
+    login = {
+        'username': username,
+        'password': password,
+    }
+    bad_password = {
+        'password': 'XXXXXXX_WRONG_PASS_XXXXXXXX',
+    }
+    assert session.post('http://0.0.0.0:5000'+'/login', data=login).status_code == 200 # can login now
     assert session.post('http://0.0.0.0:5000'+'/delete_account').status_code == 401 # no password input
     assert session.post('http://0.0.0.0:5000'+'/delete_account', data=bad_password).status_code == 401 # bad password input
-    assert session.post('http://0.0.0.0:5000'+'/delete_account', data=password).status_code == 200 # actually delete account
+    assert session.post('http://0.0.0.0:5000'+'/delete_account', data={'password': password}).status_code == 200 # actually delete account
     assert session.get('http://0.0.0.0:5000'+'/u/'+username).status_code == 404 # shouldnt exist
+
+def test_delete_account_basic():
+    session = requests.Session()
+    username = 'test_doge_quirell_account'
+    password = 'test_doge_access_code'
+    login = {
+        'username': username,
+        'password': password,
+    }
+    assert session.post('http://0.0.0.0:5000'+'/login', data=login).status_code == 200
+    assert session.post('http://0.0.0.0:5000'+'/delete_account', data={'password': password}).status_code == 200
 
 def test_shutdown_server():
     requests.post('http://0.0.0.0:5000/shutdown')
