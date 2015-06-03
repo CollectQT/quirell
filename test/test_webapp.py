@@ -120,6 +120,26 @@ def test_account_create_basic():
     assert session.post('http://0.0.0.0:5000'+'/signup', data=signup).status_code == 200
     assert session.get('http://0.0.0.0:5000'+'/confirm_account/'+confirmation_code).status_code == 200
 
+def test_follow_and_unfollow():
+    session = requests.Session()
+    username = 'test_doge_quirell_account'
+    password = 'test_doge_access_code'
+    login = {
+        'username': username,
+        'password': password,
+    }
+    relationship_1 = {
+        'relationship': 'follow',
+        'user': '@test_kitten_quirell_account'
+    }
+    relationship_2 = {
+        'relationship': 'knows',
+        'user': '@test_kitten_quirell_account'
+    }
+    assert session.post('http://0.0.0.0:5000'+'/login', data=login).status_code == 200
+    assert session.post('http://0.0.0.0:5000'+'/relationship/edit', data=relationship_1).status_code == 200
+    assert session.post('http://0.0.0.0:5000'+'/relationship/edit', data=relationship_2).status_code == 200
+
 def test_delete_account_verbose():
     session = requests.Session()
     username = 'test_kitten_quirell_account'

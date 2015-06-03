@@ -245,6 +245,56 @@ class Database (object):
         except IndexError: user = None
         return user, timeline
 
+    #################
+    # relationships #
+    #################
+
+    def apply_relationship(self, user, target, relationship):
+        '''
+        example input:
+
+            user = '@doge'
+            target = '@kitten'
+            relationship = {
+                'name': 'follows',
+                'desc': '',
+                'icon': '',
+                'order': 1,
+                'follow': True,
+                'access': [],
+            }
+        '''
+        parameters = {'user':user, 'target':target, 'relates':relationship}
+        tx = self.db.cypher.begin()
+        tx.append('''
+                MATCH (user:user {username:{user}})
+                MATCH (target:user {username:{target}})
+                MERGE (user)-[relates:RELATES]->(target)
+                SET relates = {relates}
+            ''',parameters=parameters)
+        if relationship['follow'] == True:
+            tx.append('''
+                MATCH (user:user {username:{user}})
+                MATCH (target:user {username:{target}})
+                MERGE (user)-[:FOLLOWS]->(target)
+                ''', parameters=parameters)
+        elif relationship['follow'] == False:
+            tx.append('''
+                MATCH (user:user {username:{user}})
+                MATCH (target:user {username:{target}})
+                MATCH (user)-[follows:FOLLOWS]->(target)
+                DELETE follows
+                ''', parameters=parameters)
+        else:
+            LOG.warning('Invalid relationship definition: {}'.format(relationship))
+        tx.commit()
+
+    def get_following(self, user):
+        pass
+
+    def get_followers(self, user):
+        pass
+
     ##################
     # self functions #
     ##################

@@ -319,15 +319,18 @@ class Relationships(object):
         for name, values in self.mapped.items():
             values['name'] = name
             self.ordered.append(values)
+            self.mapped[name]['name'] = name
         self.ordered.sort(key=lambda item: item['order'])
 
     def change_definition(self, name, definition):
         pass
 
-    def apply_relationship_with_user(self, user_other):
-        pass
+    def apply_relationship(self, relationship, target):
+        user = self.user['username']
+        relationship = self[relationship]
+        cms.db.apply_relationship(user, target, relationship)
 
-    def change_relationship_with_user(self, user_other, changes):
+    def change_relationship_with_user(self, changes, target):
         pass
 
     def __str__ (self):

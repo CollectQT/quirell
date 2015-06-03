@@ -240,6 +240,15 @@ def update_profile():
     current_user.commit()
     return flask.jsonify({'status':200})
 
+@app.route("/relationship/edit", methods=["POST"])
+@flask_login.login_required
+def apply_relationship():
+    relationship = flask.request.form['relationship']
+    target_user = flask.request.form['user']
+    if not target_user[0] == '@': target_user = '@'+target_user
+    current_user.relationships.apply_relationship(relationship, target_user)
+    return flask.jsonify({'status':200})
+
 #########
 # USERS #
 #########
