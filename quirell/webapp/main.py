@@ -12,9 +12,9 @@ from quirell.config import *
 from quirell.webapp import app
 from quirell.webapp.cms import Cms
 
-###########
-# GLOBALS #
-###########
+####################
+# TEMPLATE GLOBALS #
+####################
 
 cms = Cms(app)
 
