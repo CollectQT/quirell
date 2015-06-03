@@ -228,8 +228,7 @@ def new_post_POST():
 def update_profile():
     # DANGEROUS!!!!! CONTENTS HAVE TO BE PARSED FIRST!!!!!!!!!!!!!
     # gonna leave it here for a bit though
-    for k in flask.request.form:
-        v = flask.request.form[k]
+    for k, v in flask.request.form.items():
         # prepend profile picture url
         if k == 'profile_picture':
             if not v: continue
