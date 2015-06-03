@@ -282,6 +282,13 @@ class Relationships(object):
     '''
 
     defaults = {
+        'knows': {
+            'desc': '',
+            'icon': '',
+            'order': 0,
+            'follow': False,
+            'access': [],
+        },
         'follow': {
             'desc': '',
             'icon': '',
