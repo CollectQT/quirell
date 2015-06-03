@@ -71,6 +71,19 @@ class Cms(object):
         app.before_request(self._before_request)
         # app.after_request(self._after_request)
 
+    def clean_html (self, html):
+        # cleans html to prevent people doing evil things with it like
+        # like... idk. things with evil scripts and inline css
+        from bs4 import BeautifulSoup
+        html = BeautifulSoup(html)
+        # destroy evil tags
+        for tag in html(['iframe', 'script']): tag.decompose()
+        # remove evil attributes
+        for tag in html():
+            for attribute in ["class", "id", "name", "style", "data"]:
+                del tag[attribute]
+        return str(html)
+
     def _before_request(self):
         if not flask.request.endpoint in ['static', 'base_static']:
             LOG.info('('+flask_login.current_user['username']+') '+flask.request.method+' '+flask.request.path+' endpoint '+flask.request.endpoint+'()')
