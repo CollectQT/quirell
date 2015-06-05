@@ -4,22 +4,25 @@
 import hashlib
 import multiprocessing
 # external
+import sass
 import flask
 import redis
 import markdown
 import flask_login
+import flask_cache
 import flask_misaka
 import itsdangerous
 import flask_bcrypt
 import flask_assets
 import flask_session
 import flask_seasurf
+import flask_compress
 # custom
 from quirell.config import *
 from quirell.database import Database
 
 def load_user(username):
-    from quirell.webapp.user import User
+    from quirell.webapp.models import User
     return User().get(username)
 
 class Anon(flask_login.AnonymousUserMixin):
@@ -53,8 +56,23 @@ class Cms(object):
             raise Exception('Could not get REDISTOGO_URL')
         # content building
         flask_misaka.Misaka(app) # markdown
-        if app.config['DEBUG']: self.build_css_automatic()
         assets = flask_assets.Environment(app)
+        flask_compress.Compress(app)
+        cache = flask_cache.Cache(app,
+            config={
+                'CACHE_TYPE': 'redis',
+                'CACHE_REDIS_URL': os.environ['REDISTOGO_URL']
+            }
+        )
+        self.cached = cache.cached; self.memoize = cache.memoize
+        input_file = BASE_PATH+'/quirell/webapp/static/scss/main.scss'
+        output_file = BASE_PATH+'/quirell/webapp/static/css/main.css'
+        include_paths = BASE_PATH+'/quirell/webapp/static/scss/'
+        sass.compile(
+            dirname=(input_file, output_file),
+            output_style='compressed',
+            include_paths=include_paths
+        )
         # users
         self.login_manager = flask_login.LoginManager()
         self.login_manager.init_app(app)
@@ -71,9 +89,22 @@ class Cms(object):
         app.before_request(self._before_request)
         # app.after_request(self._after_request)
 
+    def clean_html (self, html):
+        # cleans html to prevent people doing evil things with it like
+        # like... idk. things with evil scripts and inline css
+        from bs4 import BeautifulSoup
+        html = BeautifulSoup(html)
+        # destroy evil tags
+        for tag in html(['iframe', 'script']): tag.decompose()
+        # remove evil attributes
+        for tag in html():
+            for attribute in ["class", "id", "name", "style", "data"]:
+                del tag[attribute]
+        return str(html)
+
     def _before_request(self):
         if not flask.request.endpoint in ['static', 'base_static']:
-            LOG.info('('+flask_login.current_user['username']+') '+flask.request.method+' '+flask.request.path+' endpoint '+flask.request.endpoint+'()')
+            LOG.info('('+flask_login.current_user['username']+') '+flask.request.method+' '+str(flask.request.path)+' endpoint '+str(flask.request.endpoint)+'()')
 
     # def _after_request(self, r):
     #     return r
@@ -147,47 +178,6 @@ class Cms(object):
             return 'Account already active', 401
         else:
             return 'Could not confirm account', 401
-
-    ################
-    # CSS BUILDING #
-    ################
-
-    from watchdog.events import FileSystemEventHandler
-    class _Change_monitor (FileSystemEventHandler):
-        ''' build_css() on scss file change'''
-        def __init__ (self, cms_inst): self.css_builder = cms_inst.build_css
-        def on_modified (self, event): self.css_builder()
-
-
-    def build_css_automatic (self):
-        '''adds monitoring to autoreload css on changes'''
-        # start up the monitor
-        from watchdog import observers
-        from watchdog.events import LoggingEventHandler
-        change_monitor = Cms._Change_monitor(self)
-        observer = observers.Observer()
-        observer.schedule(change_monitor, BASE_PATH+'/quirell/webapp/static/scss/')
-        observer.start()
-        # start css writer
-        import scss
-        scss.config.PROJECT_ROOT = BASE_PATH
-        self.scss_file = BASE_PATH+'/quirell/webapp/static/scss/main.scss'
-        self.css_writer = scss.Scss()
-        # do an intial build
-        self.build_css()
-
-    def build_css (self):
-        '''builds css from sass'''
-        with open(self.scss_file, 'r') as infile:
-            scss_content = infile.read()
-        compiled_css = self.css_writer.compile(scss_content)
-        # readability sillyness
-        for i in range(4): compiled_css = compiled_css.replace("  ", " ")
-        # write to file
-        with open(BASE_PATH+'/quirell/webapp/static/css/main.css', 'w') as outfile:
-            outfile.write(compiled_css)
-        # log
-        LOG.info('Building CSS')
 
     ###########
     # Mailing #

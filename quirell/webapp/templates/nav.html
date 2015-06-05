@@ -18,30 +18,26 @@
         -->
     </div>
     <div class='nav-block nav-mid'>
-        <a href='/'><i class='icon quirell-icon'>Q</i></a>
+        <img src='/static/img/quirell.png'>
     </div>
     <div class='nav-block nav-right'>
         <!-- user account functions -->
         {% if current_user.is_authenticated() %}
             <!-- user actions -->
             <ul class='nav-menu'>
-                <div class='avatar'><img class='img_preview avatar img-small' src="{{ current_user.profile_picture }}" alt='{{ current_user.username}} Avatar'></div>
-                <div class='nav-text'>{{ current_user.display_name }}</div>
-                <a href='/profile'>
-                    <li>Profile</li>
-                </a>
-                <a href='/profile/edit'>
-                    <li>Edit Profile</li>
-                </a>
-                <a href='/logout'>
-                    <li>Logout</li>
-                </a>
+                <span class='nav-menu-top' title='Options Menu' tabindex='0'>
+                    <img class='img_preview avatar img-small' src="{{ current_user.profile_picture }}" alt='{{ current_user.username}} Avatar'>
+                    <span class='nav-text'>{{ current_user.display_name }}</span>
+                </span>
+                <li><a href='/profile'>Profile</a></li>
+                <li><a href='/profile/edit'>Edit Profile</a></li>
+                <li><a href='/logout'>Logout</a></li>
             </ul>
         {% else %}
             <!-- login -->
             <a href='/login?next={{ flask.request.path }}' class='button'>
-                    <i class='fa fa-user'></i>
-                    <div class='nav-text'>Login / Signup</div>
+                <i class='fa fa-user'></i>
+                <div class='nav-text'>Login / Signup</div>
             </a>
         {% endif %}
     </div>

@@ -12,9 +12,9 @@ from quirell.config import *
 from quirell.webapp import app
 from quirell.webapp.cms import Cms
 
-###########
-# GLOBALS #
-###########
+####################
+# TEMPLATE GLOBALS #
+####################
 
 cms = Cms(app)
 
@@ -141,23 +141,6 @@ def profile_page():
     return flask.render_template('profile.html', user=user,
         timeline=timeline)
 
-# render static files
-@app.route('/static/<path:filename>')
-def base_static(filename):
-    return flask.send_from_directory(app.root_path + '/static/', filename)
-
-# mostly used to render the readmes
-@app.route('/files/<path:filename>')
-def render_file(filename):
-    # get all files
-    files = glob.glob(BASE_PATH+'/'+filename+'*')
-    # the shortest file with the beggining the user requested is probably right
-    # ie. if the request was /readme we want /readme.md not /readme-webapp.md
-    files.sort(key=len);
-    with open(files[0], 'r') as f:
-        content = f.read()
-    return flask.render_template('message.html', html_content=content)
-
 #########
 # FORMS #
 #########
@@ -179,7 +162,7 @@ def render_file(filename):
 
 @app.route('/login', methods=['POST'])
 def login_POST():
-    from quirell.webapp.user import User
+    from quirell.webapp.models import User
     user = User()
     success, message = user.login(
         username=flask.request.form.get('username'),
@@ -201,7 +184,8 @@ def login_POST():
 
 @app.route('/signup', methods=['POST'])
 def signup_POST():
-    from quirell.webapp.user import User
+
+    from quirell.webapp.models import User
     # will eventually be moved to cms.validate_signup
     THE_PASSWORD = os.environ.get('THE_PASSWORD')
     if not flask.request.form.get('secret_password') == THE_PASSWORD: flask.abort(401)
@@ -227,8 +211,7 @@ def new_post_POST():
 def update_profile():
     # DANGEROUS!!!!! CONTENTS HAVE TO BE PARSED FIRST!!!!!!!!!!!!!
     # gonna leave it here for a bit though
-    for k in flask.request.form:
-        v = flask.request.form[k]
+    for k, v in flask.request.form.items():
         # prepend profile picture url
         if k == 'profile_picture':
             if not v: continue
@@ -238,6 +221,15 @@ def update_profile():
         #
     # / DANGER
     current_user.commit()
+    return flask.jsonify({'status':200})
+
+@app.route("/relationship/edit", methods=["POST"])
+@flask_login.login_required
+def apply_relationship():
+    relationship = flask.request.form['relationship']
+    target_user = flask.request.form['user']
+    if not target_user[0] == '@': target_user = '@'+target_user
+    current_user.relationships.apply_relationship(relationship, target_user)
     return flask.jsonify({'status':200})
 
 #########
@@ -365,6 +357,11 @@ def shutdown():
         return 'Server shutting down...'
 
 @app.route('/favicon.ico')
-def favicon():
-    return flask.send_from_directory(os.path.join(BASE_PATH, 'quirell',
-        'webapp', 'static'), 'favicon.png')
+@cms.cached(3600)
+def show_favicon():
+    return flask.send_from_directory(BASE_PATH+'/quirell/webapp/static/img', 'quirell.ico')
+
+@app.route('/static/<path:filename>')
+@cms.memoize(3600)
+def render_static_file(filename):
+    return flask.send_from_directory(app.root_path + '/static/', filename)
