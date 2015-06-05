@@ -141,23 +141,6 @@ def profile_page():
     return flask.render_template('profile.html', user=user,
         timeline=timeline)
 
-# render static files
-@app.route('/static/<path:filename>')
-def base_static(filename):
-    return flask.send_from_directory(app.root_path + '/static/', filename)
-
-# mostly used to render the readmes
-@app.route('/files/<path:filename>')
-def render_file(filename):
-    # get all files
-    files = glob.glob(BASE_PATH+'/'+filename+'*')
-    # the shortest file with the beggining the user requested is probably right
-    # ie. if the request was /readme we want /readme.md not /readme-webapp.md
-    files.sort(key=len);
-    with open(files[0], 'r') as f:
-        content = f.read()
-    return flask.render_template('message.html', html_content=content)
-
 #########
 # FORMS #
 #########
@@ -374,6 +357,20 @@ def shutdown():
         return 'Server shutting down...'
 
 @app.route('/favicon.ico')
-def favicon():
-    return flask.send_from_directory(os.path.join(BASE_PATH, 'quirell',
-        'webapp', 'static'), 'favicon.png')
+def show_favicon():
+    return flask.send_from_directory(BASE_PATH+'quirell/webapp/static/img', 'quirell.ico')
+
+@app.route('/static/scss/<path:filename>')
+def render_scss_file(filename):
+    import sass
+    return sass.compile(filename='static/main.scss', output_style='compressed')
+
+@app.route('/static/<path:filename>')
+def render_static_file(filename):
+    return flask.send_from_directory(app.root_path + '/static/', filename)
+
+@app.route('/files/<path:filename>')
+def render_base_path_file(filename):
+    with open(BASE_PATH+'/'+filename, 'r') as f:
+        html_content = f.read()
+    return flask.render_template('message.html', html_content=html_content)

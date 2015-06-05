@@ -53,7 +53,6 @@ class Cms(object):
             raise Exception('Could not get REDISTOGO_URL')
         # content building
         flask_misaka.Misaka(app) # markdown
-        if app.config['DEBUG']: self.build_css_automatic()
         assets = flask_assets.Environment(app)
         # users
         self.login_manager = flask_login.LoginManager()
@@ -147,47 +146,6 @@ class Cms(object):
             return 'Account already active', 401
         else:
             return 'Could not confirm account', 401
-
-    ################
-    # CSS BUILDING #
-    ################
-
-    from watchdog.events import FileSystemEventHandler
-    class _Change_monitor (FileSystemEventHandler):
-        ''' build_css() on scss file change'''
-        def __init__ (self, cms_inst): self.css_builder = cms_inst.build_css
-        def on_modified (self, event): self.css_builder()
-
-
-    def build_css_automatic (self):
-        '''adds monitoring to autoreload css on changes'''
-        # start up the monitor
-        from watchdog import observers
-        from watchdog.events import LoggingEventHandler
-        change_monitor = Cms._Change_monitor(self)
-        observer = observers.Observer()
-        observer.schedule(change_monitor, BASE_PATH+'/quirell/webapp/static/scss/')
-        observer.start()
-        # start css writer
-        import scss
-        scss.config.PROJECT_ROOT = BASE_PATH
-        self.scss_file = BASE_PATH+'/quirell/webapp/static/scss/main.scss'
-        self.css_writer = scss.Scss()
-        # do an intial build
-        self.build_css()
-
-    def build_css (self):
-        '''builds css from sass'''
-        with open(self.scss_file, 'r') as infile:
-            scss_content = infile.read()
-        compiled_css = self.css_writer.compile(scss_content)
-        # readability sillyness
-        for i in range(4): compiled_css = compiled_css.replace("  ", " ")
-        # write to file
-        with open(BASE_PATH+'/quirell/webapp/static/css/main.css', 'w') as outfile:
-            outfile.write(compiled_css)
-        # log
-        LOG.info('Building CSS')
 
     ###########
     # Mailing #
