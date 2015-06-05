@@ -365,9 +365,3 @@ def show_favicon():
 @cms.memoize(3600)
 def render_static_file(filename):
     return flask.send_from_directory(app.root_path + '/static/', filename)
-
-@app.route('/files/<path:filename>')
-def render_base_path_file(filename):
-    with open(BASE_PATH+'/'+filename, 'r') as f:
-        html_content = f.read()
-    return flask.render_template('message.html', html_content=html_content)
