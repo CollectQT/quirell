@@ -357,10 +357,12 @@ def shutdown():
         return 'Server shutting down...'
 
 @app.route('/favicon.ico')
+@cms.cached(3600)
 def show_favicon():
     return flask.send_from_directory(BASE_PATH+'/quirell/webapp/static/img', 'quirell.ico')
 
 @app.route('/static/<path:filename>')
+@cms.memoize(3600)
 def render_static_file(filename):
     return flask.send_from_directory(app.root_path + '/static/', filename)
 

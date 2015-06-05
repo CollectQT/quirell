@@ -9,6 +9,7 @@ import flask
 import redis
 import markdown
 import flask_login
+import flask_cache
 import flask_misaka
 import itsdangerous
 import flask_bcrypt
@@ -57,6 +58,13 @@ class Cms(object):
         flask_misaka.Misaka(app) # markdown
         assets = flask_assets.Environment(app)
         flask_compress.Compress(app)
+        cache = flask_cache.Cache(app,
+            config={
+                'CACHE_TYPE': 'redis',
+                'CACHE_REDIS_URL': os.environ['REDISTOGO_URL']
+            }
+        )
+        self.cached = cache.cached; self.memoize = cache.memoize
         input_file = BASE_PATH+'/quirell/webapp/static/scss/main.scss'
         output_file = BASE_PATH+'/quirell/webapp/static/css/main.css'
         include_paths = BASE_PATH+'/quirell/webapp/static/scss/'
