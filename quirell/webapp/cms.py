@@ -15,6 +15,7 @@ import flask_bcrypt
 import flask_assets
 import flask_session
 import flask_seasurf
+import flask_compress
 # custom
 from quirell.config import *
 from quirell.database import Database
@@ -55,6 +56,7 @@ class Cms(object):
         # content building
         flask_misaka.Misaka(app) # markdown
         assets = flask_assets.Environment(app)
+        flask_compress.Compress(app)
         input_file = BASE_PATH+'/quirell/webapp/static/scss/main.scss'
         output_file = BASE_PATH+'/quirell/webapp/static/css/main.css'
         include_paths = BASE_PATH+'/quirell/webapp/static/scss/'
