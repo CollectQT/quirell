@@ -358,12 +358,7 @@ def shutdown():
 
 @app.route('/favicon.ico')
 def show_favicon():
-    return flask.send_from_directory(BASE_PATH+'quirell/webapp/static/img', 'quirell.ico')
-
-@app.route('/static/scss/<path:filename>')
-def render_scss_file(filename):
-    import sass
-    return sass.compile(filename='static/main.scss', output_style='compressed')
+    return flask.send_from_directory(BASE_PATH+'/quirell/webapp/static/img', 'quirell.ico')
 
 @app.route('/static/<path:filename>')
 def render_static_file(filename):

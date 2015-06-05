@@ -4,6 +4,7 @@
 import hashlib
 import multiprocessing
 # external
+import sass
 import flask
 import redis
 import markdown
@@ -54,6 +55,14 @@ class Cms(object):
         # content building
         flask_misaka.Misaka(app) # markdown
         assets = flask_assets.Environment(app)
+        input_file = BASE_PATH+'/quirell/webapp/static/scss/main.scss'
+        output_file = BASE_PATH+'/quirell/webapp/static/css/main.css'
+        include_paths = BASE_PATH+'/quirell/webapp/static/scss/'
+        sass.compile(
+            dirname=(input_file, output_file),
+            output_style='compressed',
+            include_paths=include_paths
+        )
         # users
         self.login_manager = flask_login.LoginManager()
         self.login_manager.init_app(app)
