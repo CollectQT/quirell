@@ -357,7 +357,6 @@ def shutdown():
         return 'Server shutting down...'
 
 @app.route('/favicon.ico')
-@cms.cached(3600)
 def show_favicon():
     return flask.send_from_directory(BASE_PATH+'/quirell/webapp/static/img', 'quirell.ico')
 
