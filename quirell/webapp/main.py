@@ -217,12 +217,13 @@ def signup_POST():
     # will eventually be moved to cms.validate_signup
     THE_PASSWORD = os.environ.get('THE_PASSWORD')
 
-    # if not flask.request.form.get('secret_password') == THE_PASSWORD: flask.abort(401)
     # if not flask.request.form.get('password') == flask.request.form.get('confirm'): flask.abort(401)
     form = SignupForm(flask.request.form)
     if not form.validate():
         print(form.errors)
         return flask.abort(400)
+    if form.secret_password.data != THE_PASSWORD:
+        flask.abort(401)
 
     user = User()
     user.create(
