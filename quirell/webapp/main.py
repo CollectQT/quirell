@@ -7,6 +7,7 @@ import time
 # external
 import flask
 import flask_login
+from wtforms import validators, fields, Form
 # custom
 from quirell.config import *
 from quirell.webapp import app
@@ -160,18 +161,45 @@ def profile_page():
 # `user = User()` line does. Every other function that needs a user
 # object (as opposed to a node) needs to pull from `current_user`
 
+class LoginForm(Form):
+    username = fields.TextField("username", [validators.InputRequired()])
+    password = fields.PasswordField("password", [validators.InputRequired()])
+    remember_me = fields.BooleanField("Remember Me")
+
+class SignupForm(Form):
+    username = fields.TextField("username", [validators.InputRequired()])
+    password = fields.PasswordField("password", [validators.InputRequired()])
+    confirm = fields.PasswordField("confirm password", [
+        validators.InputRequired(),
+        validators.EqualTo("password", message="Passwords must match")
+    ])
+    email = fields.TextField("email address", [
+        validators.InputRequired(),
+        validators.Email(message="Email address must be valid")
+    ])
+    secret_password = fields.TextField("how many kittens?", [validators.InputRequired()])
+
 @app.route('/login', methods=['POST'])
 def login_POST():
+
     from quirell.webapp.models import User
+
+    form = LoginForm(flask.request.form)
+    if not form.validate():
+        print(form.errors)
+        message = "???"
+        return flask.render_template('forms/login.html', login_message=message), 400
+
     user = User()
     success, message = user.login(
-        username=flask.request.form.get('username'),
-        password=flask.request.form.get('password'),
-        remember=flask.request.form.get('remember_me', False),)
+        username=form.username.data,
+        password=form.password.data,
+        remember=form.remember_me.data,)
     if not success: # user credentials invalid in some way
         return flask.render_template('forms/login.html',
             login_message=message), 401
         #return flask.jsonify(messsage=message)
+
     # go somewhere
     if flask.request.args.get('next'):
         if re.search('.*/(login|signup)', flask.request.args.get('next')):
@@ -188,13 +216,19 @@ def signup_POST():
     from quirell.webapp.models import User
     # will eventually be moved to cms.validate_signup
     THE_PASSWORD = os.environ.get('THE_PASSWORD')
-    if not flask.request.form.get('secret_password') == THE_PASSWORD: flask.abort(401)
-    if not flask.request.form.get('password') == flask.request.form.get('confirm'): flask.abort(401)
+
+    # if not flask.request.form.get('secret_password') == THE_PASSWORD: flask.abort(401)
+    # if not flask.request.form.get('password') == flask.request.form.get('confirm'): flask.abort(401)
+    form = SignupForm(flask.request.form)
+    if not form.validate():
+        print(form.errors)
+        return flask.abort(400)
+
     user = User()
     user.create(
-        username=flask.request.form.get('username'),
-        password=flask.request.form.get('password'),
-        email=flask.request.form.get('email'),
+        username=form.username.data,
+        password=form.password.data,
+        email=form.email.data,
         url_root=flask.request.url_root)
     return flask.render_template('message.html',
         html_content='Almost there! An email was sent to you to confirm your sigup')
