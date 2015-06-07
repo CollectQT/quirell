@@ -56,6 +56,7 @@ class Cms(object):
             raise Exception('Could not get REDISTOGO_URL')
         # content building
         flask_misaka.Misaka(app) # markdown
+        app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
         assets = flask_assets.Environment(app)
         flask_compress.Compress(app)
         cache = flask_cache.Cache(app,
