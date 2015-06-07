@@ -29,7 +29,7 @@ Install all the requirements with:
 
 There are also a few external resources (ie. Heroku addons) and passwords (ie. the SECRET_KEY) that Quirell needs in order to run. Example versions of them exist inside of `ENV.yaml.example`. To get up and running quickly, run this command
 
-    $ mv quirell/ENV.yaml.example quirell/ENV.yaml
+    $ cp quirell/ENV.yaml.example quirell/ENV.yaml
 
 Finally, you can run the code with
 
