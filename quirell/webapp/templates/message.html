@@ -20,10 +20,10 @@ it to the html_content variable like so:
 
 #}
 {% extends "base.html" %}
-	{% block content %}
-		<main><article class=''>
+    {% block content %}
+        <main><article class=''>
                 {% autoescape false %}{% filter markdown %}{% block article -%}
                     {{ html_content|safe }}
                 {%- endblock %}{% endfilter %}{% endautoescape %}
         </article></main>
-	{% endblock %}
+    {% endblock %}
