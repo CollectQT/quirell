@@ -19,20 +19,22 @@ CONFIG['MAIL_SUPPRESS_SEND'] = True
 from quirell.webapp import runserver
 from quirell.webapp.main import cms
 
+ROOT = 'http://0.0.0.0:'+str(CONFIG['PORT'])
+
 def test_webserver_start():
     web_server = multiprocessing.Process(target=runserver.run)
     web_server.start()
 
 def test_index_page():
     time.sleep(1) # give the server a few to start up
-    assert requests.get('http://0.0.0.0:5000'+'/').status_code == 200
+    assert requests.get(ROOT+'/').status_code == 200
 
 def test_basic_pages():
-    assert requests.get('http://0.0.0.0:5000'+'/').status_code == 200
-    assert requests.get('http://0.0.0.0:5000'+'/signup').status_code == 200
-    assert requests.get('http://0.0.0.0:5000'+'/u/@cyrin').status_code == 200
-    assert requests.get('http://0.0.0.0:5000'+'/profile').status_code == 401
-    assert requests.get('http://0.0.0.0:5000'+'/u/nobody_with_this_username').status_code == 404
+    assert requests.get(ROOT+'/').status_code == 200
+    assert requests.get(ROOT+'/signup').status_code == 200
+    assert requests.get(ROOT+'/u/@cyrin').status_code == 200
+    assert requests.get(ROOT+'/profile').status_code == 401
+    assert requests.get(ROOT+'/u/nobody_with_this_username').status_code == 404
 
 def test_user_functions():
     session = requests.Session()
@@ -41,12 +43,12 @@ def test_user_functions():
         'password': 'cyrin',
     }
     # assert incorrect login
-    assert session.post('http://0.0.0.0:5000'+'/login', data=login).status_code == 200
-    assert session.get('http://0.0.0.0:5000'+'/').status_code == 200 # index
-    assert session.get('http://0.0.0.0:5000'+'/profile').status_code == 200 # view self
-    assert session.get('http://0.0.0.0:5000'+'/u/@opheliablack').status_code == 200 # view other
+    assert session.post(ROOT+'/login', data=login).status_code == 200
+    assert session.get(ROOT+'/').status_code == 200 # index
+    assert session.get(ROOT+'/profile').status_code == 200 # view self
+    assert session.get(ROOT+'/u/@opheliablack').status_code == 200 # view other
     # profile editing
-    assert session.get('http://0.0.0.0:5000'+'/profile/edit').status_code == 200
+    assert session.get(ROOT+'/profile/edit').status_code == 200
     profile_edit = {
         'description': random.choice([
             'a kitten',
@@ -55,8 +57,8 @@ def test_user_functions():
             'programmer TWoC',
             ])
     }
-    assert session.post('http://0.0.0.0:5000'+'/profile/edit', data=profile_edit).status_code == 200
-    assert session.get('http://0.0.0.0:5000'+'/logout').status_code == 200
+    assert session.post(ROOT+'/profile/edit', data=profile_edit).status_code == 200
+    assert session.get(ROOT+'/logout').status_code == 200
     # post creation
     # assert... something
     # assert create post
@@ -79,19 +81,19 @@ def test_account_create_verbose():
         'username': username,
         'password': password,
     }
-    if session.get('http://0.0.0.0:5000'+'/u/'+username).status_code == 200:
+    if session.get(ROOT+'/u/'+username).status_code == 200:
         cms.db.delete_account('@'+username)
 
     # assert signup bad data
     # assert signup already exists
-    assert session.post('http://0.0.0.0:5000'+'/signup', data=signup).status_code == 200 # signup
+    assert session.post(ROOT+'/signup', data=signup).status_code == 200 # signup
     # assert signup already exists
-    assert session.post('http://0.0.0.0:5000'+'/login', data=login).status_code == 401 # account not active yet
-    assert session.get('http://0.0.0.0:5000'+'/confirm_account/'+'000000').status_code == 401 # bad confirmation code
-    assert session.get('http://0.0.0.0:5000'+'/confirm_account/'+confirmation_code).status_code == 200 # correct confirmation code
-    assert session.get('http://0.0.0.0:5000'+'/confirm_account/'+confirmation_code).status_code == 401 # already confirmed
-    assert session.post('http://0.0.0.0:5000'+'/login', data=login).status_code == 200 # can login now
-    assert session.get('http://0.0.0.0:5000'+'/u/'+username).status_code == 200 # should exist now
+    assert session.post(ROOT+'/login', data=login).status_code == 401 # account not active yet
+    assert session.get(ROOT+'/confirm_account/'+'000000').status_code == 401 # bad confirmation code
+    assert session.get(ROOT+'/confirm_account/'+confirmation_code).status_code == 200 # correct confirmation code
+    assert session.get(ROOT+'/confirm_account/'+confirmation_code).status_code == 401 # already confirmed
+    assert session.post(ROOT+'/login', data=login).status_code == 200 # can login now
+    assert session.get(ROOT+'/u/'+username).status_code == 200 # should exist now
     # assert can view profile
     # assert can view /u/@tesk_kitten
 
@@ -115,10 +117,10 @@ def test_account_create_basic():
     password = {
         'password': password,
     }
-    if session.get('http://0.0.0.0:5000'+'/u/'+username).status_code == 200:
+    if session.get(ROOT+'/u/'+username).status_code == 200:
         cms.db.delete_account('@'+username)
-    assert session.post('http://0.0.0.0:5000'+'/signup', data=signup).status_code == 200
-    assert session.get('http://0.0.0.0:5000'+'/confirm_account/'+confirmation_code).status_code == 200
+    assert session.post(ROOT+'/signup', data=signup).status_code == 200
+    assert session.get(ROOT+'/confirm_account/'+confirmation_code).status_code == 200
 
 def test_follow_and_unfollow():
     session = requests.Session()
@@ -136,9 +138,9 @@ def test_follow_and_unfollow():
         'relationship': 'knows',
         'user': '@test_kitten_quirell_account'
     }
-    assert session.post('http://0.0.0.0:5000'+'/login', data=login).status_code == 200
-    assert session.post('http://0.0.0.0:5000'+'/relationship/edit', data=relationship_1).status_code == 200
-    assert session.post('http://0.0.0.0:5000'+'/relationship/edit', data=relationship_2).status_code == 200
+    assert session.post(ROOT+'/login', data=login).status_code == 200
+    assert session.post(ROOT+'/relationship/edit', data=relationship_1).status_code == 200
+    assert session.post(ROOT+'/relationship/edit', data=relationship_2).status_code == 200
 
 def test_delete_account_verbose():
     session = requests.Session()
@@ -151,11 +153,11 @@ def test_delete_account_verbose():
     bad_password = {
         'password': 'XXXXXXX_WRONG_PASS_XXXXXXXX',
     }
-    assert session.post('http://0.0.0.0:5000'+'/login', data=login).status_code == 200 # can login now
-    assert session.post('http://0.0.0.0:5000'+'/delete_account').status_code == 401 # no password input
-    assert session.post('http://0.0.0.0:5000'+'/delete_account', data=bad_password).status_code == 401 # bad password input
-    assert session.post('http://0.0.0.0:5000'+'/delete_account', data={'password': password}).status_code == 200 # actually delete account
-    assert session.get('http://0.0.0.0:5000'+'/u/'+username).status_code == 404 # shouldnt exist
+    assert session.post(ROOT+'/login', data=login).status_code == 200 # can login now
+    assert session.post(ROOT+'/delete_account').status_code == 401 # no password input
+    assert session.post(ROOT+'/delete_account', data=bad_password).status_code == 401 # bad password input
+    assert session.post(ROOT+'/delete_account', data={'password': password}).status_code == 200 # actually delete account
+    assert session.get(ROOT+'/u/'+username).status_code == 404 # shouldnt exist
 
 def test_delete_account_basic():
     session = requests.Session()
@@ -165,10 +167,10 @@ def test_delete_account_basic():
         'username': username,
         'password': password,
     }
-    assert session.post('http://0.0.0.0:5000'+'/login', data=login).status_code == 200
-    assert session.post('http://0.0.0.0:5000'+'/delete_account', data={'password': password}).status_code == 200
+    assert session.post(ROOT+'/login', data=login).status_code == 200
+    assert session.post(ROOT+'/delete_account', data={'password': password}).status_code == 200
 
 def test_shutdown_server():
-    requests.post('http://0.0.0.0:5000/shutdown')
+    requests.post('http://0.0.0.0:{}/shutdown'.format(CONFIG['PORT']))
     # server should be down, and so we should get a connection error
-    py.test.raises(requests.exceptions.ConnectionError, requests.post, 'http://0.0.0.0:5000/')
+    py.test.raises(requests.exceptions.ConnectionError, requests.post, 'http://0.0.0.0:{}/'.format(CONFIG['PORT']))

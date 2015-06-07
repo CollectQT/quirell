@@ -29,5 +29,5 @@ if __name__ == "__main__":
     db = Database()
     web_server = multiprocessing.Process(target=runserver.run).start()
     # update_all_users(db)
-    requests.post('http://0.0.0.0:5000/shutdown')
+    requests.post('http://0.0.0.0:{}/shutdown'.format(CONFIG['PORT']))
     LOG.info('Migration Complete')

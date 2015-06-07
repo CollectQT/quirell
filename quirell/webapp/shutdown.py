@@ -10,7 +10,7 @@ def shutdown_server():
 
 def shutdown():
     import requests
-    requests.post('http://0.0.0.0:5000/shutdown')
+    requests.post('http://0.0.0.0:{}/shutdown'.format(CONFIG['PORT']))
 
 if __name__ == '__main__':
     shutdown()
