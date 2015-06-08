@@ -48,7 +48,8 @@ class Cms(object):
             raise Exception('Could not connect to neo4j database')
         # sessions
         try:
-            app.config['SESSION_REDIS'] = redis.from_url(os.environ['REDISTOGO_URL'])
+            self.redis = redis.from_url(os.environ['REDISTOGO_URL'])
+            app.config['SESSION_REDIS'] = self.redis
             LOG.info('Connected to redis database')
             flask_session.Session(app)
         except KeyError:
