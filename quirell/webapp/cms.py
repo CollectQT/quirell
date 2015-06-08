@@ -4,7 +4,6 @@
 import hashlib
 import multiprocessing
 # external
-import sass
 import flask
 import redis
 import markdown
@@ -66,14 +65,7 @@ class Cms(object):
             }
         )
         self.cached = cache.cached; self.memoize = cache.memoize
-        input_file = BASE_PATH+'/quirell/webapp/static/scss/main.scss'
-        output_file = BASE_PATH+'/quirell/webapp/static/css/main.css'
-        include_paths = BASE_PATH+'/quirell/webapp/static/scss/'
-        sass.compile(
-            dirname=(input_file, output_file),
-            output_style='compressed',
-            include_paths=include_paths
-        )
+        Cms.scss_monitor(app)
         # users
         self.login_manager = flask_login.LoginManager()
         self.login_manager.init_app(app)
@@ -89,6 +81,38 @@ class Cms(object):
         # logging
         app.before_request(self._before_request)
         # app.after_request(self._after_request)
+
+    def scss_monitor(app):
+        if app.config['DEBUG']:
+            # build css on changes
+            from watchdog.events import FileSystemEventHandler
+            class If_scss_changes (FileSystemEventHandler):
+                def on_modified (self, event): Cms.build_css()
+
+            # monitor for changes
+            from watchdog.observers import Observer
+            watch = Observer()
+            watch.schedule(If_scss_changes(), os.path.dirname(__file__)+'/static/scss/')
+            watch.start()
+
+        # do a build
+        Cms.build_css()
+
+    @staticmethod
+    def build_css():
+        # scss configs
+        import scss
+        scss.config.PROJECT_ROOT = BASE_PATH+'/quirell/webapp/'
+        scss.config.STATIC_ROOT = BASE_PATH+'/quirell/webapp/static/scss'
+        _scss = scss.Scss(scss_opts={'compress':True, 'debug_info': True})
+
+        # read, then write to file
+        with open(BASE_PATH+'/quirell/webapp/static/scss/main.scss', 'r') as f:
+            compiled_css = _scss.compile(f.read())
+        with open(BASE_PATH+'/quirell/webapp/static/css/main.css', 'w') as f:
+            f.write(compiled_css)
+
+        LOG.info('Built css')
 
     def clean_html (self, html):
         # cleans html to prevent people doing evil things with it like
