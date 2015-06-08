@@ -87,7 +87,7 @@ class User (object):
             return False, 'Incorrect password'
         # and if they are active
         if not node['active']:
-            return False, 'Account not active, [go to /send_confirmation](/send_confirmation/{}) to send an activation email'.format(username)
+            return False, 'Account not active, [go to /send_confirmation/{0}](/send_confirmation/{0}) to send an activation email'.format(username)
         # user considered successfully logged in at this point
         self.format(node)
         flask_login.login_user(self, remember=remember) # add to login manager
