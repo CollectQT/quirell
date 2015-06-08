@@ -33,7 +33,7 @@ There are also a few external resources (ie. Heroku addons) and passwords (ie. t
 
 Finally, you can run the code with
 
-    $ python -m quirell
+    $ python quirell
 
 Or tests with
 
