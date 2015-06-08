@@ -1,4 +1,5 @@
 ENV.yaml
+main.css
 
 venv/
 generated/
