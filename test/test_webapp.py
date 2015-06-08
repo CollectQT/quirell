@@ -29,12 +29,25 @@ def test_index_page():
     time.sleep(1) # give the server a few to start up
     assert requests.get(ROOT+'/').status_code == 200
 
+def create_user_cyrin():
+    signup = {
+        'username': 'cyrin',
+        'password': 'cyrin',
+        'confirm': 'cyrin',
+        'email': 'firemagelynn+quirelltestingcyrin@gmail.com',
+        'secret_password': os.environ.get('THE_PASSWORD'),
+    }
+    assert requests.post(ROOT+'/signup', data=signup).status_code == 200 # signup
+
 def test_basic_pages():
     assert requests.get(ROOT+'/').status_code == 200
     assert requests.get(ROOT+'/signup').status_code == 200
-    assert requests.get(ROOT+'/u/@cyrin').status_code == 200
     assert requests.get(ROOT+'/profile').status_code == 401
     assert requests.get(ROOT+'/u/nobody_with_this_username').status_code == 404
+
+def test_user_cyrin():
+    if not requests.get(ROOT+'/u/@cyrin').status_code == 200:
+        create_user_cyrin()
 
 def test_user_functions():
     session = requests.Session()
