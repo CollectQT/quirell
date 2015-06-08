@@ -3,6 +3,7 @@
 # builtin
 import os
 import time
+import yaml
 import random
 import multiprocessing
 # external
@@ -20,6 +21,23 @@ from quirell.webapp import runserver
 from quirell.webapp.main import cms
 
 ROOT = 'http://0.0.0.0:'+str(CONFIG['PORT'])
+
+def test_clear_development_databases():
+    LOG.info('Clearning developement databases')
+    with open(BASE_PATH+'/quirell/ENV.yaml.example', 'r') as f:
+        keys = yaml.load(f.read())
+    clear_if_running_dev_neo4j(keys)
+    clear_if_running_dev_redis(keys)
+
+def clear_if_running_dev_neo4j(keys):
+    if keys['GRAPHENEDB_URL'] == CONFIG['GRAPHENEDB_URL']:
+        cms.db.db.delete_all()
+        LOG.info('Clearing neo4j database')
+
+def clear_if_running_dev_redis(keys):
+    if keys['REDISTOGO_URL'] == CONFIG['REDISTOGO_URL']:
+        cms.redis.flushdb()
+        LOG.info('Clearing redis database ')
 
 def test_webserver_start():
     web_server = multiprocessing.Process(target=runserver.run)
