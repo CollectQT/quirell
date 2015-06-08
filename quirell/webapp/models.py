@@ -221,6 +221,9 @@ class User (object):
     def __delitem__ (self, key):
         del self.node[key]
 
+    def __bool__(self):
+        return True
+
 class Relationships(object):
     '''
     Used as the intermediate between the relationships backend and frontend.

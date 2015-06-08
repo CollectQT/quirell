@@ -33,6 +33,9 @@ class Anon(flask_login.AnonymousUserMixin):
         else:
             return ''
 
+    def __bool__(self):
+        return False
+
 class Cms(object):
     '''
     manages content and scripts for the webapp layer or the applications
