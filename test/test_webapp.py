@@ -3,6 +3,7 @@
 # builtin
 import os
 import time
+import yaml
 import random
 import multiprocessing
 # external
@@ -21,6 +22,23 @@ from quirell.webapp.main import cms
 
 ROOT = 'http://0.0.0.0:'+str(CONFIG['PORT'])
 
+def test_clear_development_databases():
+    LOG.info('Clearning developement databases')
+    with open(BASE_PATH+'/quirell/ENV.yaml.example', 'r') as f:
+        keys = yaml.load(f.read())
+    clear_if_running_dev_neo4j(keys)
+    clear_if_running_dev_redis(keys)
+
+def clear_if_running_dev_neo4j(keys):
+    if keys['GRAPHENEDB_URL'] == CONFIG['GRAPHENEDB_URL']:
+        cms.db.db.delete_all()
+        LOG.info('Clearing neo4j database')
+
+def clear_if_running_dev_redis(keys):
+    if keys['REDISTOGO_URL'] == CONFIG['REDISTOGO_URL']:
+        cms.redis.flushdb()
+        LOG.info('Clearing redis database ')
+
 def test_webserver_start():
     web_server = multiprocessing.Process(target=runserver.run)
     web_server.start()
@@ -32,9 +50,28 @@ def test_index_page():
 def test_basic_pages():
     assert requests.get(ROOT+'/').status_code == 200
     assert requests.get(ROOT+'/signup').status_code == 200
-    assert requests.get(ROOT+'/u/@cyrin').status_code == 200
     assert requests.get(ROOT+'/profile').status_code == 401
     assert requests.get(ROOT+'/u/nobody_with_this_username').status_code == 404
+
+def create_user_cyrin():
+    email = 'firemagelynn+quirelltestingcyrin@gmail.com'
+    signup = {
+        'username': 'cyrin',
+        'password': 'cyrin',
+        'confirm': 'cyrin',
+        'email': email,
+        'secret_password': os.environ.get('THE_PASSWORD'),
+    }
+    confirmation_code = cms.serialize.dumps(email)
+    assert requests.post(ROOT+'/signup', data=signup).status_code == 200 # signup
+    assert requests.get(ROOT+'/confirm_account/'+confirmation_code).status_code == 200
+
+def test_user_cyrin():
+    confirmation_code = cms.serialize.dumps('firemagelynn+quirelltestingcyrin@gmail.com')
+    assert requests.get(ROOT+'/confirm_account/'+confirmation_code).status_code == 200
+
+    if not requests.get(ROOT+'/u/@cyrin').status_code == 200:
+        create_user_cyrin()
 
 def test_user_functions():
     session = requests.Session()
@@ -46,7 +83,6 @@ def test_user_functions():
     assert session.post(ROOT+'/login', data=login).status_code == 200
     assert session.get(ROOT+'/').status_code == 200 # index
     assert session.get(ROOT+'/profile').status_code == 200 # view self
-    assert session.get(ROOT+'/u/@opheliablack').status_code == 200 # view other
     # profile editing
     assert session.get(ROOT+'/profile/edit').status_code == 200
     profile_edit = {
@@ -94,8 +130,7 @@ def test_account_create_verbose():
     assert session.get(ROOT+'/confirm_account/'+confirmation_code).status_code == 401 # already confirmed
     assert session.post(ROOT+'/login', data=login).status_code == 200 # can login now
     assert session.get(ROOT+'/u/'+username).status_code == 200 # should exist now
-    # assert can view profile
-    # assert can view /u/@tesk_kitten
+    assert session.get(ROOT+'/profile').status_code == 200
 
 def test_account_create_basic():
     session = requests.Session()
@@ -141,6 +176,17 @@ def test_follow_and_unfollow():
     assert session.post(ROOT+'/login', data=login).status_code == 200
     assert session.post(ROOT+'/relationship/edit', data=relationship_1).status_code == 200
     assert session.post(ROOT+'/relationship/edit', data=relationship_2).status_code == 200
+
+def test_can_view_other():
+    session = requests.Session()
+    username = 'test_doge_quirell_account'
+    password = 'test_doge_access_code'
+    login = {
+        'username': username,
+        'password': password,
+    }
+    assert session.post(ROOT+'/login', data=login).status_code == 200
+    assert session.get(ROOT+'/u/@test_kitten_quirell_account').status_code == 200 # should exist now
 
 def test_delete_account_verbose():
     session = requests.Session()
