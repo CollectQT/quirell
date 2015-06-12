@@ -7,11 +7,11 @@ import time
 # external
 import flask
 import flask_login
-from wtforms import validators, fields, Form
 # custom
 from quirell.config import *
 from quirell.webapp import app
 from quirell.webapp.cms import Cms
+from quirell.webapp.forms import *
 
 ####################
 # TEMPLATE GLOBALS #
@@ -160,24 +160,6 @@ def profile_page():
 # will ever be allowed to create a user object. That's what the
 # `user = User()` line does. Every other function that needs a user
 # object (as opposed to a node) needs to pull from `current_user`
-
-class LoginForm(Form):
-    username = fields.TextField("username", [validators.InputRequired()])
-    password = fields.PasswordField("password", [validators.InputRequired()])
-    remember_me = fields.BooleanField("Remember Me")
-
-class SignupForm(Form):
-    username = fields.TextField("username", [validators.InputRequired()])
-    password = fields.PasswordField("password", [validators.InputRequired()])
-    confirm = fields.PasswordField("confirm password", [
-        validators.InputRequired(),
-        validators.EqualTo("password", message="Passwords must match")
-    ])
-    email = fields.TextField("email address", [
-        validators.InputRequired(),
-        validators.Email(message="Email address must be valid")
-    ])
-    secret_password = fields.TextField("how many kittens?", [validators.InputRequired()])
 
 @app.route('/login', methods=['POST'])
 def login_POST():
