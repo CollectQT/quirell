@@ -198,10 +198,9 @@ def signup_POST():
     # if not flask.request.form.get('password') == flask.request.form.get('confirm'): flask.abort(401)
     form = SignupForm(flask.request.form)
     if not form.validate():
-        print(form.errors)
-        return flask.abort(400)
+        return flask.jsonify(errors=form.errors), 400
     if form.secret_password.data != THE_PASSWORD:
-        flask.abort(401)
+        return flask.jsonify(errors={"signup":"Wrong number of kittens"}), 401
 
     user = User()
     user.create(
@@ -209,8 +208,9 @@ def signup_POST():
         password=form.password.data,
         email=form.email.data,
         url_root=flask.request.url_root)
-    return flask.render_template('message.html',
-        html_content='Almost there! An email was sent to you to confirm your sigup')
+    # return flask.render_template('message.html',
+        # html_content='Almost there! An email was sent to you to confirm your sigup')
+    return flask.jsonify(message="Almost there! An email was sent to you to confirm your signup."), 200
 
 @app.route('/new_post', methods=['POST'])
 @flask_login.login_required
