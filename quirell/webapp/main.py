@@ -168,9 +168,7 @@ def login_POST():
 
     form = LoginForm(flask.request.form)
     if not form.validate():
-        print(form.errors)
-        message = "???"
-        return flask.render_template('forms/login.html', login_message=message), 400
+        return flask.jsonify(errors=form.errors), 400
 
     user = User()
     success, message = user.login(
@@ -178,19 +176,17 @@ def login_POST():
         password=form.password.data,
         remember=form.remember_me.data,)
     if not success: # user credentials invalid in some way
-        return flask.render_template('forms/login.html',
-            login_message=message), 401
-        #return flask.jsonify(messsage=message)
+        return flask.jsonify(errors={"login":message}), 401
 
     # go somewhere
     if flask.request.args.get('next'):
         if re.search('.*/(login|signup)', flask.request.args.get('next')):
             # should eventually go somewhere better
-            return flask.redirect('/')
+            return flask.jsonify(redirect="/"), 200
         else:
-            return flask.redirect(flask.request.args.get('next'))
+            return flask.jsonify(redirect=flask.request.args.get("next")), 200
     else:
-        return flask.redirect('/')
+        return flask.jsonify(redirect="/"), 200
 
 @app.route('/signup', methods=['POST'])
 def signup_POST():
