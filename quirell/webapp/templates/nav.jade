@@ -1,44 +1,24 @@
-<nav>
+nav
     <div class='nav-block nav-left'>
         <a href='/' class='button'>
             <i class='fa fa-home'></i>
             <div class='nav-text'>Home</div>
-        </a>
-        {% if current_user.is_authenticated() %}
-        <a href='/notes' class='button'>
-            <i class='fa fa-exclamation'></i>
-            <div class='nav-text'>Notes</div>
-        </a>
-        {% endif %}
-        <!--
-        <button class='button'>
-            <i class='fa fa-comment'></i>
-            <div class='nav-text'>Chat</div>
-        </button>
-        -->
-    </div>
+        if current_user
+            <a href='/notes' class='button'>
+                <i class='fa fa-exclamation'></i>
+                <div class='nav-text'>Notes</div>
     <div class='nav-block nav-mid'>
         <img src='/static/img/quirell.png'>
-    </div>
     <div class='nav-block nav-right'>
-        <!-- user account functions -->
-        {% if current_user.is_authenticated() %}
-            <!-- user actions -->
+        if current_user
             <ul class='nav-menu'>
                 <span class='nav-menu-top' title='Options Menu' tabindex='0'>
                     <img class='img_preview avatar img-small' src="{{ current_user.profile_picture }}" alt='{{ current_user.username}} Avatar'>
                     <span class='nav-text'>{{ current_user.display_name }}</span>
-                </span>
                 <li><a href='/profile'>Profile</a></li>
                 <li><a href='/profile/edit'>Edit Profile</a></li>
                 <li><a href='/logout'>Logout</a></li>
-            </ul>
-        {% else %}
-            <!-- login -->
+        else
             <a href='/login?next={{ flask.request.path }}' class='button'>
                 <i class='fa fa-user'></i>
                 <div class='nav-text'>Login / Signup</div>
-            </a>
-        {% endif %}
-    </div>
-</nav>

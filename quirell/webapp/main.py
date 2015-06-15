@@ -117,7 +117,7 @@ def set_globals():
 
 @app.route('/test')
 def testing():
-    return flask.render_template('message.html', html_content='testing')
+    return flask.render_template('message.jade', html_content='testing')
 
 @app.route('/')
 def index ():
@@ -139,7 +139,7 @@ def signup():
 def profile_page():
     user, timeline = cms.get_user_page(user_self=current_user,
         user_req=current_user['username'])
-    return flask.render_template('profile.html', user=user,
+    return flask.render_template('profile.jade', user=user,
         timeline=timeline)
 
 #########
@@ -208,7 +208,7 @@ def signup_POST():
         password=form.password.data,
         email=form.email.data,
         url_root=flask.request.url_root)
-    # return flask.render_template('message.html',
+    # return flask.render_template('message.jade',
         # html_content='Almost there! An email was sent to you to confirm your sigup')
     return flask.jsonify(message="Almost there! An email was sent to you to confirm your signup."), 200
 
@@ -217,7 +217,7 @@ def signup_POST():
 def new_post_POST():
     current_user.create_post(
         content=flask.request.form.get('content'),)
-    return flask.render_template('message.html', html_content='post created')
+    return flask.render_template('message.jade', html_content='post created')
 
 @app.route("/profile/edit", methods=["POST"])
 @flask_login.login_required
@@ -257,13 +257,13 @@ def user_request(username):
     if not user:
         return flask.render_template('paths/user_not_found.html'), 404
     else:
-        return flask.render_template('profile.html', user=user,
+        return flask.render_template('profile.jade', user=user,
             timeline=timeline)
 
 @app.route('/profile/edit')
 @flask_login.login_required
 def edit_profile():
-    return flask.render_template('profile_edit.html',
+    return flask.render_template('profile_edit.jade',
         user=current_user)
 
 @app.route('/user/<path>')
@@ -284,12 +284,12 @@ def post_request(username, post_id):
 def send_account_confirmation_email(username):
     if not username[0] == '@': username = '@'+username
     message, status = cms.send_confirmation_email(username, flask.request.url_root)
-    return flask.render_template('message.html', html_content=message), status
+    return flask.render_template('message.jade', html_content=message), status
 
 @app.route('/confirm_account/<confirmation_code>')
 def confirm_user_account(confirmation_code):
     message, status = cms.activate_account(confirmation_code=confirmation_code)
-    return flask.render_template('message.html', html_content=message), status
+    return flask.render_template('message.jade', html_content=message), status
 
 @app.route('/settings')
 @flask_login.login_required
@@ -319,7 +319,7 @@ def delete_account_POST():
     password = flask.request.form.get('password')
     message, status = current_user.delete_account(password)
     if status == 200: flask_login.logout_user() # successful account deletion logs you out
-    return flask.render_template('message.html', html_content=message), status
+    return flask.render_template('message.jade', html_content=message), status
 
 ########
 # TECH #

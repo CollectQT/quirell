@@ -1,0 +1,34 @@
+extends base.html
+block content
+main
+    block user_account_startendblock
+    .banner
+        .middle.h-card
+            .middle.banner-left(href='/u/#{user.username}')
+                .avatar
+                    img.img_preview.profile_picture.avatar.img-large.u-photo(src='#{user.profile_picture}', alt='#{user.username} Avatar')
+                .empty
+                    span.display-name.p-name
+                        block user_display_name
+                            = user.display_name
+                    span.pronouns.subtext
+                        span (
+                        span.p-x-pronoun-nominative
+                            block user_pronouns
+                                = user.pronouns
+                        span )
+                    a.username.subtext.p-nickname.u-url(rel='me', href='/u/#{user.username}')
+                        = user.username
+            .banner-right.p-note
+                block user_description
+                    = user.description
+
+    block user_profile_picture
+
+    block user_account_end
+        if is_current(user)
+            a(href='/profile/edit'): button Edit Profile
+
+    block timeline
+        article.timeline'
+            include 'timeline.html'

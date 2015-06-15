@@ -1,0 +1,27 @@
+extends profile
+
+block user_account_start
+    form(method="POST", action="/profile/edit", id="profile_edit_form")
+        input(type="hidden", name="_csrf_token", value="#{csrf_token()}")
+
+block user_display_name
+    input.display_name(type="text", name="display_name", value="#{current_user.display_name}", placeholder="")
+
+block user_pronouns
+    input.pronouns(type="text", name="pronouns", value="#{current_user.pronouns}", placeholder="she / they / ze / etc...")
+
+block user_description
+    input.description(type="text", name="description", value="#{current_user.description}", placeholder="Some words about yourself")
+
+block user_profile_picture
+    article.post
+        input#profile_picture_upload_input.img_upload.profile_picture.cloudinary-fileupload(type="file", name="file", data-cloudinary-field="profile_picture", data-form-data='#{profile_picture_form_data()|tojson}')
+        input(type="hidden", name="profile_picture")
+        p.upload_status
+        <progress max="100" style="display: none;"></progress>
+
+block user_account_end
+    input(type="submit", value="Update profile")
+
+block timeline
+    //- dont render timeline on edit page

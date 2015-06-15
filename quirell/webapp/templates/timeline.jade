@@ -1,0 +1,30 @@
+for line in timeline
+    if line.post.content
+    .post.h-entry
+        .middle
+            a.middle(href='/u/= line.user.username')
+                img.avatar.img-mid(src="= line.user.profile_picture", alt='= line.user.username s Avatar')
+            .post-meta-top
+                .p-author.h-card: a.middle.u-url(href='/u/= line.user.username')
+                    .display-name.p-name
+                        = line.user.display_name
+                    <span class='pronouns subtext '>(<span class='x-pronoun-nominative'>{{ line.user.pronouns }}</span>)</span>
+                <a class='subtext u-url' href='/u/{{ line.user.username }}/post/{{ line.post.post_id }}'><time class="dt-published" datetime="{{line.post.datetime}}">{{ format_time(line.post.datetime) }}</time></a>
+                .subtext = line.post.visibility
+                    i.fa.fa-globe
+        .content.p-name.e-content
+            = line.post.content
+        .post-meta-bottom
+            <div class='post-tags'>
+                for tag in line.post.tags
+                    .p-category
+                        = tag
+            if line.post.notes
+                <div class='post-notes'>{{ line.post.notes }}</div>
+            <div class='post-action-bar'>
+                <i class="fa fa-reply"></i>
+                <i class="fa fa-retweet"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-ellipsis-h"></i>
+            if is_current(user)
+                //- edit and delete stuff
