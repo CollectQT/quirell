@@ -26,55 +26,12 @@ Organization:
     IMPORTS
 -----------------*/
 
-// Partials
 @import "quirell/webapp/static/scss/_variables.scss";
-
-/*---------------
-    HELPER CLASSES
------------------*/
-
-.visible {opacity: 1;}
-.invisible {opacity: 0;}
-.none {display: none;}
-.positionAbsolute {position: absolute;}
-.positionStatic {position: static;}
-.center {margin-left: auto; margin-right: auto;}
-
-/*---------------
-    GLOBAL
------------------*/
-
-/* global */
-
-/* idk, does something */
-@-ms-viewport{ width: device-width; }
-
-html, body {
-    padding: 0;
-    margin: 0;
-    color: $filler_darkest;
-    width: 100%;
-    height: 100%;
-}
-
-body {
-    background-color: $color_primary;
-    overflow-x: hidden;
-    font-family: $font_body;
-}
+@import "quirell/webapp/static/scss/_styling.scss";
+@import "quirell/webapp/static/scss/_layout.scss";
+@import "quirell/webapp/static/scss/_external.scss";
 
 /* inline */
-
-h1, h2, h3, h4, h5, p {
-    color: $filler_darkest;
-    font-family: $font_body;
-    padding: 5px 10px;
-    line-height: 1.5em;
-}
-
-h1, h2 {
-    text-align: center;
-}
 
 main a {
     cursor: inherit;
@@ -83,10 +40,6 @@ main a {
     &:hover {
         text-decoration: underline;
     }
-}
-
-nav a {
-    text-decoration: none;
 }
 
 .icon {
@@ -588,23 +541,4 @@ blockquote {
         vertical-align: top;
     }
 
-}
-
-/*---------------
-    EXTERNAL
------------------*/
-
-.fa-linkedin {color: #4875B4;}
-.fa-twitter {color: #33CCFF;}
-.fa-skype {color: #12A5F4;}
-.fa-envelope {color: gray;}
-.fa-github {color: black;}
-.fa-rss-square {color: orange;}
-
-//TWITTER MADE ME DO IT >_<
-.twitter-tweet {margin-left: auto !important; margin-right: auto !important;}
-
-@font-face {
-    font-family: "Quirell";
-    src: url(../fonts/Quirell.ttf) format("truetype");
 }
