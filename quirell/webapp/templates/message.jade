@@ -17,8 +17,12 @@
 //-     flask.render_template('message.jade' html_content='text, text, text')
 //-
 extends base
-    block content
-        main
-            article
-                block article
-                    = html_content
+block content
+    .container-fluid
+        .row
+            aside
+            aside
+            main
+                article
+                    block article
+                        = html_content

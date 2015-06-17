@@ -1,24 +1,62 @@
-nav
-    <div class='nav-block nav-left'>
-        <a href='/' class='button'>
-            <i class='fa fa-home'></i>
-            <div class='nav-text'>Home</div>
-        if current_user
-            <a href='/notes' class='button'>
-                <i class='fa fa-exclamation'></i>
-                <div class='nav-text'>Notes</div>
-    <div class='nav-block nav-mid'>
-        <img src='/static/img/quirell.png'>
-    <div class='nav-block nav-right'>
-        if current_user
-            <ul class='nav-menu'>
-                <span class='nav-menu-top' title='Options Menu' tabindex='0'>
-                    <img class='img_preview avatar img-small' src="{{ current_user.profile_picture }}" alt='{{ current_user.username}} Avatar'>
-                    <span class='nav-text'>{{ current_user.display_name }}</span>
-                <li><a href='/profile'>Profile</a></li>
-                <li><a href='/profile/edit'>Edit Profile</a></li>
-                <li><a href='/logout'>Logout</a></li>
-        else
-            <a href='/login?next={{ flask.request.path }}' class='button'>
-                <i class='fa fa-user'></i>
-                <div class='nav-text'>Login / Signup</div>
+mixin nav_profile_dropdown
+    li.dropdown
+        button.navbar-btn(data-toggle="dropdown")
+            img.img_preview.avatar(src='#{current_user.profile_picture}', alt='#{current_user.username} Avatar, and options menu')
+            span #{current_user.username}
+        ul.dropdown-menu
+            li: a(href='/profile') Profile
+            li: a(href='/profile/edit') Edit Profile
+            li: a(href='/settings') Settings
+            li: a(href='/logout') Logout
+
+mixin nav_quirell_icon
+    li: a(href="/")
+        img.quirell(src='/static/img/quirell.png')
+
+mixin nav_notes
+    li: a(href='/notes')
+        i.fa.fa-exclamation
+        span Notes
+
+mixin nav_new_post
+    li: button.navbar-btn.new-post
+        i.fa.fa-pencil-square
+        span Post
+
+mixin nav_login_signup
+    li: a(href='/login?next=#{flask.request.path}')
+        i.fa.fa-user
+        span Login / Signup
+
+mixin nav_home
+    li: a(href="/")
+        i.fa.fa-home
+        span Home
+
+nav.navbar.navbar-default.navbar-fixed-top
+    .container
+        .show-small
+            ul.nav.navbar-nav
+                +nav_quirell_icon
+                if current_user
+                    +nav_notes
+                    +nav_new_post
+                    +nav_profile_dropdown
+                else
+                    +nav_login_signup
+
+        .show-large
+            ul.nav.navbar-nav.navbar-left
+                +nav_home
+                if current_user
+                    +nav_notes
+
+            .container.navbar-center
+                +nav_quirell_icon
+
+            ul.nav.navbar-nav.navbar-right
+                if current_user
+                    +nav_new_post
+                    +nav_profile_dropdown
+                else
+                    +nav_login_signup

@@ -1,1 +1,12 @@
 //
+
+// bootstrap navbar overrides
+
+.navbar-nav>li, .navbar-nav {
+    float: left!important;
+}
+
+.navbar-right {
+    float: right!important;
+}
+

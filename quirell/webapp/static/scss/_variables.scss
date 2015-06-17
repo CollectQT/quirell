@@ -34,5 +34,6 @@ $font_helvetica: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue"
 
 // Specific Purpose
 
-$font_body: $font_sniglet;
+$font_stylized: $font_sniglet;
+$font_body: $font_helvetica;
 $font_pre: $font_monospaced;

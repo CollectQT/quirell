@@ -1,12 +1,10 @@
 //
 
 html, body {
-    color: $filler_darkest;
-}
-
-body {
     background-color: $color_primary;
     font-family: $font_body;
+    color: $filler_darkest;
+    font-size: 16px;
 }
 
 h1, h2, h3, h4, h5, p {
@@ -14,7 +12,36 @@ h1, h2, h3, h4, h5, p {
     font-family: $font_body;
 }
 
+main a, aside a {
+    color: $color_accent;
+}
+
 // nav
+
+nav {
+    background-color: $filler_light;
+    box-shadow: 0 0 10px $filler_darkest;
+    font-size: 18px;
+    font-family: $font_stylized;
+    font-weight: bold;
+    list-style: none;
+}
+
+.navbar-default .navbar-nav>li>a {
+    transition-property: color, background-color;
+    background-color: inherit;
+    color: $filler_darkest;
+    list-style-type: none;
+}
+
+nav i, nav span {
+    color: $color_primary;
+}
+
+nav button {
+    border: none;
+    background-color: inherit;
+}
 
 // sidebars
 

@@ -1,3 +1,13 @@
+// utility clases
+
+@media all and (max-width: 768px) {
+    .show-large {display: none    !important;}
+}
+
+@media all and (min-width: 768px) {
+    .show-small {display: none    !important;}
+}
+
 // body
 
 html, body {
@@ -22,6 +32,83 @@ h1, h2 {
 }
 
 // nav
+
+nav {
+    box-shadow: 0 0 10px $filler_darkest;
+}
+
+.navbar-center {
+    position: absolute;
+    text-align: center;
+    padding-top: 8px;
+}
+
+.navbar-default .navbar-nav>li>a {
+    padding: 5px 0;
+}
+
+.navbar-default .navbar-nav>li>button {
+    padding: 5px 0;
+}
+
+.navbar-btn {
+    margin: 0;
+}
+
+.navbar-nav {
+    margin: 0;
+}
+
+.navbar-nav>li {
+    margin-right: 10px;
+}
+
+.navbar-nav>li:last-of-type {
+    margin-right: 0;
+}
+
+nav .quirell {
+    width: 32px;
+    margin-right: 10px;
+}
+
+nav .avatar {
+    width: 35px;
+    border-radius: 20%;
+}
+
+nav i {
+    font-size: 35px;
+}
+
+nav img {
+    vertical-align: bottom;
+}
+
+nav span {
+    vertical-align: super;
+    margin-left: 5px;
+}
+
+@media all and (max-width: 768px) {
+
+    .container, .container-fluid {
+        padding: 0;
+    }
+
+    // hide extra text on mobile navbar
+    .navbar-nav>li span {display: none    !important;}
+
+    .navbar-nav>li {
+        margin-right: 0;
+    }
+
+    nav .show-small>ul {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+}
 
 // sidebars
 
