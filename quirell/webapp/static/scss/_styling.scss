@@ -21,6 +21,8 @@ main a, aside a {
 nav {
     color: $color_primary;
     background-color: $filler_light;
+    transition: color 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out;
     //
     border: none;
     box-shadow: 0 0 10px $filler_darkest;
@@ -46,7 +48,7 @@ nav .navbar-nav>li>a {
 }
 
 .nav>li {
-    transition: border-bottom-width 0.2s;
+    transition: border-bottom-width 0.2s ease-in-out;
 }
 
 .nav>li:hover, .nav>li:active {
