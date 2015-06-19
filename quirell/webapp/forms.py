@@ -17,3 +17,7 @@ class SignupForm(Form):
         validators.Email(message="Email address must be valid")
     ])
     secret_password = fields.TextField("how many kittens?", [validators.InputRequired()])
+
+class ApplyRelationshipForm(Form):
+    relationship = fields.TextField("relationship", [validators.InputRequired()])
+    target_user = fields.TextField("user", [validators.InputRequired()])

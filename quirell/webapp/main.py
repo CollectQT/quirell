@@ -239,8 +239,13 @@ def update_profile():
 @app.route("/relationship/edit", methods=["POST"])
 @flask_login.login_required
 def apply_relationship():
-    relationship = flask.request.form['relationship']
-    target_user = flask.request.form['user']
+    # relationship = flask.request.form['relationship']
+    # target_user = flask.request.form['user']
+
+    form = ApplyRelationshipForm(flask.request.form)
+    if not form.validate():
+        return flask.jsonify(errors=form.errors), 400
+
     if not target_user[0] == '@': target_user = '@'+target_user
     current_user.relationships.apply_relationship(relationship, target_user)
     return flask.jsonify({'status':200})
