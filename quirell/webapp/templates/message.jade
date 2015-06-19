@@ -20,9 +20,9 @@ extends base
 block content
     .container-fluid
         .row
-            aside
-            aside
-            main
-                article
+            aside.col-sm-2.col-sm-offset-1
+            main.col-sm-6.col-xs-12
+                article.message
                     block article
                         = html_content
+            aside.col-sm-2.col-sm-offset-1

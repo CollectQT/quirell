@@ -30,21 +30,40 @@ nav {
     list-style: none;
 }
 
+.navbar {
+    border: none;
+}
+
 nav .navbar-nav>li>a {
-    transition-property: color, background-color;
     background-color: inherit;
-    color: $filler_darkest;
+    color: inherit;
     list-style-type: none;
+}
+
+// bootstrap override
+.nav>li>a:hover {
+    background-color: transparent;
+}
+
+.nav>li {
+    transition: border-bottom-width 0.2s;
+}
+
+.nav>li:hover, .nav>li:active {
+    color: $color_accent;
+    border-bottom-color: $color_accent;
+    border-bottom-width: 6px;
+    border-bottom-style: solid;
 }
 
 nav button, nav i, nav span {
     border: none;
-    color: $color_primary;
-    background-color: $filler_light;
+    color: inherit;
+    background-color: transparent;
 }
 
 @media all and (max-width: 768px) {
-    nav, nav button, nav i, nav span {
+    nav {
         color: $filler_light;
         background-color: $color_primary;
     }
@@ -53,3 +72,7 @@ nav button, nav i, nav span {
 // sidebars
 
 // main
+
+article {
+    background-color: $filler_light;
+}

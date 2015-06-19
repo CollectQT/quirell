@@ -14,6 +14,9 @@ html, body {
 
 body {
     overflow-x: hidden;
+    margin-top: 60px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 
@@ -77,6 +80,10 @@ nav i {
     font-size: 35px;
 }
 
+nav li {
+    height: 50px;
+}
+
 nav img {
     vertical-align: bottom;
 }
@@ -104,8 +111,22 @@ nav span {
         display: flex;
         justify-content: space-between;
     }
+
+    nav .navbar-nav>li>a, nav .navbar-nav>li>button {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
 }
 
 // sidebars
 
 // main
+
+article {
+    border-radius: 10px;
+}
+
+article.message {
+    padding: 20px;
+    margin-bottom: 30px;
+}
