@@ -1,31 +1,3 @@
-/*
-main.css
-
-Organization:
-
-[HELPER CLASSES]
-    basic stuff, like add to invisble or disable none
-[GLOBAL]
-    global styling
-        font
-        font style
-        colors
-[BASE LAYOUT]
-    base layout
-        height / width
-        margin and padding
-        font size
-        shadows
-[DESKTOP]
-    desktop media queries and layout
-[EXTERNAL]
-    styling for external resources. ex icons and fonts
-*/
-
-/*---------------
-    IMPORTS
------------------*/
-
 @import "quirell/webapp/static/scss/_variables.scss";
 @import "quirell/webapp/static/scss/_styling.scss";
 @import "quirell/webapp/static/scss/_layout.scss";
