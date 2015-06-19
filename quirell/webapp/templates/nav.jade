@@ -1,18 +1,3 @@
-mixin nav_profile_dropdown
-    li.dropdown
-        button.navbar-btn(data-toggle="dropdown")
-            img.img_preview.avatar(src='#{current_user.profile_picture}', alt='#{current_user.username} Avatar, and options menu')
-            span #{current_user.username}
-        ul.dropdown-menu
-            li: a(href='/profile') Profile
-            li: a(href='/profile/edit') Edit Profile
-            li: a(href='/settings') Settings
-            li: a(href='/logout') Logout
-
-mixin nav_quirell_icon
-    li: a(href="/")
-        img.quirell(src='/static/img/quirell.png')
-
 mixin nav_notes
     li: a(href='/notes')
         i.fa.fa-exclamation
@@ -20,7 +5,7 @@ mixin nav_notes
 
 mixin nav_new_post
     li: button.navbar-btn.new-post
-        i.fa.fa-pencil-square
+        i.fa.fa-pencil
         span Post
 
 mixin nav_login_signup
@@ -33,15 +18,35 @@ mixin nav_home
         i.fa.fa-home
         span Home
 
-nav.navbar.navbar-default.navbar-fixed-top
+mixin nav_profile_dropdown
+    ul.dropdown-menu
+        li: a(href='/profile') Profile
+        li: a(href='/profile/edit') Edit Profile
+        li: a(href='/settings') Settings
+        li: a(href='/logout') Logout
+
+mixin nav_profile_dropdown_small
+    li.dropdown
+        button.navbar-btn(data-toggle="dropdown")
+            i.fa.fa-user
+        +nav_profile_dropdown
+
+mixin nav_profile_dropdown_large
+    li.dropdown
+        button.navbar-btn(data-toggle="dropdown")
+            img.img_preview.avatar(src='#{current_user.profile_picture}', alt='ptions menu button')
+            span #{current_user.username}
+        +nav_profile_dropdown
+
+nav.navbar.navbar-fixed-top
     .container
         .show-small
             ul.nav.navbar-nav
-                +nav_quirell_icon
+                +nav_home
                 if current_user
                     +nav_notes
                     +nav_new_post
-                    +nav_profile_dropdown
+                    +nav_profile_dropdown_small
                 else
                     +nav_login_signup
 
@@ -51,12 +56,12 @@ nav.navbar.navbar-default.navbar-fixed-top
                 if current_user
                     +nav_notes
 
-            .container.navbar-center
-                +nav_quirell_icon
+            a(href='/')
+                img.quirell(src='/static/img/quirell.png')
 
             ul.nav.navbar-nav.navbar-right
                 if current_user
                     +nav_new_post
-                    +nav_profile_dropdown
+                    +nav_profile_dropdown_large
                 else
                     +nav_login_signup
