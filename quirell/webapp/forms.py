@@ -18,6 +18,9 @@ class SignupForm(Form):
     ])
     secret_password = fields.TextField("how many kittens?", [validators.InputRequired()])
 
+class NewPostForm(Form):
+    content = fields.TextField("content", [validators.InputRequired()])
+
 class ApplyRelationshipForm(Form):
     relationship = fields.TextField("relationship", [validators.InputRequired()])
     target_user = fields.TextField("user", [validators.InputRequired()])

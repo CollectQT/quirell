@@ -215,8 +215,13 @@ def signup_POST():
 @app.route('/new_post', methods=['POST'])
 @flask_login.login_required
 def new_post_POST():
-    current_user.create_post(
-        content=flask.request.form.get('content'),)
+
+    form = NewPostForm(flask.request.form)
+    
+    if not form.validate():
+        return flask.jsonify(errors=form.errors), 400
+
+    current_user.create_post(content=form.content)
     return flask.render_template('message.jade', html_content='post created')
 
 @app.route("/profile/edit", methods=["POST"])
@@ -245,6 +250,9 @@ def apply_relationship():
     form = ApplyRelationshipForm(flask.request.form)
     if not form.validate():
         return flask.jsonify(errors=form.errors), 400
+
+    relationship = form.relationship
+    target_user = form.user
 
     if not target_user[0] == '@': target_user = '@'+target_user
     current_user.relationships.apply_relationship(relationship, target_user)
