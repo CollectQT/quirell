@@ -186,8 +186,10 @@ class Cms(object):
             LOG.info('Activating account '+user['username'])
             return 'Account actived!', 200
         elif (user) and (user['active']):
+            LOG.info('Tried to active account active account '+user['username'])
             return 'Account already active', 401
         else:
+            LOG.info('Could name confirm account '+user['username'])
             return 'Could not confirm account', 401
 
     ###########
