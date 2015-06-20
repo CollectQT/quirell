@@ -7,6 +7,7 @@ import time
 # external
 import flask
 import flask_login
+import flask.ext.babel
 # custom
 from quirell.config import *
 from quirell.webapp import app
@@ -18,6 +19,7 @@ from quirell.webapp.forms import *
 ####################
 
 cms = Cms(app)
+babel = flask.ext.babel.Babel(app)
 
 # So, the use of the 'user' namespace within templates:
 #
@@ -110,6 +112,15 @@ def set_globals():
         profile_picture_form_data=profile_picture_form_data,
         normal_picture_form_data=normal_picture_form_data,
         cloudinary=app.config['CLOUDINARY'],)
+
+################
+# LOCALIZATION #
+################
+
+@babel.localeselector
+def get_locale():
+    return current_user.locale or request.accept_languages.best_match([
+        "en", "es"])
 
 ###############
 # BASIC PATHS #

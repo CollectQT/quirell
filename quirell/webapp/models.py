@@ -46,13 +46,61 @@ class User (object):
         Remembering logged in users: I haven't actually tested how this works >_>
         But a functionality I would like that may not be written into flask login,
         is the ability to remember logged in users across server restarts.
+
+
+    Property Reference
+    ------------------
+    username: a URL safe string. which probably means UTF8 at the
+        very least, but also excluding certain special symbols
+    password: a string hashable by bcrypt
+    active: boolean, defaults to false, disallows logins while false
+    confirmation_code: an int. needed to become active
+    email: a string containing a valid email address
+    description: a string containing markdown
+    display_name: a string
+    locale: a string containing a valid babel locale
+    pronouns: a string. In the future this field might be generalized
+        to a more vague descriptor (ex. shortname). So instead of just
+        being (he / she / they / ze) this field would also contain values
+        such as (group / robot / cat).
+    posts_amount: an int
+    profile_picture: a string containing a URL
+    pictures: a list of URLs
+    pictures_amount: an int
     '''
+
+    properties = {
+        'username': ""
+        'password': ""
+        'active': False,
+        'confirmation_code': 0
+        'email': ""
+        'description': '',
+        'display_name': "",
+        'locale': "",
+        'pronouns': 'they',
+        'posts_amount': 0,
+        'profile_picture': '/static/img/default.png',
+        'pictures': tuple(),
+        'pictures_amount': 0,
+        'relationships': ""
+        }
 
     #########
     # inits #
     #########
 
+    def fix_undeclared_properties(self, properties):
+ 
+        for k, v in self.properties.items():
+            try:
+                getattr(properties, k)
+            except AttributeError:
+                properties[k] = v
+
     def format(self, node):
+
+        self.fix_undeclared_properties(node)
         self.node = node
         self.relationships = Relationships(self, node['relationships'])
 
@@ -76,6 +124,7 @@ class User (object):
 
     def login (self, username, password, remember):
         '''logs in a user'''
+
         if not username[0] == '@': username = '@'+username
         node = cms.db.load_user(username)
         # check that inputs are correct
@@ -90,51 +139,24 @@ class User (object):
             return False, 'Account not active, go to [/send_confirmation/{0}](/send_confirmation/{0}) to send an activation email'.format(username)
         # user considered successfully logged in at this point
         self.format(node)
+
         flask_login.login_user(self, remember=remember) # add to login manager
         return True, self
 
     def create (self, username, password, email, url_root):
-        '''
-        create a new user
+        '''create a new user'''
 
-        also serves as the reference for all of the data that should
-        exist on a user object. that being:
+        properties = dict(self.properties)
+        properties["username"] = "@"+username
+        properties["password"] = cms.bcrypt.generate_password_hash(password)
+        properties["confirmation_code"] = cms.serialize.dumps(email)
+        properties["email"] = email
+        properties["display_name"] = username
+        properties["pictures"] = []
 
-        username: a URL safe string. which probably means UTF8 at the
-            very least, but also excluding certain special symbols
-        password: a string hashable by bcrypt
-        active: boolean, defaults to false, disallows logins while false
-        confirmation_code: an int. needed to become active
-        email: a string containing a valid email address
-        description: a string containing markdown
-        display_name: a string
-        pronouns: a string. In the future this field might be generalized
-            to a more vague descriptor (ex. shortname). So instead of just
-            being (he / she / they / ze) this field would also contain values
-            such as (group / robot / cat).
-        posts_amount: an int
-        profile_picture: a string containing a URL
-        pictures: a list of URLs
-        pictures_amount: an int
-        '''
         # initalize a node
         import os
         import codecs
-        properties = {
-            'username': '@'+username,
-            'password': cms.bcrypt.generate_password_hash(password),
-            'active': False,
-            'confirmation_code': cms.serialize.dumps(email),
-            'email': email,
-            'description': '',
-            'display_name': username,
-            'pronouns': 'they',
-            'posts_amount': 0,
-            'profile_picture': '/static/img/default.png',
-            'pictures': [],
-            'pictures_amount': 0,
-            'relationships': json.dumps(Relationships.defaults),
-            }
         # then send it to the database
         cms.db.create_user(properties)
         # and send the account confirmation email

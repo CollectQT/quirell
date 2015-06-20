@@ -1,4 +1,5 @@
 from wtforms import validators, fields, Form
+from flask.ext.babel import gettext, lazy_gettext
 
 class LoginForm(Form):
     username = fields.TextField("username", [validators.InputRequired()])
@@ -10,7 +11,7 @@ class SignupForm(Form):
     password = fields.PasswordField("password", [validators.InputRequired()])
     confirm = fields.PasswordField("confirm password", [
         validators.InputRequired(),
-        validators.EqualTo("password", message="Passwords must match")
+        validators.EqualTo("password", message=lazy_gettext("Passwords must match"))
     ])
     email = fields.TextField("email address", [
         validators.InputRequired(),
