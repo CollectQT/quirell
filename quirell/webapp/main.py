@@ -119,7 +119,7 @@ def set_globals():
 
 @babel.localeselector
 def get_locale():
-    return current_user['locale'] or request.accept_languages.best_match([
+    return current_user['locale'] or flask.request.accept_languages.best_match([
         "en", "es"])
 
 ###############
