@@ -119,7 +119,7 @@ def set_globals():
 
 @babel.localeselector
 def get_locale():
-    return current_user.locale or request.accept_languages.best_match([
+    return current_user.node.locale or request.accept_languages.best_match([
         "en", "es"])
 
 ###############
@@ -218,7 +218,8 @@ def signup_POST():
         username=form.username.data,
         password=form.password.data,
         email=form.email.data,
-        url_root=flask.request.url_root)
+        url_root=flask.request.url_root,
+        locale=get_locale())
     # return flask.render_template('message.jade',
         # html_content='Almost there! An email was sent to you to confirm your sigup')
     return flask.jsonify(message="Almost there! An email was sent to you to confirm your signup."), 200

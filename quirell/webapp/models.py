@@ -77,7 +77,7 @@ class User (object):
         'email': ""
         'description': '',
         'display_name': "",
-        'locale': "",
+        'locale': "en",
         'pronouns': 'they',
         'posts_amount': 0,
         'profile_picture': '/static/img/default.png',
@@ -143,7 +143,7 @@ class User (object):
         flask_login.login_user(self, remember=remember) # add to login manager
         return True, self
 
-    def create (self, username, password, email, url_root):
+    def create (self, username, password, email, url_root, locale=None):
         '''create a new user'''
 
         properties = dict(self.properties)
@@ -153,6 +153,8 @@ class User (object):
         properties["email"] = email
         properties["display_name"] = username
         properties["pictures"] = []
+        if locale:
+            properties["locale"] = locale
 
         # initalize a node
         import os
