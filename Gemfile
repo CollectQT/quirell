@@ -1,6 +1,5 @@
-# A sample Gemfile
 source "https://rubygems.org"
 
-gem 'sass', '>= 3.4'
+ruby '2.2.1'
 
-'ruby 2.2'
+gem 'sass', '>= 3.4'
