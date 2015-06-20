@@ -67,9 +67,6 @@ def create_user_cyrin():
     assert requests.get(ROOT+'/confirm_account/'+confirmation_code).status_code == 200
 
 def test_user_cyrin():
-    confirmation_code = cms.serialize.dumps('firemagelynn+quirelltestingcyrin@gmail.com')
-    assert requests.get(ROOT+'/confirm_account/'+confirmation_code).status_code == 200
-
     if not requests.get(ROOT+'/u/@cyrin').status_code == 200:
         create_user_cyrin()
 
