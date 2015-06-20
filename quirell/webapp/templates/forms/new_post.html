@@ -1,8 +1,0 @@
-{% extends "message.html" %}
-    {% block article %}
-<h1>Create New Post</h1>
-<form action="/new_post" method="POST" name="new_post">
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}" />
-    <textarea name='content'></textarea>
-</form>
-    {% endblock %}

@@ -92,54 +92,6 @@
 // //this media query is just for consistency
 // @media all {
 
-//     html {
-//         font-size: 16px;
-//         line-height: 1.3em;
-//     }
-
-//     article.double-form {
-//         padding-left: 0;
-//         padding-right: 0;
-//     }
-
-//     article.double-form .login-signup-box {
-//         margin: 0;
-//     }
-
-//     .login-message {
-//         text-align: center;
-//         background-color: rgba($color_primary, 0.25);
-//         margin-bottom: 20px;
-//     }
-
-//     .login-signup-box form, .form form {
-//         width: 70%;
-//         margin-left: auto;
-//         margin-right: auto;
-//     }
-
-//     .login-signup-box label input, .form label input {
-//         width: auto;
-//     }
-
-//     .login-signup-box .submit {
-//         width: auto;
-//         display: block;
-//         margin-left: auto;
-//         margin-right: auto;
-//         margin-top: 10px;
-//         margin-bottom: 10px;
-//     }
-
-//     .login-signup-box input, .form input {
-//         box-sizing: border-box;
-//         width: 100%;
-//         margin-top: 5px;
-//         margin-bottom: 5px;
-//         padding-left: 10px;
-//         padding-right: 10px;
-//     }
-
 //     .banner-left {
 //         width: 75%;
 //         margin: 0 auto;
@@ -305,42 +257,9 @@
 //         width: 70%;
 //     }
 
-//     main.double-form, main.form {
-//         width: 75%;
-//         text-align: center;
-//     }
-
-//     .double-form .login-signup-box {
-//         width: 100%;
-//         display: inline-block;
-//         margin-left: 10px;
-//         margin-right: 10px;
-//     }
-
 //     .banner {
 //         padding-left: 5%;
 //         padding-right: 5%;
-//     }
-
-// }
-
-// /*---------------
-//      DESKTOP
-// -----------------*/
-
-// @media all and (min-width: 1000px){
-
-//     article {
-//         width: 45%;
-//     }
-
-//     .double-form article {
-//         width: 85%;
-//     }
-
-//     .double-form .login-signup-box {
-//         width: 40%;
-//         vertical-align: top;
 //     }
 
 // }

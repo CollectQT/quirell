@@ -137,12 +137,12 @@ def index ():
 @app.route('/login')
 def login():
     if current_user.is_authenticated(): return flask.redirect('/')
-    return flask.render_template('forms/login_signup.html')
+    return flask.render_template('forms/login_signup.jade')
 
 @app.route('/signup')
 def signup():
     if current_user.is_authenticated(): return flask.redirect('/')
-    return flask.render_template('forms/login_signup.html')
+    return flask.render_template('forms/login_signup.jade')
 
 @app.route('/user')
 @app.route('/profile')

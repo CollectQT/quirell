@@ -1,0 +1,11 @@
+- from 'mixins.jade' import form_login, form_signup
+
+extends base.jade
+block content
+    .row
+        main.col-sm-10.col-sm-offset-1
+            .row
+                .col-sm-5
+                    +form_login
+                .col-sm-5.col-sm-offset-2
+                    +form_signup
