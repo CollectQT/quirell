@@ -111,12 +111,15 @@ class Cms(object):
         _scss = scss.Scss(scss_opts={'compress':True, 'debug_info': True})
 
         # read, then write to file
-        with open(BASE_PATH+'/quirell/webapp/static/scss/main.scss', 'r') as f:
-            compiled_css = _scss.compile(f.read())
-        with open(BASE_PATH+'/quirell/webapp/static/css/main.css', 'w') as f:
-            f.write(compiled_css)
+        try:
+            with open(BASE_PATH+'/quirell/webapp/static/scss/main.scss', 'r') as f:
+                compiled_css = _scss.compile(f.read())
+            with open(BASE_PATH+'/quirell/webapp/static/css/main.css', 'w') as f:
+                f.write(compiled_css)
+                LOG.info('Built css')
+        except scss.errors.SassEvaluationError:
+            LOG.error('Sass Evaluation Error')
 
-        LOG.info('Built css')
 
     def clean_html (self, html):
         # cleans html to prevent people doing evil things with it like
