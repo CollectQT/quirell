@@ -1,8 +1,10 @@
 ENV.yaml
 main.css
+main.css.map
 
 venv/
 generated/
+.sass-cache/
 
 *.pyc
 *.pyo

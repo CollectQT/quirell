@@ -1,9 +1,13 @@
-// utility clases
+/***************
+    utility
+***************/
 
 @media all and (max-width: 768px) {.show-large {display: none !important;}}
 @media all and (min-width: 768px) {.show-small {display: none !important;}}
 
-// body
+/***************
+    body/inline
+***************/
 
 html, body {
     padding: 0;
@@ -17,8 +21,8 @@ body {
     margin-top: 60px;
     padding-left: 10px;
     padding-right: 10px;
+    min-width: 320px;
 }
-
 
 h1, h2, h3, h4, h5, p {
     padding: 5px 10px;
@@ -29,10 +33,10 @@ h1, h2 {
     text-align: center;
 }
 
-// nav
-
+/***************
+    nav
+***************/
 nav {
-    box-shadow: 0 0 10px $filler_darkest;
     text-align: center;
 }
 
@@ -118,9 +122,13 @@ nav span {
     }
 }
 
-// sidebars
+/***************
+    sidebars
+***************/
 
-// main
+/***************
+    main
+***************/
 
 article {
     border-radius: 10px;
@@ -129,4 +137,55 @@ article {
 article.message {
     padding: 20px;
     margin-bottom: 30px;
+}
+
+/***************
+    forms
+***************/
+
+.form h1 {
+    padding: 0;
+    margin: 0 0 10px;
+}
+
+form>label {
+    width: 100%;
+}
+
+form div.row div {
+}
+
+form>label>div>span {
+    text-align: right;
+    padding-top: 6px;
+    display: inline-block;
+}
+
+form>label>div>input {
+    width: 100%;
+    padding: 6px 12px;
+    margin-left: 5px;
+    border-radius: 5px;
+}
+
+form>label.check>div>input {
+    width: auto;
+    margin-left: 19px;
+    margin-right: 10px;
+}
+
+.login-signup-form {
+    border-radius: 10px;
+    padding: 0 15px 20px;
+}
+
+@media all and (max-width: 768px) {
+    .login-signup-form {
+        margin: 0 10px;
+    }
+
+    // this is ugly :/
+    .login-signup-form .row .row {
+        margin: 0;
+    }
 }

@@ -10,22 +10,38 @@ Feature wise, Quirell takes a lot of cues from Facebook and Tumblr, and technica
 
 ## Local developement
 
-Install all the requirements with:
+Copy paste all this into command line to install the requirements:
 
     # python, python developer packages, and other systemwide dependencies
-    $ sudo add-apt-repository ppa:fkrull/deadsnakes \
-        && sudo apt-get update \
-        && sudo apt-get install -y python3.4 python3.4-dev python-dev \
-        && sudo apt-get install -y git python-pip python-virtualenv \
-        && wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
+    sudo add-apt-repository ppa:fkrull/deadsnakes
+    sudo apt-get update
+    sudo apt-get install -y python3.4 python3.4-dev python-dev
+    sudo apt-get install -y git python-pip python-virtualenv
+    && wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
 
     # get the quirell source code
     $ git clone git@gitlab.com:collectqt/quirell.git && cd quirell
 
     # active the environment
-    $ virtualenv -p python3.4 venv \
-        && source venv/bin/activate \
-        && pip install -r requirements.txt
+    virtualenv -p python3.4 venv
+    source venv/bin/activate
+    pip install -r requirements.txt
+
+    # ruby
+    gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+    curl -L https://get.rvm.io | bash -s stable
+    source ~/.rvm/scripts/rvm
+    rvm install 2.2
+    rvm use 2.2
+    gem install bundler
+    bundler install
+
+The environment has to be activated before running in the code, even if you've installed before. Do that with
+
+    # python
+    source venv/bin/activate
+    # ruby
+    rvm use 2.2
 
 There are also a few external resources (ie. Heroku addons) and passwords (ie. the SECRET_KEY) that Quirell needs in order to run. Example versions of them exist inside of `ENV.yaml.example`. To get up and running quickly, run this command
 

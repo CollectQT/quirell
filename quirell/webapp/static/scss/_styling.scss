@@ -1,4 +1,6 @@
-//
+/***************
+    body/inline
+***************/
 
 html, body {
     background-color: $color_primary;
@@ -16,7 +18,9 @@ main a, aside a {
     color: $color_accent;
 }
 
-// nav
+/***************
+    nav
+***************/
 
 nav {
     color: $color_primary;
@@ -30,6 +34,7 @@ nav {
     font-family: $font_stylized;
     font-weight: bold;
     list-style: none;
+    box-shadow: 0 0 10px $filler_darkest;
 }
 
 .navbar {
@@ -76,5 +81,22 @@ nav button, nav i, nav span {
 // main
 
 article {
+    background-color: $filler_light;
+}
+
+// forms
+
+.form h1 {
+    font-family: $font_stylized;
+    border-bottom: 1px solid $filler_medium;
+}
+
+form>label>div>input {
+    border: 1px solid $filler_medium;
+    background-color: $filler_lightest;
+    transition: border-color 0.2s ease-in-out;
+}
+
+.login-signup-form {
     background-color: $filler_light;
 }

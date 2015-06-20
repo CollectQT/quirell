@@ -2,27 +2,32 @@ mixin form_csrf_token
     input(type="hidden", name="_csrf_token", value="#{csrf_token()}")
 
 mixin form_new_post
-    h2 Create New Post
+    h1 Create New Post
     form(action="/new_post", method="POST", name="new_post")
         +form_csrf_token
         textarea(name='content')
 
 mixin form_login
-    h2 Login
+    h1 Login
     .login-message #{login_message}
-    form.row(action="/login?next=#{next}", method="POST")
+    form.container-fluid(action="/login?next=#{next}", method="POST")
         +form_csrf_token
-        label.col-xs-3 Username
-        input.col-xs-9(type='text', name='username', id='form-login-username', placeholder='username', autofocus='autofocus', required)
-        label.col-xs-3 Password
-        input.col-xs-9(type='password', name='password', id='form-login-password', placeholder='password', required)
-        label
-            input(id="form-login-remember_me", name="remember_me", type="checkbox", value="1", checked)
-            span Remember Me
-        input.col-xs-offset-3.submit(type="submit", value="Login")
+        label.row
+            .col-sm-3: span Username
+            .col-sm-9: input(type='text', name='username', id='form-login-username', placeholder='username', autofocus='autofocus', required)
+        label.row
+            .col-sm-3: span Password
+            .col-sm-9: input(type='password', name='password', id='form-login-password', placeholder='password', required)
+        label.row.check
+            .col-sm-offset-3
+                input(id="form-login-remember_me", name="remember_me", type="checkbox", value="1", checked)
+                span Remember Me
+        .row.submit
+            .col-sm-offset-3
+                input(type="submit", value="Login")
 
 mixin form_signup
-    h2 Sign Up
+    h1 Sign Up
     form(action="/signup", method="POST", name="signup")
         +form_csrf_token
         //- vertical align isn't important, it just looks really nice
