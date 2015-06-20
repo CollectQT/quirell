@@ -2,252 +2,6 @@ import json
 import flask_login
 from quirell.webapp.main import cms
 
-class User (object):
-    '''
-    the user class represents an individual user in the database
-
-    The user class
-    --------------
-    The user class, in general, handles functions that run on individual users,
-    and an instance of the user class is primary way that any change that happens
-    via a view function can affect user data. The only other way that a view
-    function can affect user data is via the cms (quirell.webapp.cms), but in that
-    case it should be an admin who is causing the function call, not an
-    individual user.
-
-    Creating a user instance
-    ------------------------
-    Given that its a user instance that a view function is generally interacting
-    with, the user class has to be instanced before changes can start happening to
-    it. Also, the only time when you should be instancing a user class instead of
-    reading data directly from the node is when the view function is being called by
-    a human who has access to edit the user data for the node. To be less technical,
-    you instance the user class only for a login or signup. If you need a user
-    instance outside of either of those contexts use `user=flask_login.current_user`
-    (that is, you assume the user is logged in already)
-
-    The user class and flask login
-    ------------------------------
-    Flask login handles some of the more technical aspects of user logins. those
-    being: user sessions, basic view permissions, and remembering logged in users.
-    I'll explain those things in order.
-
-        When a user logs in (via `user.login`) an instance of the user class is
-        created. That instance is passed to `flask_login.login_user` and also the
-        `cms.user_container` dictionary. flask_login.login_user is a black box, but
-        cms.user_container is used to hold the user instance of all the currently
-        logged in users. When flask login wants to load a user instance, it reads it
-        out of the user_container.
-
-        Basic view permissions work via adding the flask_login.login_required
-        decorator. Which just checks to see if there is a user instance attached
-        to the browser session of the user making the request.
-
-        Remembering logged in users: I haven't actually tested how this works >_>
-        But a functionality I would like that may not be written into flask login,
-        is the ability to remember logged in users across server restarts.
-
-
-    Property Reference
-    ------------------
-    username: a URL safe string. which probably means UTF8 at the
-        very least, but also excluding certain special symbols
-    password: a string hashable by bcrypt
-    active: boolean, defaults to false, disallows logins while false
-    confirmation_code: an int. needed to become active
-    email: a string containing a valid email address
-    description: a string containing markdown
-    display_name: a string
-    locale: a string containing a valid babel locale
-    pronouns: a string. In the future this field might be generalized
-        to a more vague descriptor (ex. shortname). So instead of just
-        being (he / she / they / ze) this field would also contain values
-        such as (group / robot / cat).
-    posts_amount: an int
-    profile_picture: a string containing a URL
-    pictures: a list of URLs
-    pictures_amount: an int
-    '''
-
-    properties = {
-        'username': "",
-        'password': "",
-        'active': False,
-        'confirmation_code': 0,
-        'email': "",
-        'description': '',
-        'display_name': "",
-        'locale': "en",
-        'pronouns': 'they',
-        'posts_amount': 0,
-        'profile_picture': '/static/img/default.png',
-        'pictures': tuple(),
-        'pictures_amount': 0,
-        'relationships': "",
-        }
-
-    #########
-    # inits #
-    #########
-
-    def fix_undeclared_properties(self, properties):
-
-        for k, v in self.properties.items():
-            try:
-                getattr(properties, k)
-            except AttributeError:
-                properties[k] = v
-
-    def format(self, node):
-
-        self.fix_undeclared_properties(node)
-        self.node = node
-        self.relationships = Relationships(self, node['relationships'])
-
-    def get(self, username):
-        '''
-        get a user object straight from the database
-
-        Note that this has no access control checks, so the access control check
-        needs to be made outside of this function
-
-        At the time I'm writing this, the only use of this function is with
-        flask_login's user loader, which itself checks that the use being loaded
-        is logged in.
-        '''
-        node = cms.db.load_user(username)
-        if node is None:
-            return None
-        else:
-            self.format(node)
-            return self
-
-    def login (self, username, password, remember):
-        '''logs in a user'''
-
-        if not username[0] == '@': username = '@'+username
-        node = cms.db.load_user(username)
-        # check that inputs are correct
-        # that is, if this user exists
-        if node == None:
-            return False, 'No user exists with this username'
-        # and if their password matches the db password
-        if not cms.bcrypt.check_password_hash(node['password'], password):
-            return False, 'Incorrect password'
-        # and if they are active
-        if not node['active']:
-            return False, 'Account not active, go to [/send_confirmation/{0}](/send_confirmation/{0}) to send an activation email'.format(username)
-        # user considered successfully logged in at this point
-        self.format(node)
-
-        flask_login.login_user(self, remember=remember) # add to login manager
-        return True, self
-
-    def create (self, username, password, email, url_root, locale=None):
-        '''create a new user'''
-
-        properties = dict(self.properties)
-        properties["username"] = "@"+username
-        properties["password"] = cms.bcrypt.generate_password_hash(password)
-        properties["confirmation_code"] = cms.serialize.dumps(email)
-        properties["email"] = email
-        properties["display_name"] = username
-        properties["pictures"] = []
-        if locale:
-            properties["locale"] = locale
-
-        # initalize a node
-        import os
-        import codecs
-        # then send it to the database
-        cms.db.create_user(properties)
-        # and send the account confirmation email
-        cms.send_confirmation_email(properties['username'], url_root)
-
-    ###############
-    # general use #
-    ###############
-
-    def commit (self): self.node.push()
-
-    def get_id (self): return self['username']
-
-    def is_authenticated (self): return True
-
-    def is_active (self): return self['active']
-
-    def is_anonymous(self): return False
-
-    def delete_account (self, password):
-        # confirm password
-        if not cms.bcrypt.check_password_hash(self['password'], password):
-            return 'Incorrect Password', 401
-        # do deletion
-        cms.db.delete_account(self['username'])
-        return 'Account deleted', 200
-
-    def get_all_data (self):
-        cms.db.get_all_data(self.node)
-
-    #########
-    # posts #
-    #########
-
-    def create_post (self, content):
-        from datetime import datetime
-        from dateutil import tz
-        # post id is current number of posts, which we then increment
-        post_id = self['posts_amount']
-        self['posts_amount'] += 1
-        # make sure the post isn't filled with EVIL
-        # then format the node and relationship data
-        content = cms.clean_html(content)
-        post_properties = {
-            'content': content,
-            'datetime': datetime.now(tz.gettz('US/Pacific')),
-            'post_id': post_id,
-        }
-        relationship_properties = {
-            'access': [],
-        }
-        # push to database
-        cms.db.create_post(self.node, post_properties, relationship_properties)
-        self.node.push()
-
-    def edit_post (self, post_id):
-        pass
-        #cms.db.get_post(post_id=post_id, user=self.node)
-
-    ############
-    # builtins #
-    ############
-
-    # these functions allow the user object to function like a dictionary,
-    # in that you can retrieve attributes from user.node with user['username']
-    # (which resolves to user.node['username'])
-
-    def __str__ (self):
-        return str(self.node)
-
-    def __repr__ (self):
-        return str(self.node)
-
-    def __getitem__ (self, key):
-        if key == 'relationships':
-            return self.relationships
-        else:
-            try: return self.node[key]
-            except KeyError: return None
-
-    def __setitem__ (self, key, value):
-        self.node[key] = value
-
-    def __delitem__ (self, key):
-        del self.node[key]
-
-    def __bool__(self):
-        return True
-
 class Relationships(object):
     '''
     Used as the intermediate between the relationships backend and frontend.
@@ -372,3 +126,241 @@ class Relationships(object):
             except KeyError: return None
         elif type(key) is int:
             return self.ordered[key]
+
+class User (object):
+    '''
+    the user class represents an individual user in the database
+
+    The user class
+    --------------
+    The user class, in general, handles functions that run on individual users,
+    and an instance of the user class is primary way that any change that happens
+    via a view function can affect user data. The only other way that a view
+    function can affect user data is via the cms (quirell.webapp.cms), but in that
+    case it should be an admin who is causing the function call, not an
+    individual user.
+
+    Creating a user instance
+    ------------------------
+    Given that its a user instance that a view function is generally interacting
+    with, the user class has to be instanced before changes can start happening to
+    it. Also, the only time when you should be instancing a user class instead of
+    reading data directly from the node is when the view function is being called by
+    a human who has access to edit the user data for the node. To be less technical,
+    you instance the user class only for a login or signup. If you need a user
+    instance outside of either of those contexts use `user=flask_login.current_user`
+    (that is, you assume the user is logged in already)
+
+    The user class and flask login
+    ------------------------------
+    Flask login handles some of the more technical aspects of user logins. those
+    being: user sessions, basic view permissions, and remembering logged in users.
+    I'll explain those things in order.
+
+        When a user logs in (via `user.login`) an instance of the user class is
+        created. That instance is passed to `flask_login.login_user` and also the
+        `cms.user_container` dictionary. flask_login.login_user is a black box, but
+        cms.user_container is used to hold the user instance of all the currently
+        logged in users. When flask login wants to load a user instance, it reads it
+        out of the user_container.
+
+        Basic view permissions work via adding the flask_login.login_required
+        decorator. Which just checks to see if there is a user instance attached
+        to the browser session of the user making the request.
+
+        Remembering logged in users: I haven't actually tested how this works >_>
+        But a functionality I would like that may not be written into flask login,
+        is the ability to remember logged in users across server restarts.
+
+
+    Property Reference
+    ------------------
+    username: a URL safe string. which probably means UTF8 at the
+        very least, but also excluding certain special symbols
+    password: a string hashable by bcrypt
+    active: boolean, defaults to false, disallows logins while false
+    confirmation_code: an int. needed to become active
+    email: a string containing a valid email address
+    description: a string containing markdown
+    display_name: a string
+    locale: a string containing a valid babel locale
+    pronouns: a string. In the future this field might be generalized
+        to a more vague descriptor (ex. shortname). So instead of just
+        being (he / she / they / ze) this field would also contain values
+        such as (group / robot / cat).
+    posts_amount: an int
+    profile_picture: a string containing a URL
+    pictures: a list of URLs
+    pictures_amount: an int
+    '''
+
+    defaults = {
+        'username': '',
+        'password': '',
+        'active': False,
+        'confirmation_code': '',
+        'email': '',
+        'description': '',
+        'display_name': '',
+        'locale': 'en',
+        'pronouns': 'they',
+        'posts_amount': 0,
+        'profile_picture': '/static/img/default.png',
+        'pictures': [],
+        'pictures_amount': 0,
+        'relationships': json.dumps(Relationships.defaults),
+        }
+
+    #########
+    # inits #
+    #########
+
+    def fix_undeclared_properties(self):
+        for k, v in User.defaults.items():
+            try:
+                getattr(self.node, k)
+            except AttributeError:
+                self.node[k] = v
+
+    def format(self, node):
+
+        self.node = node
+        self.fix_undeclared_properties()
+        self.relationships = Relationships(self, node['relationships'])
+
+    def get(self, username):
+        '''
+        get a user object straight from the database
+
+        Note that this has no access control checks, so the access control check
+        needs to be made outside of this function
+
+        At the time I'm writing this, the only use of this function is with
+        flask_login's user loader, which itself checks that the use being loaded
+        is logged in.
+        '''
+        node = cms.db.load_user(username)
+        if node is None:
+            return None
+        else:
+            self.format(node)
+            return self
+
+    def login (self, username, password, remember):
+        '''logs in a user'''
+
+        if not username[0] == '@': username = '@'+username
+        node = cms.db.load_user(username)
+        # check that inputs are correct
+        # that is, if this user exists
+        if node == None:
+            return False, 'No user exists with this username'
+        # and if their password matches the db password
+        if not cms.bcrypt.check_password_hash(node['password'], password):
+            return False, 'Incorrect password'
+        # and if they are active
+        if not node['active']:
+            return False, 'Account not active, go to [/send_confirmation/{0}](/send_confirmation/{0}) to send an activation email'.format(username)
+        # user considered successfully logged in at this point
+        self.format(node)
+
+        flask_login.login_user(self, remember=remember) # add to login manager
+        return True, self
+
+    def create (self, username, password, email, url_root, locale=''):
+        '''create a new user'''
+
+        properties = self.defaults
+        properties["username"] = "@"+username
+        properties["password"] = cms.bcrypt.generate_password_hash(password)
+        properties["confirmation_code"] = cms.serialize.dumps(email)
+        properties["email"] = email
+        properties["display_name"] = username
+        properties["locale"] = locale
+
+        cms.db.create_user(properties)
+        cms.send_confirmation_email(properties['username'], url_root)
+
+    ###############
+    # general use #
+    ###############
+
+    def commit (self): self.node.push()
+
+    def get_id (self): return self['username']
+
+    def is_authenticated (self): return True
+
+    def is_active (self): return self['active']
+
+    def is_anonymous(self): return False
+
+    def delete_account (self, password):
+        # confirm password
+        if not cms.bcrypt.check_password_hash(self['password'], password):
+            return 'Incorrect Password', 401
+        # do deletion
+        cms.db.delete_account(self['username'])
+        return 'Account deleted', 200
+
+    def get_all_data (self):
+        cms.db.get_all_data(self.node)
+
+    #########
+    # posts #
+    #########
+
+    def create_post (self, content):
+        from datetime import datetime
+        from dateutil import tz
+        # post id is current number of posts, which we then increment
+        post_id = self['posts_amount']
+        self['posts_amount'] += 1
+        # make sure the post isn't filled with EVIL
+        # then format the node and relationship data
+        content = cms.clean_html(content)
+        post_properties = {
+            'content': content,
+            'datetime': datetime.now(tz.gettz('US/Pacific')),
+            'post_id': post_id,
+        }
+        relationship_properties = {
+            'access': [],
+        }
+        # push to database
+        cms.db.create_post(self.node, post_properties, relationship_properties)
+        self.node.push()
+
+    def edit_post (self, post_id):
+        pass
+        #cms.db.get_post(post_id=post_id, user=self.node)
+
+    ############
+    # builtins #
+    ############
+
+    # these functions allow the user object to function like a dictionary,
+    # in that you can retrieve attributes from user.node with user['username']
+    # (which resolves to user.node['username'])
+
+    def __str__ (self):
+        return str(self.node)
+
+    def __repr__ (self):
+        return str(self.node)
+
+    def __getitem__ (self, key):
+        if key == 'relationships':
+            return self.relationships
+        else:
+            try: return self.node[key]
+            except KeyError: return None
+
+    def __setitem__ (self, key, value):
+        self.node[key] = value
+
+    def __delitem__ (self, key):
+        del self.node[key]
+
+    def __bool__(self):
+        return True
