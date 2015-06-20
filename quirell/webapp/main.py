@@ -119,7 +119,7 @@ def set_globals():
 
 @babel.localeselector
 def get_locale():
-    return current_user.node.locale or request.accept_languages.best_match([
+    return current_user['locale'] or request.accept_languages.best_match([
         "en", "es"])
 
 ###############
@@ -229,7 +229,7 @@ def signup_POST():
 def new_post_POST():
 
     form = NewPostForm(flask.request.form)
-    
+
     if not form.validate():
         return flask.jsonify(errors=form.errors), 400
 
