@@ -70,11 +70,11 @@ class User (object):
     '''
 
     properties = {
-        'username': ""
-        'password': ""
+        'username': "",
+        'password': "",
         'active': False,
-        'confirmation_code': 0
-        'email': ""
+        'confirmation_code': 0,
+        'email': "",
         'description': '',
         'display_name': "",
         'locale': "en",
@@ -83,7 +83,7 @@ class User (object):
         'profile_picture': '/static/img/default.png',
         'pictures': tuple(),
         'pictures_amount': 0,
-        'relationships': ""
+        'relationships': "",
         }
 
     #########
@@ -91,7 +91,7 @@ class User (object):
     #########
 
     def fix_undeclared_properties(self, properties):
- 
+
         for k, v in self.properties.items():
             try:
                 getattr(properties, k)
