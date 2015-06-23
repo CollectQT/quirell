@@ -100,3 +100,7 @@ form>label>div>input {
 .login-signup-form {
     background-color: $filler_light;
 }
+
+.message h1 {
+    border-bottom: $filler_medium 2px inset;
+}

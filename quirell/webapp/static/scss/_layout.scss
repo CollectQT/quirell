@@ -33,6 +33,10 @@ h1, h2 {
     text-align: center;
 }
 
+h1 img {
+    width: 32px;
+}
+
 /**********
     nav
 **********/
@@ -135,7 +139,7 @@ article {
 }
 
 article.message {
-    padding: 20px;
+    padding: 10px;
     margin-bottom: 30px;
 }
 
