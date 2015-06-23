@@ -189,7 +189,7 @@ class Cms(object):
             LOG.info('Tried to active account active account '+user['username'])
             return 'Account already active', 401
         else:
-            LOG.info('Could name confirm account '+user['username'])
+            LOG.info('Could name confirm account for input '+str(username or confirmation_code))
             return 'Could not confirm account', 401
 
     ###########
