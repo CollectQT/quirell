@@ -7,12 +7,12 @@
 
 start() {
     sudo service redis_6379 start
-    # sudo service neo4j start ?
+    sudo service neo4j-service start
 }
 
 stop() {
     sudo service redis_6379 stop
-    # sudo service neo4j stop ?
+    sudo service neo4j-service stop
 }
 
 activate() {
