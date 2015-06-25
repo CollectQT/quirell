@@ -8,56 +8,45 @@ Quirell is a currently in developement social network being developed by [Collec
 
 Feature wise, Quirell takes a lot of cues from Facebook and Tumblr, and technically it is inspired by [rstat.us](https://github.com/hotsh/rstat.us) and [diaspora*](https://github.com/diaspora/diaspora)
 
-## Local developement
+## Quick start
 
-Copy paste all this into command line to install the requirements:
+    bash manage.sh install
+    bash manage.sh start
+    python quirell
 
-    # python, python developer packages, and other systemwide dependencies
-    sudo add-apt-repository ppa:fkrull/deadsnakes
-    sudo apt-get update
-    sudo apt-get install -y python3.4 python3.4-dev python-dev
-    sudo apt-get install -y git python-pip python-virtualenv
-    && wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
+Go to [http://localhost:5000](http://localhost:5000)
 
-    # get the quirell source code
-    $ git clone git@gitlab.com:collectqt/quirell.git && cd quirell
+## Slightly less quick
 
-    # active the environment
-    virtualenv -p python3.4 venv
-    source venv/bin/activate
-    pip install -r requirements.txt
+Install dependencies, which checks if a few things are installed (python 3.4, ruby, databases) and installs them if they are not.
 
-    # ruby
-    gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
-    curl -L https://get.rvm.io | bash -s stable
-    source ~/.rvm/scripts/rvm
-    rvm install 2.2
-    rvm use 2.2
-    gem install bundler
-    bundler install
+    bash manage.sh install
 
-The environment has to be activated before running in the code, even if you've installed before. Do that with
+The install includes a section which activates the environment, but if you are running the code for a 2nd or 3rd time you'll have to activate the environment yourself
 
-    # python
-    source venv/bin/activate
-    # ruby
-    rvm use 2.2
+    bash manage.sh activate
 
-There are also a few external resources (ie. Heroku addons) and passwords (ie. the SECRET_KEY) that Quirell needs in order to run. Example versions of them exist inside of `ENV.yaml.example`. To get up and running quickly, run this command
+Start the required databases. This assumes that you aren't using custom ports or remote resources. If you are you'll have to add their location to ENV.yaml
 
-    $ cp quirell/ENV.yaml.example quirell/ENV.yaml
+    bash manage.sh start
 
 Finally, you can run the code with
 
-    $ python quirell
+    python quirell
 
-Or tests with
+At this point you should be able to go to [http://localhost:5000](http://localhost:5000) in your browser and view Quirell !
 
-    $ py.test
+When you are done working on things you probably want to turn off the local databases services, do that with
+
+    bash manage.sh stop
 
 ## Contributing
 
 Anything you would ever want to help with is on [the gitlab issues list](https://gitlab.com/collectqt/quirell/issues). Although you probably want to look at [the standalone issues](https://gitlab.com/collectqt/quirell/issues?label_name=Standalone), they're picked to be issues that one could easily work on without requiring a ton of knowable about the code base.
+
+Try not to push to `develop` if your changes make the tests fail! This command will run tests for you
+
+    py.test
 
 Also if you have push access, the relevant git remotes are:
 
