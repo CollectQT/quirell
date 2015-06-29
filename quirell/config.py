@@ -24,7 +24,7 @@ CONFIG={
     'MAIL_USE_SSL': True,
     #
     'CLOUDINARY_CDN': 'http://res.cloudinary.com/',
-    'THE_PASSWORD': 'likefivehundredthousandkittens',
+    'THE_PASSWORD': '3',
     'DEBUG': True,
     'PORT': 5000,
 }
