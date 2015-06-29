@@ -119,17 +119,17 @@ class Database (object):
     def __init__ (self):
         # Set global database values, first the URL
         graphenedb_url = os.environ['GRAPHENEDB_URL']
-        self.db = py2neo.ServiceRoot(graphenedb_url).graph
+        self.graph = py2neo.Graph(graphenedb_url)
         # # Users and searched by usernames, so they must be unique
         # # Making them unique also automatically indexes them
         # self.create_uniqueness_constraint('user', 'username')
         # self.create_uniqueness_constraint('user', 'email')
         # # Posts are searched by either post_id or datetime, so we index those
-        # self.db.cypher.execute('CREATE INDEX ON :post(post_id)')
-        # self.db.cypher.execute('CREATE INDEX ON :post(datetime)')
+        # self.graph.cypher.execute('CREATE INDEX ON :post(post_id)')
+        # self.graph.cypher.execute('CREATE INDEX ON :post(datetime)')
 
     def create_uniqueness_constraint (self, label, constraint):
-        try: self.db.schema.create_uniqueness_constraint(label, constraint)
+        try: self.graph.schema.create_uniqueness_constraint(label, constraint)
         except py2neo.GraphError as error:
             if error.__class__.__name__ == 'ConstraintViolationException': pass
             else: raise
@@ -149,7 +149,7 @@ class Database (object):
         # create a new user
         user_node = py2neo.Node('user', **properties)
         try:
-            self.db.create(user_node)
+            self.graph.create(user_node)
             LOG.info('Creating new user '+properties['username'])
             return True, ''
         except Exception as e:
@@ -162,13 +162,13 @@ class Database (object):
         # create new post, and a relationship for the poster
         post = py2neo.Node('post', **post_properties)
         user_created_post = py2neo.Relationship(user, 'CREATED', post, **relationship_properties)
-        self.db.create(post, user_created_post)
+        self.graph.create(post, user_created_post)
         LOG.info('Creating new post for user '+user['username'])
 
     def create_timeline (self, properties, user):
         timeline = py2neo.Node('timeline', **properties)
         user_owns_timeline = py2neo.Relationship(user, 'OWNS', timeline)
-        self.db.create(timeline, user_owns_timeline)
+        self.graph.create(timeline, user_owns_timeline)
         LOG.info('New timeline created')
 
     ##################
@@ -179,11 +179,11 @@ class Database (object):
     # externally so the database is free to do a simple query and return
 
     def load_user (self, username):
-        return self.db.find_one('user', 'username', username)
+        return self.graph.find_one('user', 'username', username)
 
     def load_post (self, owner, post_id):
         parameters = {'username': owner, 'post_id': post_id}
-        recordlist = self.db.cypher.execute('''
+        recordlist = self.graph.cypher.execute('''
             MATCH (user:user {username:{username}})
             OPTIONAL MATCH (user)-[created:CREATED]->(post:post {post_id:{post_id}})
             RETURN user, created, post
@@ -191,11 +191,11 @@ class Database (object):
         return recordlist[0]['user'], recordlist[0]['created'], recordlist[0]['post']
 
     def load_user_from_confirmation_code (self, confirmation_code):
-        return self.db.find_one('user', 'confirmation_code', confirmation_code)
+        return self.graph.find_one('user', 'confirmation_code', confirmation_code)
 
     def load_timeline (self, owner):
         parameters = {'username': owner}
-        recordlist = self.db.cypher.execute('''
+        recordlist = self.graph.cypher.execute('''
             MATCH (user:user {username:{username}})
             OPTIONAL MATCH (user)-[CREATED]->(post:post)
             RETURN user, post ORDER BY post.datetime desc LIMIT 50
@@ -218,7 +218,7 @@ class Database (object):
 
     def view_public_timeline (self, owner):
         parameters = {'username':owner}
-        recordlist = self.db.cypher.execute('''
+        recordlist = self.graph.cypher.execute('''
             MATCH (owner:user {username:{username}})
             OPTIONAL MATCH (owner)-[created:CREATED]->(post:post)
             WHERE length(created.access)=0
@@ -231,7 +231,7 @@ class Database (object):
 
     def view_timeline (self, owner, reader):
         parameters = {'owner':owner, 'reader':reader}
-        recordlist = self.db.cypher.execute('''
+        recordlist = self.graph.cypher.execute('''
             MATCH (owner:user {username:{owner}})
             MATCH (reader:user {username:{reader}})
             MERGE (owner)-[relates:RELATES]->(reader) ON CREATE SET relates.access=[] WITH *
@@ -265,7 +265,7 @@ class Database (object):
             }
         '''
         parameters = {'user':user, 'target':target, 'relates':relationship}
-        tx = self.db.cypher.begin()
+        tx = self.graph.cypher.begin()
         tx.append('''
                 MATCH (user:user {username:{user}})
                 MATCH (target:user {username:{target}})
@@ -301,7 +301,7 @@ class Database (object):
 
     # def delete_post (self, owner, post_id):
     #     parameters = {'username':owner, 'post_id':post_id}
-    #     recordlist = self.db.cypher.execute('''
+    #     recordlist = self.graph.cypher.execute('''
     #         MATCH (:user {username:{username}})-[CREATED]->(post:post {post_id:{post_id}})
     #         RETURN post
     #         ''', parameters=parameters)
@@ -319,7 +319,7 @@ class Database (object):
 
     def delete_account (self, user):
         parameters = {'username': user}
-        tx = self.db.cypher.begin()
+        tx = self.graph.cypher.begin()
         # delete posts
         tx.append('''
             MATCH (u:user {username:{username}})-[r:CREATED]->(n:post)
