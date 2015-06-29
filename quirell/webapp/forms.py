@@ -4,12 +4,12 @@ from flask.ext.babel import gettext, lazy_gettext
 class LoginForm(Form):
     username = fields.TextField("username", [validators.InputRequired()])
     password = fields.PasswordField("password", [validators.InputRequired()])
-    remember_me = fields.BooleanField("Remember Me")
+    remember_me = fields.BooleanField("remember")
 
 class SignupForm(Form):
     username = fields.TextField("username", [validators.InputRequired()])
     password = fields.PasswordField("password", [validators.InputRequired()])
-    confirm = fields.PasswordField("confirm password", [
+    confirm = fields.PasswordField("confirm", [
         validators.InputRequired(),
         validators.EqualTo("password", message=lazy_gettext("Passwords must match"))
     ])
