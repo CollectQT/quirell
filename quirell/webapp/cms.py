@@ -69,7 +69,7 @@ class Cms(object):
             }
         )
         self.cached = cache.cached; self.memoize = cache.memoize
-        Cms.build_css(app.debug)
+        self.build_css(app.debug)
         # users
         self.login_manager = flask_login.LoginManager()
         self.login_manager.init_app(app)
@@ -86,8 +86,7 @@ class Cms(object):
         app.before_request(self._before_request)
         # app.after_request(self._after_request)
 
-    @staticmethod
-    def build_css(watch):
+    def build_css(self, watch):
         import subprocess
 
         if watch: watch = '--watch'
@@ -97,7 +96,13 @@ class Cms(object):
             'output': BASE_PATH+'/quirell/webapp/static/css/main.css',
             'watch': watch,
         }
-        subprocess.Popen('sass {watch} {source}:{output} --style compressed -q'.format(**args), shell=True)
+        self.sass_proc = subprocess.Popen('''
+            sass {watch} {source}:{output} --style compressed -q
+            '''.format(**args),
+            shell=True,
+            preexec_fn=os.setsid,
+            stdout=subprocess.PIPE
+        )
 
 
     def clean_html (self, html):

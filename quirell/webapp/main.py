@@ -389,8 +389,10 @@ def shutdown():
     if app.config['DEBUG'] == False:
         return flask.abort(401)
     else:
+        import signal
         from quirell.webapp.shutdown import shutdown_server
         cms.mail_queue.put({'task':'shutdown'})
+        os.killpg(cms.sass_proc.pid, signal.SIGTERM) # kill the sass process groups
         shutdown_server()
         return 'Server shutting down...'
 
