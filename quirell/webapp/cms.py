@@ -46,14 +46,14 @@ class Cms(object):
         # database
         try:
             self.db = Database()
-            LOG.info('Connected to neo4j database')
+            LOG.info('Connected to neo4j database at {}'.format(os.environ['GRAPHENEDB_URL']))
         except:
             raise Exception('Could not connect to neo4j database')
         # sessions
         try:
             self.redis = redis.from_url(os.environ['REDISTOGO_URL'])
             app.config['SESSION_REDIS'] = self.redis
-            LOG.info('Connected to redis database')
+            LOG.info('Connected to redis database at {}'.format(os.environ['REDISTOGO_URL']))
             flask_session.Session(app)
         except KeyError:
             raise Exception('Could not get REDISTOGO_URL')
