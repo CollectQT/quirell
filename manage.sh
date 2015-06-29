@@ -75,8 +75,8 @@ install() {
         sudo tar zxvf '/usr/local/neo4j.tar.gz'
         sudo mv neo4j-community-2.2.2/ neo4j
         bash /usr/local/neo4j/bin/neo4j-installer install
-        neoauth neo4j neo4j my-p4ssword
-        neoauth neo4j my-p4ssword
+        neoauth neo4j neo4j quirell-password
+        neoauth neo4j quirell-password
     fi
 }
 
