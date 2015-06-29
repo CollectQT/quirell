@@ -73,7 +73,7 @@ def create_signature(params):
         if key is 'api_key': continue
         unsigned_string += '&{}={}'.format(key, params[key])
     unsigned_string = unsigned_string[1:]  #clip leading &
-    unsigned_string += app.config['CLOUDINARY'].api_secret
+    unsigned_string += CLOUDINARY.api_secret
     hasher = sha1()
     hasher.update(unsigned_string.encode(encoding='utf-8'))
     signature = hasher.hexdigest()
@@ -83,7 +83,7 @@ def profile_picture_form_data():
     params = {
         "public_id": current_user['username'],
         "timestamp": time.time(),
-        "api_key": app.config['CLOUDINARY'].api_key,
+        "api_key": CLOUDINARY.api_key,
         "callback": "/static/html/cloudinary_cors.html",
         "format": "jpg",
         "eager": "w_200,h_200,c_scale"
@@ -95,7 +95,7 @@ def normal_picture_form_data():
     params = {
         "user_filename": True,
         "timestamp": time.time(),
-        "api_key": app.config['CLOUDINARY'].api_key,
+        "api_key": CLOUDINARY.api_key,
         "callback": "/static/html/cloudinary_cors.html",
         "format": "jpg",
     }
@@ -111,7 +111,7 @@ def set_globals():
         format_time=format_time,
         profile_picture_form_data=profile_picture_form_data,
         normal_picture_form_data=normal_picture_form_data,
-        cloudinary=app.config['CLOUDINARY'],)
+        cloudinary=CLOUDINARY,)
 
 ################
 # LOCALIZATION #
@@ -245,7 +245,7 @@ def update_profile():
         # prepend profile picture url
         if k == 'profile_picture':
             if not v: continue
-            v = app.config['CLOUDINARY_CDN']+app.config['CLOUDINARY'].cloud_name+'/'+v
+            v = app.config['CLOUDINARY_CDN']+CLOUDINARY.cloud_name+'/'+v
         current_user[k] = v
         # clean html
         #
