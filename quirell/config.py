@@ -29,7 +29,8 @@ CONFIG={
     'PORT': 5000,
 }
 
-CONFIG.update(dotenv.parse_dotenv(BASE_PATH+'/.env'))
+try: CONFIG.update(dotenv.parse_dotenv(BASE_PATH+'/.env'))
+except FileNotFoundError: pass
 for k, v in CONFIG.items(): os.environ[k] = str(v)
 
 logging.basicConfig(stream=sys.stdout)
