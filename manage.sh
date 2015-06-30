@@ -13,8 +13,6 @@ start() {
 stop() {
     sudo service redis_6379 stop
     sudo service neo4j-service stop
-    kill $(ps aux | grep 'quirell' | awk '{print $2}')
-    echo 'killed proceses matching: ps aux | grep \"quirell\" '
 }
 
 activate() {
