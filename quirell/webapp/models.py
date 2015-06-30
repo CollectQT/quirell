@@ -1,6 +1,7 @@
 import json
 import flask_login
 from quirell.webapp.main import cms
+from quirell.config import *
 
 class Relationships(object):
     '''
@@ -218,15 +219,17 @@ class User (object):
     def fix_undeclared_properties(self):
         for k, v in User.defaults.items():
             try:
-                getattr(self.node, k)
-            except AttributeError:
-                self.node[k] = v
+                self[k]
+            except KeyError:
+                LOG.warning('''
+altering user {}'s key \"{}\" to value \"{}\"
+                '''.format(self['username'], k, v))
+                self[k] = v
 
     def format(self, node):
-
         self.node = node
-        self.fix_undeclared_properties()
         self.relationships = Relationships(self, node['relationships'])
+        self.fix_undeclared_properties()
 
     def get(self, username):
         '''
@@ -263,7 +266,6 @@ class User (object):
             return False, 'Account not active, go to <a href="/send_confirmation/{0}">/send_confirmation/{0}</a> to send an activation email'.format(username)
         # user considered successfully logged in at this point
         self.format(node)
-
         flask_login.login_user(self, remember=remember) # add to login manager
         return True, self
 
