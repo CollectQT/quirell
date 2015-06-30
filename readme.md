@@ -10,6 +10,8 @@ Feature wise, Quirell takes a lot of cues from Facebook and Tumblr, and technica
 
 ## Quick start
 
+    git clone http://gitlab.com/collectqt/quirell.git
+    cd quirell
     bash manage.sh install
     bash manage.sh start
     python quirell
@@ -17,6 +19,8 @@ Feature wise, Quirell takes a lot of cues from Facebook and Tumblr, and technica
 Go to [http://localhost:5000](http://localhost:5000)
 
 ## Slightly less quick
+
+Create a gitlab account and clone quirell via https or ssh
 
 Install dependencies, which checks if a few things are installed (python 3.4, ruby, databases) and installs them if they are not.
 
