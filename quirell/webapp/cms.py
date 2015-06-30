@@ -69,7 +69,7 @@ class Cms(object):
             }
         )
         self.cached = cache.cached; self.memoize = cache.memoize
-        self.build_css(app.debug)
+        self._build_css(app.debug)
         # users
         self.login_manager = flask_login.LoginManager()
         self.login_manager.init_app(app)
@@ -86,24 +86,39 @@ class Cms(object):
         app.before_request(self._before_request)
         # app.after_request(self._after_request)
 
-    def build_css(self, watch):
+    def _build_css(self, watch):
+        if watch:
+            # build css on changes
+            from watchdog.events import FileSystemEventHandler
+            class If_scss_changes (FileSystemEventHandler):
+                def on_modified (self, event): Cms.build_css()
+
+            # monitor for changes
+            from watchdog.observers import Observer
+            watch = Observer()
+            watch.schedule(If_scss_changes(), BASE_PATH+'/quirell/webapp/static/scss/')
+            watch.start()
+
+            LOG.info('Watching /quirell/webapp/static/scss/ for changes')
+
+        Cms.build_css()
+
+    @staticmethod
+    def build_css():
         import subprocess
 
-        if watch: watch = '--watch'
-        else: watch = ''
         args = {
             'source': BASE_PATH+'/quirell/webapp/static/scss/main.scss',
             'output': BASE_PATH+'/quirell/webapp/static/css/main.css',
-            'watch': watch,
         }
-        self.sass_proc = subprocess.Popen('''
-            sass {watch} {source}:{output} --style compressed -q
+        subprocess.call('''
+            sass {source}:{output} --style compressed -q
             '''.format(**args),
             shell=True,
             preexec_fn=os.setsid,
             stdout=subprocess.PIPE
         )
-
+        LOG.info('Built CSS')
 
     def clean_html (self, html):
         # cleans html to prevent people doing evil things with it like
