@@ -14,8 +14,12 @@ class Mail_server (object):
     def mail_watcher(self):
         while True:
             if self.mail_queue.empty():
-                time.sleep(1)
-                continue
+                try:
+                    time.sleep(1)
+                    continue
+                except KeyboardInterrupt:
+                    LOG.warning('Shutting Down Mailer')
+                    break
             kwargs = self.mail_queue.get()
             if kwargs['task'] == 'shutdown':
                 LOG.warning('Shutting Down Mailer')
