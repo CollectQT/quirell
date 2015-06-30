@@ -16,7 +16,7 @@ Feature wise, Quirell takes a lot of cues from Facebook and Tumblr, and technica
     bash manage.sh start
     python quirell
 
-Go to [http://localhost:5000](http://localhost:5000)
+Go to [http://localhost:5000](http://localhost:5000) in your browser
 
 ## Slightly less quick
 
