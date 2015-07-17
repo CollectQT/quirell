@@ -30,6 +30,7 @@ Create a gitlab account and clone quirell via https or ssh
 * [ruby 2.2](https://www.ruby-lang.org/en/downloads/)
 * [redis](http://redis.io/download)
 * [neo4j 2.2.2](http://neo4j.com/docs/stable/server-installation.html)
+* python-pip, python-virtualenv, openjdk-7-jre
 
 But if you are on Ubuntu, you can run the following command. Hit enter a few times to keep the default config options, and enter your password as needed.
 
