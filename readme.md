@@ -10,6 +10,8 @@ Feature wise, Quirell takes a lot of cues from Facebook and Tumblr, and technica
 
 ## Quick start
 
+Only works on Ubuntu, and only tested on Ubuntu 14.04. Any other system will need to follow the long form instructions
+
     git clone http://gitlab.com/collectqt/quirell.git
     cd quirell
     bash manage.sh install
@@ -22,7 +24,14 @@ Go to [http://localhost:5000](http://localhost:5000) in your browser
 
 Create a gitlab account and clone quirell via https or ssh
 
-Install dependencies, which checks if a few things are installed (python 3.4, ruby, databases) and installs them if they are not.
+**Important** the install script is written for Ubuntu, any other system will need to install the requirements manually. The requirements are:
+
+* [python 3.4](https://www.python.org/downloads/release/python-342/)
+* [ruby 2.2](https://www.ruby-lang.org/en/downloads/)
+* [redis](http://redis.io/download)
+* [neo4j 2.2.2](http://neo4j.com/docs/stable/server-installation.html)
+
+But if you are on Ubuntu, you can run the following command. Hit enter a few times to keep the default config options, and enter your password as needed.
 
     bash manage.sh install
 
