@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sudo service redis_6379 start
+sudo service neo4j-service start

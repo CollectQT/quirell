@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sudo service redis_6379 stop
+sudo service neo4j-service stop

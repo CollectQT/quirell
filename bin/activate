@@ -1,0 +1,8 @@
+#!/bin/bash
+
+source venv/bin/activate
+pip install -qr requirements.txt
+
+source ~/.rvm/scripts/rvm
+rvm use 2.2
+bundler install
