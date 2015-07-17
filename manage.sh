@@ -58,8 +58,8 @@ install() {
     then
         wget -c 'http://download.redis.io/redis-stable.tar.gz' \
             -O '/tmp/redis-stable.tar.gz'
-        tar xvzf '/tmp/redis-stable.tar.gz'
-        cd redis-stable
+        tar xvzf '/tmp/redis-stable.tar.gz' '/tmp/'
+        cd /tmp/redis-stable
         make
         sudo make install
         sudo utils/install_server.sh
@@ -72,8 +72,8 @@ install() {
         sudo apt-get install openjdk-7-jre
         sudo wget -c 'http://dist.neo4j.org/neo4j-community-2.2.2-unix.tar.gz' \
             -O '/usr/local/neo4j.tar.gz'
-        sudo tar zxvf '/usr/local/neo4j.tar.gz'
-        sudo mv neo4j-community-2.2.2/ neo4j
+        sudo tar zxvf '/usr/local/neo4j.tar.gz' -C '/usr/local/'
+        sudo mv /usr/local/neo4j-community-2.2.2 /usr/local/neo4j
         bash /usr/local/neo4j/bin/neo4j-installer install
         neoauth neo4j neo4j quirell-password
         neoauth neo4j quirell-password
