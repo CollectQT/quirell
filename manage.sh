@@ -26,7 +26,7 @@ activate() {
 
 install() {
     # configs
-    cp -n quirell/ENV.yaml.example quirell/ENV.yaml
+    cp -n .env-example .env
 
     # python3.4, pip, virtualenv
     if ! command -v python3.4
