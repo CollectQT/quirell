@@ -4,27 +4,28 @@
 cp -n .env-example .env
 
 # basics
-sudo apt-get install git curl
+sudo apt-get install -y -qq git curl
 
 # python3.4, pip, virtualenv
 if ! command -v python3.4
 then
-    sudo add-apt-repository -y ppa:fkrull/deadsnakes
+    sudo add-apt-repository -y -qq ppa:fkrull/deadsnakes
     sudo apt-get update
 fi
-sudo apt-get install -y python3.4 python3.4-dev python-dev\
+sudo apt-get install -y -qq python3.4 python3.4-dev python-dev\
     python-pip python-virtualenv
 virtualenv -p python3.4 venv
 source venv/bin/activate
-pip install -r requirements.txt
+pip install -qr requirements.txt
 
 # ruby
 if ! command -v rvm
 then
-	sudo add-apt-repository ppa:rael-gc/rvm
+	sudo add-apt-repository -y ppa:rael-gc/rvm
     sudo apt-get update
 fi
 sudo apt-get install rvm
+source /usr/share/rvm/scripts/rvm 
 rvm install 2.2
 rvm use 2.2
 gem install bundler
@@ -33,28 +34,20 @@ bundler install
 # redis
 if ! command -v redis-server
 then
-    wget -c 'http://download.redis.io/redis-stable.tar.gz' \
-        -O '/tmp/redis-stable.tar.gz'
-    tar xvzf '/tmp/redis-stable.tar.gz' -C '/tmp/'
-    cd /tmp/redis-stable
-    make
-    sudo make install
-    sudo utils/install_server.sh
-    cd -
-    sudo service redis_6379 start
+	sudo add-apt-repository -y ppa:chris-lea/redis-server
+    sudo apt-get update
+    sudo apt-get install -y -qq redis-server
 fi
+redis-server
+redis-cli ping
 
 # neo4j
 if ! command -v /usr/local/neo4j/bin/neo4j
 then
-    sudo apt-get install openjdk-7-jre
-    sudo wget -c 'http://dist.neo4j.org/neo4j-community-2.2.2-unix.tar.gz' \
-        -O '/usr/local/neo4j.tar.gz'
-    sudo tar zxvf '/usr/local/neo4j.tar.gz' -C '/usr/local/'
-    sudo mv /usr/local/neo4j-community-2.2.2 /usr/local/neo4j
-    sudo bash /usr/local/neo4j/bin/neo4j-installer install
-    sudo service neo4j-service start
+	wget -O - 'http://debian.neo4j.org/neotechnology.gpg.key' | sudo apt-key add -
+	sudo add-apt-repository 'deb http://debian.neo4j.org/repo stable/'
+	sudo apt-get install -y -qq openjdk-7-jre neo4j
     neoauth neo4j neo4j quirell-password
     neoauth neo4j quirell-password
- fi
-
+fi
+neo4j-service start
