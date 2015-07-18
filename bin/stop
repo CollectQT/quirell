@@ -1,4 +1,4 @@
 #!/bin/bash
 
-sudo service redis_6379 stop
+sudo redis-cli shutdown
 sudo service neo4j-service stop

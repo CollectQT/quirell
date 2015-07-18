@@ -42,13 +42,13 @@ redis-server
 redis-cli ping
 
 # neo4j
-if ! command -v /usr/local/neo4j/bin/neo4j
+if ! command -v neo4j-shell
 then
 	wget -O - 'http://debian.neo4j.org/neotechnology.gpg.key' | sudo apt-key add -
 	sudo add-apt-repository 'deb http://debian.neo4j.org/repo stable/'
 	sudo apt-get install -y -qq openjdk-7-jre neo4j
-	sudo neo4j-service start
+	sudo service neo4j-service start
     neoauth neo4j neo4j quirell-password
     neoauth neo4j quirell-password
 fi
-sudo neo4j-service start
+sudo service neo4j-service start
