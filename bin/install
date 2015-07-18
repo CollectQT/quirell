@@ -47,7 +47,8 @@ then
 	wget -O - 'http://debian.neo4j.org/neotechnology.gpg.key' | sudo apt-key add -
 	sudo add-apt-repository 'deb http://debian.neo4j.org/repo stable/'
 	sudo apt-get install -y -qq openjdk-7-jre neo4j
+	sudo neo4j-service start
     neoauth neo4j neo4j quirell-password
     neoauth neo4j quirell-password
 fi
-neo4j-service start
+sudo neo4j-service start
