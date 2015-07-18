@@ -14,8 +14,8 @@ Only works on Ubuntu, and only tested on Ubuntu 14.04. Any other system will nee
 
     git clone http://gitlab.com/collectqt/quirell.git
     cd quirell
-    bash manage.sh install
-    bash manage.sh start
+    bash bin/install
+    bash bin/start
     python quirell
 
 Go to [http://localhost:5000](http://localhost:5000) in your browser
@@ -34,15 +34,15 @@ Create a gitlab account and clone quirell via https or ssh
 
 But if you are on Ubuntu, you can run the following command. Hit enter a few times to keep the default config options, and enter your password as needed.
 
-    bash manage.sh install
+    bash bin/install
 
 The install includes a section which activates the environment, but if you are running the code for a 2nd or 3rd time you'll have to activate the environment yourself
 
-    bash manage.sh activate
+    bash bin/activate
 
 Start the required databases. This assumes that you aren't using custom ports or remote resources. If you are you'll have to add their location to ENV.yaml
 
-    bash manage.sh start
+    bash bin/start
 
 Finally, you can run the code with
 
@@ -52,7 +52,7 @@ At this point you should be able to go to [http://localhost:5000](http://localho
 
 When you are done working on things you probably want to turn off the local databases services, do that with
 
-    bash manage.sh stop
+    bash bin/stop
 
 ## Contributing
 
