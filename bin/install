@@ -25,7 +25,7 @@ then
     sudo apt-get update
 fi
 sudo apt-get install rvm
-source /usr/share/rvm/scripts/rvm 
+source /usr/share/rvm/scripts/rvm
 rvm install 2.2
 rvm use 2.2
 gem install bundler
@@ -38,7 +38,7 @@ then
     sudo apt-get update
     sudo apt-get install -y -qq redis-server
 fi
-service redis-server start
+sudo service redis-server start
 redis-cli ping
 
 # neo4j

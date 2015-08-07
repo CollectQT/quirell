@@ -1,4 +1,4 @@
 #!/bin/bash
 
-service redis-server start
+sudo service redis-server start
 sudo service neo4j-service start
