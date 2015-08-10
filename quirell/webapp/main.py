@@ -111,7 +111,8 @@ def set_globals():
         format_time=format_time,
         profile_picture_form_data=profile_picture_form_data,
         normal_picture_form_data=normal_picture_form_data,
-        cloudinary=CLOUDINARY,)
+        cloudinary=CLOUDINARY,
+        js_files=cms.js_files)
 
 ################
 # LOCALIZATION #
