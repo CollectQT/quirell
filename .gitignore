@@ -2,6 +2,7 @@
 main.css
 main.css.map
 dump.rdb
+packed.js
 
 venv/
 generated/
