@@ -24,7 +24,7 @@ then
 	sudo add-apt-repository -y ppa:rael-gc/rvm
     sudo apt-get update
 fi
-sudo apt-get install rvm
+sudo apt-get install -y -qq rvm
 source /usr/share/rvm/scripts/rvm
 rvm install 2.2
 rvm use 2.2
@@ -46,10 +46,10 @@ if ! command -v neo4j-shell
 then
 	wget -O - 'http://debian.neo4j.org/neotechnology.gpg.key' | sudo apt-key add -
 	sudo add-apt-repository 'deb http://debian.neo4j.org/repo stable/'
-    sudo apt-get update
+  sudo apt-get update
 	sudo apt-get install -y -qq openjdk-7-jre neo4j
 	sudo service neo4j-service start
-    neoauth neo4j neo4j quirell-password
-    neoauth neo4j quirell-password
+  neoauth neo4j neo4j quirell-password
+  neoauth neo4j quirell-password
 fi
 sudo service neo4j-service start
