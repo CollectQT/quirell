@@ -3,6 +3,7 @@
 # builtin
 import hashlib
 import multiprocessing
+from glob import glob
 # external
 import flask
 import redis
@@ -43,12 +44,15 @@ class Cms(object):
 
     def __init__ (self, app):
         app.config.update(CONFIG)
+        print(app.debug)
+
         # database
         try:
             self.db = Database()
             LOG.debug('Connected to neo4j database at {}'.format(os.environ['GRAPHENEDB_URL']))
         except:
             raise Exception('Could not connect to neo4j database')
+
         # sessions
         try:
             self.redis = redis.from_url(os.environ['REDISTOGO_URL'])
@@ -57,12 +61,12 @@ class Cms(object):
             flask_session.Session(app)
         except KeyError:
             raise Exception('Could not get REDISTOGO_URL')
+
         # content building
         flask_misaka.Misaka(app) # markdown
-        app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
-        assets = flask_assets.Environment(app)
-        flask_compress.Compress(app)
-        cache = flask_cache.Cache(app,
+        app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension') # html preprocessor
+        flask_compress.Compress(app) # gzip compression
+        cache = flask_cache.Cache(app, # response caching
             config={
                 'CACHE_TYPE': 'redis',
                 'CACHE_REDIS_URL': os.environ['REDISTOGO_URL']
@@ -70,21 +74,37 @@ class Cms(object):
         )
         self.cached = cache.cached; self.memoize = cache.memoize
         self._build_css(app.debug)
+        self.asset_builder(app) # asset compression
+
         # users
         self.login_manager = flask_login.LoginManager()
         self.login_manager.init_app(app)
         self.login_manager.anonymous_user = Anon
         self.login_manager.user_loader(load_user)
+
         # security
         self.hash = hashlib.sha1()
         self.bcrypt = flask_bcrypt.Bcrypt(app)
         self.csrf = flask_seasurf.SeaSurf(app)
         self.serialize = itsdangerous.URLSafeSerializer(app.config['SECRET_KEY'])
+
         # mails
         self.start_mail_server(app)
+
         # logging
         app.before_request(self._before_request)
         # app.after_request(self._after_request)
+
+    def asset_builder(self, app):
+        self.js_files = [path.split('quirell/webapp')[-1] for path in glob(BASE_PATH+'/quirell/webapp/static/js/libs/*')]
+        _js_files = [path.split('static/')[-1] for path in self.js_files]
+        assets = flask_assets.Environment(app)
+        js_bundle = flask_assets.Bundle(
+            *_js_files,
+            filters='jsmin',
+            output='js/libs/packed.js'
+        )
+        assets.register('js_all', js_bundle)
 
     def _build_css(self, watch):
         if watch:
