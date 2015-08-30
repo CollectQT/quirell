@@ -1,4 +1,6 @@
 $(document).ready(function(){
+
+
     // Image Upload Section
     $('.cloudinary-fileupload').bind('fileuploadstart', function(e, data) {
         $('progress').css("display", "inline-block")
@@ -16,6 +18,7 @@ $(document).ready(function(){
         ajax_post($('#profile_edit_form'))
         // hide progress bar
     })
+
 
     // form AJAX section
     var ajax_post = function($form) {
@@ -35,4 +38,45 @@ $(document).ready(function(){
         ajax_post($(this))
         event.preventDefault()
     })
+
+
+    // Angular JS
+    angular
+        .module('Quirell', [
+        ])
+        // local storage controller, ported from another project not currently functional
+        .controller('formController', ['$scope', '$localStorage', function ($scope, $localStorage) {
+            $scope.storage = $localStorage;
+            $scope.formdata = {};
+
+            // storage -> form
+            for (var key in $scope.storage) {
+                if (key[0] !== '$') {
+                    $scope.formdata[key] = $scope.storage[key];
+                    $('#form-delete').css('opacity', 1);
+                }
+            }
+
+            // form -> storage
+            $scope.processForm = function () {
+                for (var key in $scope.formdata) {
+                    if ($scope.userForm[key].$valid) {
+                        $scope.storage[key] = $scope.formdata[key];
+                        console.log('set', key, $scope.storage[key]);
+                        $('#form-delete').css('opacity', 1);
+                    }
+                }
+                if ($scope.userForm.$valid) {
+                    $scope.changeView('/confirm');
+                }
+            };
+
+            $scope.ClearStorage = function () {
+                $('#form-delete').css('opacity', 0.1);
+                for (var key in $scope.formdata) {
+                    delete $scope.formdata[key];
+                    delete $scope.storage[key];
+                }
+            };
+        }])
 })
