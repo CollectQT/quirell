@@ -96,7 +96,7 @@ class Cms(object):
         # app.after_request(self._after_request)
 
     def asset_builder(self, app):
-        self.js_files = [path.split('quirell/webapp')[-1] for path in glob(BASE_PATH+'/quirell/webapp/static/js/libs/*')]
+        self.js_files = [path.split('quirell/webapp')[-1] for path in sorted(glob(BASE_PATH+'/quirell/webapp/static/js/libs/*'))]
         _js_files = [path.split('static/')[-1] for path in self.js_files]
         assets = flask_assets.Environment(app)
         js_bundle = flask_assets.Bundle(
