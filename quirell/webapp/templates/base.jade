@@ -1,8 +1,12 @@
 doctype html
 html(lang='en', ng-app='Quirell')
     head
+        title
+            block head_title
+                | Quirell
         block head
             include head.html
+        
     body
         block navigation
             include nav.jade
