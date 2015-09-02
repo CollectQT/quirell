@@ -44,6 +44,7 @@ class Cms(object):
 
     def __init__ (self, app):
         app.config.update(CONFIG)
+        self._build_css(app.debug)
 
         # database
         try:
@@ -72,7 +73,6 @@ class Cms(object):
             }
         )
         self.cached = cache.cached; self.memoize = cache.memoize
-        self._build_css(app.debug)
         self.asset_builder(app) # asset compression
 
         # users
@@ -131,7 +131,7 @@ class Cms(object):
             'output': BASE_PATH+'/quirell/webapp/static/css/main.css',
         }
         subprocess.call('''
-            sassc -m {source} {output}
+            sassc -m {source} {output} -s compressed
             '''.format(**args),
             shell=True,
             preexec_fn=os.setsid,
