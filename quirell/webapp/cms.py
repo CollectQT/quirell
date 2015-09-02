@@ -44,7 +44,6 @@ class Cms(object):
 
     def __init__ (self, app):
         app.config.update(CONFIG)
-        print(app.debug)
 
         # database
         try:
