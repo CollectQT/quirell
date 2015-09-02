@@ -132,7 +132,7 @@ class Cms(object):
             'output': BASE_PATH+'/quirell/webapp/static/css/main.css',
         }
         subprocess.call('''
-            sass {source}:{output} --style compressed -q
+            sassc -m {source} {output}
             '''.format(**args),
             shell=True,
             preexec_fn=os.setsid,
